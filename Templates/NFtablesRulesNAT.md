@@ -23,14 +23,14 @@ table inet filter {
 
   chain output {
     type filter hook output priority 0; policy accept;
-    oifname "ens33" accept                             # ----> Permit the gateway OS out to campus networks
+    oifname "ens33" accept                             # ----> Permit the gateway OS out to Seneca network
   }
 }
 
 table ip nat {
   chain prerouting {
     type nat hook prerouting priority -100; policy accept;
-    iifname "ens37" udp dport 53 dnat to 10.101.100.21 # ----> Intercept Local DNS and map to campus server
+    iifname "ens37" udp dport 53 dnat to 10.101.100.21 # ----> Intercept Local DNS and map to Seneca server
     iifname "ens37" tcp dport 53 dnat to 10.101.100.21
   }
 
