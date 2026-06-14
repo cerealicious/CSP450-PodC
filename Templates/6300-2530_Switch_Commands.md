@@ -82,8 +82,8 @@ router ospf 1
   exit
 
 # Outbound Gateway Traversal Static Paths
-ip route 0.0.0.0 0.0.0.0 192.168.3.158 # ----> Primary default route out through Your Router WAN IP
-ip route 0.0.0.0 0.0.0.0 192.168.3.102 # ----> Backup default route out through Partner Router WAN IP
+ip route 0.0.0.0 0.0.0.0 192.168.3.158 # ----> Primary default route out through Your Router WAN IP (Your Router's Last Usable IP)
+ip route 0.0.0.0 0.0.0.0 192.168.3.102 # ----> Backup default route out through Partner Router WAN IP (Your Partner Router's Last Usable IP)
 
 write memory
 ```
