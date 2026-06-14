@@ -1,6 +1,4 @@
 # Scenario A: Aruba 6300 Core + Aruba 2530/2540 Access Switch Setup
-**Architecture Note:** This file contains the complete deployment scripts for Scenario A. Use the horizontal divider below to separate your script from your partner's script.
-
 ---
 
 ## PART 1: ARUBA 6300 CORE SWITCH CONFIGURATION
@@ -90,13 +88,8 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.102 # ----> Backup default route out through 
 write memory
 
 
-
-
-
-
-
 ---
-
+---
 ## PART 2: ARUBA 2530 CORE SWITCH CONFIGURATION
 *To be executed by `jmalaqui` on the floor Access Switch (ARUBA 2530).*
 
