@@ -2,14 +2,14 @@
 **Target Location:** `/etc/netplan/dhcpAssignment.yaml` on the **Ubuntu Server VM**[cite: 55].
 
 ## Overview
-This file configures the business server's primary network card (`ens33`) to communicate across your internal LAN network infrastructure[cite: 55, 58]. 
+This file configures the business server's primary network card (`ens33`) to communicate across your internal LAN network infrastructure. 
 
-When applied, it forces the operating system to send out an automated DHCP discovery request across the local area network. [cite_start]The **Aruba 6300 Core Switch** will intercept this request, read the virtual machine's unique physical MAC address hardware fingerprint, and automatically bind your reserved, high-boundary static profile IP address (`172.16.57.254`)[cite: 44, 56, 59].
+When applied, it forces the operating system to send out an automated DHCP discovery request across the local area network. The **Aruba 6300 Core Switch** will intercept this request, read the virtual machine's unique physical MAC address hardware fingerprint, and automatically bind your reserved, high-boundary static profile IP address (`172.16.57.254`).
 
 ---
 
 ## Netplan Deployment Script
-Copy and paste this exact layout directly into your configuration directory using a terminal text editor (e.g., `sudo nano /etc/netplan/dhcpAssignment.yaml`)[cite: 55]:
+Copy and paste this exact layout directly into your configuration directory using a terminal text editor (e.g., `sudo nano /etc/netplan/dhcpAssignment.yaml`):
 
 ```yaml
 network:
