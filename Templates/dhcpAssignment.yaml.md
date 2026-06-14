@@ -1,5 +1,5 @@
 # Ubuntu Corporate Server Netplan Configuration
-**Target Location:** `/etc/netplan/dhcpAssignment.yaml` on the **Ubuntu Server VM**[cite: 55].
+**Target Location:** `/etc/netplan/dhcpAssignment.yaml` on the **Ubuntu Server VM**.
 
 ## Overview
 This file configures the business server's primary network card (`ens33`) to communicate across your internal LAN network infrastructure. 
