@@ -1,8 +1,5 @@
----
-
 ### File: staticAssignment.md`
 
-```markdown
 # Ubuntu Router Netplan Configuration
 **Target Location:** `/etc/netplan/staticAssignment.yaml` on the **Ubuntu Router VM**.
 
