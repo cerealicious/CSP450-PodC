@@ -14,14 +14,18 @@ _Goal: Rebuild the virtual network environment on your Windows Host machine befo
 
 **◾ Task 1.1: Reconstruct the Virtual Network Editor Layout**
 Open VMware Workstation Virtual Network Editor as an Administrator. Delete any stock settings and map the following three required virtual networks strictly to your physical computer network cards:
-  **o	VMnet5** --> Change type to **Bridged**, and set "Bridged to:" explicitly to your primary **Ethernet Family Controller** card (this physical port handles your internal LAN).
-  **o	VMnet6** --> Change type to **Bridged**, and set "Bridged to:" explicitly to your **Intel Ethernet Connection** card (this physical port connects directly to the Seneca network for internet access).
+
+ **o	VMnet5** --> Change type to **Bridged**, and set "Bridged to:" explicitly to your primary **Ethernet Family Controller** card (this physical port handles your internal LAN).
+
+ **o	VMnet6** --> Change type to **Bridged**, and set "Bridged to:" explicitly to your **Intel Ethernet Connection** card (this physical port connects directly to the Seneca network for internet access).
+ 
   **o	VMnet7** --> Change type to **Bridged**, and set "Bridged to:" explicitly to your secondary **Ethernet Family Controller #2** card (this physical port handles your external OSPF WAN link to the switch).
 
 ◾ Task 1.2: Correct Router Virtual Hardware Mapping
 Right-click your Router VM settings (Ensure the VM is powered OFF). Verify that your network adapters are bound to the correct VMnets so that Linux aligns them with the proper internal names (ens33 and ens37):
-  **o	Network Adapter 1**: Must be set to **Custom**: **VMnet6** (Faces the Internet).
-  **o	Network Adapter 2**: Must be set to **Custom**: **VMnet7** (Faces the Switch).
+
+ **o	Network Adapter 1**: Must be set to **Custom**: **VMnet6** (Faces the Internet).
+ **o	Network Adapter 2**: Must be set to **Custom**: **VMnet7** (Faces the Switch).
 
 ◾ Task 1.3: Map Workstation Virtual Hardware
 Right-click your Client VM and Server VM settings. Set their Network Adapters strictly to Custom: VMnet5 (Faces the local office LAN switch ports).
@@ -29,9 +33,12 @@ Right-click your Client VM and Server VM settings. Set their Network Adapters st
 
 
 
+
 **PHASE 2: PHYSICAL MANAGEMENT LAYER CUTOVER**
 _Goal: Establish direct communications from your desk to the console of the physical hardware switches._
+
 ◾ Task 2.1: Run Physical Management Cables Go into the back server rack room. Look at your assigned Pod letter rack.
+
  ** o	For Switch 2 (Aruba 6300 Core)**: Run a physical network patch cable from the port labeled **MGMT** on the back of the switch into your desk's corresponding patch panel port (example: Port C5 if you sit at desk C5).
   **o	For Switch 1 (Aruba 2500 / 2530 / 6300)**: Your partner runs a second network patch cable from the management port into their desk's patch panel port. _(Note: On 2500/2530 switches, use the dedicated port or Port **23/24**)._
 
