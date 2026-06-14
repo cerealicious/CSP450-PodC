@@ -64,7 +64,7 @@ dhcp-server vrf default
     range 172.16.57.194 172.16.57.253 prefix-len 26 
     default-router 172.16.57.193      # ----> Points local clients to your Core Gateway (Your First Usable IP)
     static-bind ip 172.16.57.254 mac xx:xx:xx:xx:xx:xx # ----> Binds last usable address to your Server VM (Your Last Usable IP + Server VM MAC Address)
-    dns-server 192.168.3.158          # ----> Points local clients to your Edge Linux Router IP
+    dns-server 192.168.3.158          # ----> Points local clients to your Edge Linux Router IP (Your Routers Last Usable IP) 
     exit
 
   # Your Partner's Subnet Allocation Pool & Server Static Reservation
