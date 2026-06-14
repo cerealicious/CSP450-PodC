@@ -88,8 +88,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.3.102 # ----> Backup default route out through 
 write memory
 
 
----
----
+====================================================================================================
 ## PART 2: ARUBA 2530 CORE SWITCH CONFIGURATION
 *To be executed by `jmalaqui` on the floor Access Switch (ARUBA 2530).*
 
