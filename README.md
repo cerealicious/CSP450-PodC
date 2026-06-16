@@ -102,10 +102,6 @@ These are the cables running from the patch panel ports leading to your actual l
 **Connection:** Your partner runs a patch cable from **Port 2** on the Aruba 2500/2530 switch into *their* personal desk block port on the patch panel.
 **Result:** This connects your partner's host PC network card into their respective VLAN 217 subnet domain.
 
-
-
----
-
 ## Router Connections (Your Routed Layer)
 These cables connect the Core 6300 switch directly to your Ubuntu Router VMs so they can act as gateways to the internet.
 
