@@ -78,6 +78,63 @@ Once both switch configurations are fully saved (`write memory`), return to the 
 
 ---
 
+---
+
+## The Switch-to-Switch Interconnection (The Trunk Line)
+This is the main data highway that links your two switches together so that data packets can travel between the Core layer and the Access layer.
+
+
+**Switch 2 (Aruba 6300 Core) Port:** **`1/1/3`** 
+**Switch 1 (Aruba 2500/2530 Access) Port:** **`3`** 
+
+---
+
+## Workstation Connections (Your Access Layer)
+
+These are the cables running from the patch panel ports leading to your actual lab desks where your VMs are running.
+
+### 1. Your Workspace Branch (VLAN 231)
+**Connection:** Run a patch cable from **Port 1** on the Aruba 2500/2530 switch into your personal desk block port on the patch panel (e.g., `C5`).
+**Result:** This connects your physical host PC's network card (which is running **VMnet5** for your Client and Server VMs) directly into your private VLAN 231 subnet domain.
+
+
+### 2. Your Partner's Workspace Branch (VLAN 217)
+**Connection:** Your partner runs a patch cable from **Port 2** on the Aruba 2500/2530 switch into *their* personal desk block port on the patch panel.
+**Result:** This connects your partner's host PC network card into their respective VLAN 217 subnet domain.
+
+
+
+---
+
+## Router Connections (Your Routed Layer)
+These cables connect the Core 6300 switch directly to your Ubuntu Router VMs so they can act as gateways to the internet.
+
+### 1. Your Ubuntu Router WAN Connection
+
+**Connection:** Run a patch cable from **Port 1/1/4** on the Aruba 6300 switch into your desk's secondary patch panel port (the one tied to your PC's secondary Realtek card running **VMnet7**).
+**Result:** This lights up the tight `192.168.3.156/30` point-to-point routing transit link between the 6300 switch (`.157`) and your Linux Router interface `ens37` (`.158`).
+
+### 2. Your Partner's Ubuntu Router WAN Connection
+
+**Connection:** Run a patch cable from **Port 1/1/5** on the Aruba 6300 switch into your partner's secondary patch panel port.
+**Result:** This lights up your partner's point-to-point routing link (`192.168.3.100/30`) on the core switch (`.101`).
+
+---
+### Physical Cable & Topology Matrix
+
+| Connection Source (From Device) | Port / Interface | Target Destination (To Device / Location) | Subnet / Network Domain | Purpose / Traffic Type |
+| :--- | :--- | :--- | :--- | :--- |
+| **Aruba 6300 Core Switch** | `1/1/3` | **Aruba 2530 Access Switch** Port `3` | Tagged VLANs 231 & 217 | Inter-Switch 802.1Q Trunk Pipe |
+| **Aruba 6300 Core Switch** | `1/1/4` | **Your Router WAN** (`ens37` via Desk Block Panel) | `192.168.3.156/30` | Your Point-to-Point Routing Interface |
+| **Aruba 6300 Core Switch** | `1/1/5` | **Partner Router WAN** (via Partner Desk Block Panel) | `192.168.3.100/30` | Partner's Point-to-Point Routing Interface |
+| **Aruba 2530 Access Switch** | `1` | **Your Desk Node Block** (Maps to VMnet5) | `172.16.57.192/26` | Your Private Office LAN (Client & Server) |
+| **Aruba 2530 Access Switch** | `2` | **Partner Desk Node Block** (Maps to Partner VMnet5) | `172.16.54.64/26` | Partner's Private Office LAN (Client & Server) |
+
+---
+
+
+
+
 ## PHASE 4: ENDPOINT ACTIVATION & INTER-BRANCH CONNECTIVITY
 **Goal:** Boot up your local business infrastructure nodes and check foundational local area connectivity.
 
