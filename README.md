@@ -195,3 +195,130 @@ From your isolated Client VM, test your new network architecture:
 1. **Verify edge path tracking** by running a ping and traceroute: `traceroute google.ca`.
 2. **Verify your multi-vendor OSPF neighbor tables are active.** Inside your Router's vtysh and your Aruba 6300 core terminal, run: `show ip ospf neighbor` and `show ip route`. You should see your network expanding as your classmates' subnets dynamically pop into your screen!
 3. **Capture required protocol validation handshakes.** Open Wireshark, capture the required protocol validation handshakes (DHCP lease adjustments, local SSH key management, and outer DNS requests), and export your tracking logs for lab check-off.
+
+
+## 📸 Visual Inspection & Lab Report 📸SCREENSHOT Guide
+
+This section outlines the exact verification commands required for the visual inspection, along with a checklist of mandatory 📸SCREENSHOTs needed for the stage two report submission.
+
+---
+
+### 1. Client VM Verification
+Before verifying, make sure all dynamic VMware internet backdoors on the Client are disabled. All traffic must travel explicitly through the physical switch to your custom Linux Router.
+
+#### Live Commands to Run
+* **Renew DHCP Lease:**
+    ```bash
+    sudo dhclient -r && sudo dhclient -v
+    ```
+    *Verify that your Client captures a dynamic IP in your pool range (e.g., `172.16.57.194` to `.253`).*
+
+#### Required 📸SCREENSHOTs for Report
+* [ ] **📸📸SCREENSHOT #1:** Client terminal displaying the successful dynamic IP acquisition after running `dhclient -v`.
+* [ ] **S📸CREENSHOT #2:** A successful ping and network route tracking test from the Client terminal out to the open web:
+    ```bash
+    ping -c 4 www.google.ca
+    traceroute youtube.com
+    ```
+    *(Note: Your traceroute will show the packet bouncing to your Router IP first, then hitting the college infrastructure, and finally arriving at YouTube).*
+
+---
+
+### 2. Server VM Verification
+Your server relies on the switch's DHCP service matching its unique hardware MAC fingerprint to deliver its dedicated static profile address.
+
+#### Live Commands to Run
+* **Renew Statically Bound Lease:**
+    ```bash
+    sudo dhclient -r && sudo dhclient -v
+    ```
+    *Verify that the server is allocated its fixed reservation address (e.g., `172.16.57.254`).*
+
+#### Required 📸SCREENSHOTs for Report
+* [ ] **📸📸SCREENSHOT #3:** Server terminal showing `ip a` or a successful `dhclient` renewal reflecting its exact allocated reservation IP.
+* [ ] **📸SCREENSHOT #4:** Verification showing that internet access is fully functional from the Server:
+    ```bash
+    ping -c 4 www.google.ca
+    ```
+
+---
+
+### 3. Linux Router VM Verification
+The Linux Router is the core firewall engine and dynamic gateway of your branch infrastructure.
+
+#### Live Commands to Run
+* **Check Active Routing Tables & OSPF Neighbors:**
+    ```bash
+    sudo vtysh
+    # Run these two commands inside the FRR routing shell:
+    show ip ospf neighbor
+    show ip route
+    exit
+    ```
+* **Check Live Firewall Engine Layout:**
+    ```bash
+    sudo nft list ruleset | less
+    ```
+
+#### Required 📸SCREENSHOTs for Report
+* [ ] **📸SCREENSHOT #5:** The live Netfilter security profile matching your configured ruleset (`nft list ruleset`).
+* [ ] **📸SCREENSHOT #6:** The OSPF status overview window displaying active neighborhood adjacency tables (`show ip ospf neighbor`).
+* [ ] **📸SCREENSHOT #7:** The full kernel routing table (`show ip route`) displaying dynamically learned paths (`O`) from your partner's pod and the rest of the classroom network.
+
+---
+
+### 4. Aruba Hardware Switch Verification
+You must show that your physical switches are cleanly managing your infrastructure parameters. You can run these commands by opening a PuTTY SSH session directly from your Client VM into the switch IPs.
+
+#### Aruba 6300 Core Switch Commands
+Log in and enter execution mode (`en`), then capture the following system health outputs:
+* [ ] **📸SCREENSHOT #8:** Active virtual LAN allocation tables:
+    ```text
+    show vlan
+    ```
+* [ ] **📸SCREENSHOT #9:** Hardware interface summary and assigned trunk lines:
+    ```text
+    show ip interface brief
+    ```
+* [ ] **📸SCREENSHOT #10:** Live IP address tables learned by the core backbone processor:
+    ```text
+    show ip route
+    ```
+* [ ] **📸SCREENSHOT #11:** Verification that the active automated lease distribution pools are running smoothly:
+    ```text
+    show dhcp-server vrf default
+    ```
+* [ ] **📸SCREENSHOT #12:** The raw configuration script safely committed to the switch's non-volatile memory block:
+    ```text
+    show running-config
+    ```
+
+#### Aruba 2500/2530 Access Switch Commands
+Log in to your partner's access switch interface and capture the following verification metrics:
+* [ ] **📸SCREENSHOT #13:** Active local virtual LAN allocations reflecting your untagged access ports:
+    ```text
+    show vlan
+    ```
+* [ ] **📸SCREENSHOT #14:** Active backbone trunk link configuration metrics showing physical connectivity up to the Core switch:
+    ```text
+    show trunks
+    ```
+
+### 5. Key Exchange & Wireshark Deliverables Checklist
+Before completing your documentation report, make sure you configure an SSH key pair for your administrator account (`your-mySenecaID`) across all systems. You must demonstrate that you can securely SSH from your Client VM directly into your Server VM, your Router VM, and your Aruba 6300 Switch **without entering a password**.
+
+Follow this sequence from your Client VM terminal to complete the deployment:
+
+### Generate the Cryptographic Key Pair on the Client VM
+Log into your **Client VM** terminal and execute the following command to generate a modern, high-security Ed25519 key pair:
+```bash
+ssh-keygen -t ed25519
+```
+
+#### Mandatory Wireshark Trace Captures
+Start Wireshark on your Client interface card and export a single network analysis capture file containing **only** the following transaction exchanges:
+1.  **📸SSH Handshake (Client ➔ Server):** The secure key authentication sequence and subsequent response.
+2.  **📸SSH Handshake (Client ➔ Router):** The network path connection verification packets.
+3.  **📸SSH Handshake (Client ➔ Aruba 6300):** The infrastructure terminal management transport stream.
+4.  **📸DHCP Lease Exchange:** A clean, 4-packet sequence (`Discover, Offer, Request, Acknowledge`) captured while releasing and renewing your Client workstation's address space.
+5.  **📸DNS Name Resolution:** The full query and system translation lookup packets generated when your client navigates to `youtube.com` or `google.ca`.
