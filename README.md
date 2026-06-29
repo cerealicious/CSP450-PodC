@@ -94,7 +94,7 @@ Once logged into the 6300 CLI, enter privileged mode (`en` then `conf t`). Paste
 * **ROUTE B (If Switch 1 is a modern Aruba 6300 Core Switch):** Log into the switch console. Use modern ArubaOS-CX syntax to match Switch 2. Replicate both student VLAN IDs, assign respective access IPs, and configure interface `1/1/3` on both switches as an enterprise trunk network line (`vlan trunk allowed all`).
 
 ### [ ] Task 3.3: Production Cable Cutover & Physical Wiring Plan
-Once both switch configurations are fully saved (`write memory`), return to the back rack room. Unplug your temporary management lines and execute the complete structural layout patch according to the matrix below:
+Once both switch configurations are done, return to the back rack room. Unplug your temporary management lines and execute the complete structural layout patch according to the matrix below:
 
 #### Physical Cable & Topology Matrix
 
