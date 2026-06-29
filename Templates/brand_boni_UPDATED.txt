@@ -28,8 +28,8 @@ network:
 #frrRouterConfig.txt
 configure terminal
 router ospf
+  network 10.0.0.0/24 area 0.0.0.0
   network 192.168.3.160/30 area 0
-  network 172.16.101.192/26 area 0
 exit
 
 
@@ -64,8 +64,8 @@ network:
 #frrRouterConfig.txt
 configure terminal
 router ospf
-  network 192.168.3.164/30 area 0
-  network 172.16.101.64/26 area 0
+  network 10.0.0.0/24 area 0.0.0.0
+  network 192.168.3.164/30 area 0.0.0.0
 exit
 
 
