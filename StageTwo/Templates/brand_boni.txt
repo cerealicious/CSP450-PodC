@@ -1,0 +1,165 @@
+---------------------------------------------------------
+#dabrand (UID: 407)
+---------------------------------------------------------
+Internal Network Base Range (VLAN 407):
+Subnet Block: 172.16.101.192/26
+Subnet Mask: 255.255.255.192
+ Core Switch Gateway IP Address: 172.16.101.193
+
+Workstation Dynamic DHCP Range: 172.16.101.194 to 172.16.101.253
+Statically Reserved Ubuntu Server IP: 172.16.101.254
+
+Point-to-Point Router Transit Link Subnet:
+Subnet Block: 192.168.3.160/30
+Core Switch Port 1/1/6 IP: 192.168.3.161
+Linux Router WAN (ens37) IP: 192.168.3.162
+
+
+#staticAssignment.yaml
+network:
+  version: 2
+  ethernets:
+    ens37:
+      dhcp4: false
+      addresses:
+        - 192.168.3.162/30
+
+
+#frrRouterConfig.txt
+configure terminal
+router ospf
+  network 192.168.3.160/30 area 0
+  network 172.16.101.192/26 area 0
+exit
+
+
+---------------------------------------------------------
+#aabonifacio (UID: 405)
+---------------------------------------------------------
+Internal Network Base Range (VLAN 405):
+Subnet Block: 172.16.101.64/26
+Subnet Mask: 255.255.255.192
+Core Switch Gateway IP Address: 172.16.101.65
+Workstation Dynamic DHCP Range: 172.16.101.66 to 172.16.101.125
+Statically Reserved Ubuntu Server IP: 172.16.101.126
+
+
+Point-to-Point Router Transit Link Subnet:
+Subnet Block: 192.168.3.164/30
+Core Switch Port 1/1/7 IP: 192.168.3.165
+Linux Router WAN (ens37) IP: 192.168.3.166
+
+
+#staticAssignment.yaml
+network:
+  version: 2
+  ethernets:
+    ens37:
+      dhcp4: false
+      addresses:
+        - 192.168.3.166/30
+
+
+
+#frrRouterConfig.txt
+configure terminal
+router ospf
+  network 192.168.3.164/30 area 0
+  network 172.16.101.64/26 area 0
+exit
+
+
+
+
+---------------------------------------
+Aruba 6300 Core Switch Script
+---------------------------------------
+en
+conf t
+hostname dabrand-6300
+vlan 407
+spanning-tree
+name dabrand-vlan
+interface vlan 407
+no shutdown
+ip address 172.16.101.193/26
+ip ospf 1 area 0
+y
+y
+exit
+
+vlan 405
+spanning-tree
+name aabonifacio-vlan
+interface vlan 405
+no shutdown
+ip address 172.16.101.65/26
+ip ospf 1 area 0
+exit
+
+interface 1/1/3 
+no shutdown 
+no routing 
+vlan trunk native 1 
+vlan trunk allowed all
+exit
+
+interface 1/1/4 
+no shutdown
+routing
+ip address 192.168.3.161/30
+ip ospf 1 area 0
+exit
+
+interface 1/1/5
+no shutdown
+routing
+ip address 192.168.3.165/30
+ip ospf 1 area 0
+exit
+
+dhcp-server vrf default
+pool vlan407
+range 172.16.101.194 172.16.101.253 prefix-len 26
+default-router 172.16.101.193
+static-bind ip 172.16.101.254 mac DABRAND_SERVER_MAC_HERE
+dns-server 192.168.3.162
+exit
+
+pool vlan405
+range 172.16.101.66 172.16.101.125 prefix-len 26
+default-router 172.16.101.65
+static-bind ip 172.16.101.126 mac AABONIFACIO_SERVER_MAC_HERE
+dns-server 192.168.3.166
+exit
+
+enable
+router ospf 1
+router-id 407.405.407.405
+exit
+ip route 0.0.0.0 0.0.0.0 192.168.3.162
+ip route 0.0.0.0 0.0.0.0 192.168.3.166
+
+
+---------------------------------------
+Aruba 25xx Access Switch Script
+---------------------------------------
+en
+conf t
+ip default-gateway 172.16.101.193
+hostname aabonifacio-2500
+spanning-tree
+
+vlan 407
+name dabrand-vlan
+ip address 172.16.101.220/26
+untagged 1
+tagged 3
+exit
+
+vlan 405
+name aabonifacio-vlan
+ip address 172.16.101.90/26
+untagged 2
+tagged 3
+exit

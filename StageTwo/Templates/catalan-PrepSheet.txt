@@ -1,0 +1,35 @@
+Ceril Anthony Talan UID = 231
+MySenecaID: catalan
+PW: P@ssw0rd
+
+Use the above information to complete the following information:
+
+Linux Client HostName: catalan-Client
+Linux Server HostName: catalan-Server
+Linux Router HostName: catalan-Router
+
+Client and Server VLAN ID Number == VLAN 231
+IP subnet for address assignment: Starting Reservation: 172.16.0.0 /16
+172.16.0.0 /26  Subnet # 231
+
+Network ID == 172.16.57.192 
+First IP == 172.16.57.193 
+Last IP == 172.16.57.254 
+Broadcast ID == 172.16.57.255 
+
+Use the first IP as the default gateway: 172.16.54.65
+The Linux Server will be automatically allocated the last address in this subnet from the DHCP Server: 172.16.57.254	255.255.255.192
+(The Client will be assigned a dynamic address out of this pool)
+
+
+
+Router IP subnet for address assignment: Starting reservation: 192.168.0.0 /30
+Subnet # 231
+
+Network ID == 192.168.3.156 /30 
+First IP == 192.168.3.157 
+Last IP == 192.168.3.158 
+Broadcast ID == 192.168.3.159 
+
+Assign the first IP to the connected port on the Aruba 6300 switch: 192.168.3.101
+The Linux Router will be statically assigned the last address in this subnet from the DHCP Server: 192.168.3.158	255.255.255.252

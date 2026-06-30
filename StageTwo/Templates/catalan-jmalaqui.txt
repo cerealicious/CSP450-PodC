@@ -1,0 +1,120 @@
+===================================== 
+PART 1: ARUBA 6300 CORE SWITCH 
+=====================================
+
+en
+conf t
+hostname catalan-6300
+
+vlan 231
+spanning-tree
+name catalan-vlan
+interface vlan 231
+no shutdown
+ip address 172.16.57.193/26
+ip ospf 1 area 0
+y
+y
+exit
+
+
+vlan 217
+spanning-tree
+name jmalaqui-vlan
+interface vlan 217
+no shutdown
+ip address 172.16.54.65/26
+ip ospf 1 area 0
+exit
+
+
+interface 1/1/3 
+no shutdown 
+no routing 
+vlan trunk native 1 
+vlan trunk allowed all
+exit
+
+
+
+interface 1/1/4 
+no shutdown
+routing
+ip address 192.168.3.157/30
+ip ospf 1 area 0
+exit
+
+
+interface 1/1/5
+no shutdown
+routing
+ip address 192.168.3.101/30
+ip ospf 1 area 0
+exit
+
+
+dhcp-server vrf default
+
+
+pool vlan231
+range 172.16.57.194 172.16.57.253 prefix-len 26
+default-router 172.16.57.193
+static-bind ip 172.16.57.254 mac 00:0C:29:05:00:B6
+dns-server 192.168.3.158
+exit
+
+
+
+
+pool vlan217
+range 172.16.54.66 172.16.54.125 prefix-len 26
+default-router 172.16.54.65
+static-bind ip 172.16.54.126 mac 00:0C:29:47:FE:85
+dns-server 192.168.3.102
+exit
+
+
+
+enable
+router ospf 1
+router-id 231.231.231.231
+exit
+
+ip route 0.0.0.0 0.0.0.0 192.168.3.158
+ip route 0.0.0.0 0.0.0.0 192.168.3.102
+
+
+
+
+
+
+
+
+
+
+================================
+PART 2: ARUBA 2500 ACCESS SWITCH 
+================================
+
+en
+conf t
+
+ip default-gateway 172.16.57.193
+hostname "jmalaqui-2530"
+spanning-tree
+
+
+vlan 231
+name "catalan-vlan"
+ip address 172.16.57.194/26
+untagged 1
+tagged 3
+exit
+
+
+vlan 217
+name "jmalaqui-vlan"
+ip address 172.16.54.66/26
+untagged 2
+tagged 3
+exit
