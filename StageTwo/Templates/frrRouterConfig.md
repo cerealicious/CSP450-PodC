@@ -8,6 +8,7 @@ These command strings program your local routing architecture to calculate paths
 
 ```bash
 sudo vtysh
+
 conf t
 router ospf
   router-id router-id 231.1.1.2               # ----> Loopback/Identity identifier derived from Your UID
@@ -17,7 +18,7 @@ router ospf
 ip route 0.0.0.0 0.0.0.0 ens33                # ----> Gateway-of-Last-Resort shunted out through internet port
 ```
 
-<br> <br>
+<br> <br> <br>
 Note: I think I have to add my Local VLAN for Stage 3:
 ```bash
 network 172.16.57.192/26 area 0.0.0.0         # ----> advertise your own LAN so classmates can find your store.
