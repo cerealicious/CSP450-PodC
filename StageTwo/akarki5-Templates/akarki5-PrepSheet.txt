@@ -1,0 +1,28 @@
+Unique ID#: 214
+SenecaID: akarki5
+Linux Client HostName: akarki5-Client
+Linux Server HostName: akarki5-Server
+Linux Router HostName: akarki5-Router
+
+Client and Server VLAN ID Number= VLAN 214
+IP subnet for address assignment: Starting reservation 172.16.0.0/16
+
+172.16.0.0/26 Subnet# 214
+Network ID== 172.16.53.128
+First IP== 172.16.53.129
+Last IP== 172.16.53.190
+Broadcast ID== 172.16.53.191
+Use the first IP as the default gateway: 172.16.53.129
+
+The Linux Server will be automatically allocated the last address in this subnet from the DHCP Server: 172.16.53.190
+
+
+
+Router IP subnet for address assignment: 192.168.0.0/30
+
+Network ID== 192.168.3.136/30
+First IP== 192.168.3.137
+Last IP== 192.168.3.138
+Assign the first IP to the connected port on the Aruba 6300 switch: 192.168.3.137
+
+The Linux Router will be statically assigned the last address in this subnet: 192.168.3.138

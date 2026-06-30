@@ -1,0 +1,25 @@
+Unique ID#: 206
+MySenecaID: caemmanuel
+Linux Client HostName: caemmanuel-Client
+Linux Server HostName: caemmanuel-Server
+Linux Router HostName: caemmanuel-Router
+
+
+Client and Server VLAN ID Number= VLAN 206
+IP subnet for address assignment: Starting reservation 172.16.0.0/16
+172.16.0.0/26 Subnet# 206
+
+Network ID== 172.16.51.128
+First IP== 172.16.51.129
+Last IP== 172.16.51.190
+Broadcast ID== 172.16.51.191
+Use the first IP as the default gateway: 172.16.51.129
+The Linux Server will be automatically allocated the last address in this subnet from the DHCP Server: 172.16.51.190
+
+
+Router IP subnet for address assignment: 192.168.0.0/30
+Network ID== 192.168.3.104/30
+First IP== 192.168.3.105
+Last IP== 192.168.3.106
+Assign the first IP to the connected port on the Aruba 6300 switch: 192.168.3.105
+The Linux Router will be statically assigned the last address in this subnet: 192.168.3.106

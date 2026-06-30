@@ -1,0 +1,7 @@
+network:
+  version: 2
+  ethernets:
+    ens37:
+      dhcp4: false
+      addresses:
+        - 192.168.3.106/30
