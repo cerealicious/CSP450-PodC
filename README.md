@@ -45,7 +45,9 @@ For detailed, step-by-step instructions on how the network layer was planned and
 * **[Stage Two README](./StageTwo/README.md)**: Contains the full matrix, infrastructure prerequisite packages, and physical topology blueprints.
 
 ## 📁 Additional Resources
-* **[Templates](./StageTwo/Templates/)**: Configuration files used during the project deployment pipeline.
+Each stage folder contains its own set of resources to help you replicate the setup:
+* **[Stage Two Templates](./StageTwo/Templates/)**: Switch configs, firewall rules, and network diagrams for the infrastructure layer.
+* **[Stage Three Templates](./StageThree/Templates/)**: SQL scripts, PHP source code, and server configuration files for the application layer.
 * ~~**My Personal Screenshots**: Visual metric captures and packet verification logs used for laboratory report compliance.~~
 
 ---
