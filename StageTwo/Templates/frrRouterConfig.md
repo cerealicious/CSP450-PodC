@@ -10,7 +10,7 @@ These command strings program your local routing architecture to calculate paths
 sudo vtysh
 conf t
 router ospf
-  router-id router-id 231.0.0.1               # ----> Loopback/Identity identifier derived from Your UID
+  router-id router-id 231.1.1.2               # ----> Loopback/Identity identifier derived from Your UID
   network 10.0.0.0/8 area 0.0.0.0             # ----> Seneca Lab Backbone Network (Ensure subnet value matches active room)
   network 192.168.3.156/30 area 0.0.0.0       # ----> Local Switch-Facing Point-to-Point Link Network ID
   exit
