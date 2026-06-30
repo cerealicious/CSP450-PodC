@@ -19,7 +19,7 @@ Welcome to the master documentation repository for my CSP450 project. The explic
 ## 📂 Project Stages
 
 | Stage | Status | Description |
-| :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- |
 | **[Stage Two](./StageTwo/)** | ✅**Completed** | Build the network infrastructure layer (OSPF, routing pools, VLAN segmentation, and edge NAT firewalls. |
 | **[Stage Three](./StageThree/)** | 🚧**In-Progress** | Enterprise MariaDB integration, schema deployment, and PHP frontend connectivity. |
 
