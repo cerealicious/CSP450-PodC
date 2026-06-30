@@ -111,7 +111,7 @@ vlan 231
 
 # Map Local Workspace Isolation Rules for Your Partner's Floor
 vlan 217
-  name "jmalaqui-vlan"
+  name jmalaqui-vlan
   ip address 172.16.54.66/26           # ----> Access Switch Unique SVI IP (Partner Subnet - Partners Second Usable IP)
   untagged 2                           # ----> Maps physical port 2 strictly to Partner desk drop
   tagged 3                             # ----> Shunts Partner data tags up the trunk line to Core
