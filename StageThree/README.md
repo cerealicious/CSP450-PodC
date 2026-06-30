@@ -1,35 +1,237 @@
 # Stage Three: Enterprise Database Integration & Application Tier
 
-## 🎯 Core Objective
-In Stage Two, we successfully established the network infrastructure layer, including OSPF routing, VLAN segmentation, and edge NAT firewalls. 
+## 🎯 Project Overview
+This repository contains the deployment phase for Stage 3 of our Enterprise Infrastructure Lab. Having established an OSPF-routed network architecture with secure VLAN segmentation in Stage Two, Stage Three scales an online relational database management system (**MariaDB**) coupled to a dynamic web application frontend (**Apache/PHP**).
 
-In Stage Three, the focus shifts to bringing an enterprise database application online across that secured network. The primary task is to transform the Ubuntu Server VM into a secure database host running **MariaDB**, initialize a custom relational data scheme, secure it via internal loop configurations, and connect it to a web-driven PHP frontend utility.
+## 🗺️ System Parameters (Profile: catalan)
+* **VLAN ID:** 231
+* **Server Hostname:** catalan-Server
+* **Server Production IP:** 172.16.57.254
+* **Database Target Engine:** MariaDB 10.x
+* **Application Stack:** Apache2, PHP 8.x, PDO-MySQL Driver
 
-## 🗺️ System Blueprint & Implementation Phases
+## 📁 Repository Directory Structure
+* `/var/www/html/index.php` - Custom PHP Instrument Lookup Utility Front-End
+* `populatedTable.csv` - Sanitized flat-file containing instrument inventory dataset
+
+
+## 🛡️ Security Posture
+* **Administrative Layer:** Bound strictly to local internal administration credentials.
+* **Tenant Access Policy:** Universal cross-student read-only tenant (`csp450ro`) restricted explicitly to `SELECT` privileges to mitigate data injection or unauthorized drops.
+
+
+## 📊 System Blueprint & Implementation Phases
 All implementation steps replace generic examples with our unique corporate profile name: **catalan**.
 
-### Phase 1: DB Infrastructure & Environment Provisioning
-- Install core `mariadb-server` engines on the Ubuntu Server VM.
-- Configure listener bindings to the local production address (`172.16.57.254`).
-
-### Phase 2: Database Initialization & Schema Deployment
-- Construct custom relational tables using raw SQL script blocks based on the provided spreadsheet fields.
-- Define explicit record constraints and index boundaries to ensure data integrity.
-
-### Phase 3: Relational Data Population
-- Populate tables with real data keys derived from the CSV layout.
-
-### Phase 4: Multi-Tenant Database Access & Security Policies
-- Create custom internal users with distinct roles.
-- Assign strict administrative privileges using `GRANT PRIVILEGES` to enforce least-privilege access.
-
-### Phase 5: Application Tier Integration (PHP Frontend)
-- Deploy and configure the `mariaDBfrontEnd.php` script.
-- Establish connectivity between workstations and the database engine over active switch trunk paths.
-
-### Phase 6: Visual Inspection, Verification, & Reporting
-- Perform validation checks on the database state and frontend connectivity.
-- Capture validation strings and metrics for the final lab sign-off sheet.
+---
 
 ---
-*Last Updated: June 29, 2026*
+#  Phase 1: DB Infrastructure & Environment Provisioning
+1. Login to your Server VM, open terminal and run: `sudo apt update`.
+2. Install Software Binaries by running the command: `sudo apt install apache2 php php-mysql mariadb-server mariadb-client -y`
+3. Enable Remote Network Access:
+MariaDB locks down its ears so it only listens to itself (localhost). We need to explicitly tell it to listen to your production IP address (`172.16.57.254`) so that my classmates can access my store. Edit the configuration file by running:
+```bash
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+```
+4. Look for `bind-address = 127.0.0.1` and change it to `bind-address = 0.0.0.0` then save the configuration file. *(This tells MariaDB to listen on all active network interfaces on your server, including your production IP).*
+
+5. Restart mariadb and make sure it is enabled
+```bash
+sudo systemctl restart mariadb
+sudo systemctl enable mariadb
+```
+
+6. In terminal, run `sudo ss -tulpn | grep 3306`. If you see a line showing `0.0.0.0:3306` or `*:3306`. This confirms your database server is awake and listening for network connections.
+
+- Install core `mariadb-server` engines on the Ubuntu Server VM.
+- Configure listener bindings to the local production address (`172.16.57.254`).
+---
+
+#  Phase 2: Phase 2: Multi-Tenant Database Access & Security Policies
+### Database Initialization
+1. Login to your Server VM, open terminal and run: `sudo mariadb -u root`
+*Terminal prompt will change from your regular command line to a database prompt that looks like `MariaDB [(none)]>`. This means you are now successfully inside the database engine.*
+
+2. Create your privileged Admin Account. Make sure to create your own strong password of choice:
+```bash
+CREATE USER 'catalan_admin'@'%' IDENTIFIED BY 'P@ssw0rd';
+```
+Give this user full administrative power over everything by typing this and hitting Enter:
+```bash
+GRANT ALL PRIVILEGES ON *.* TO 'catalan_admin'@'%' WITH GRANT OPTION;
+```
+3. Create the share account that our classmates will use to view your database:
+```bash
+CREATE USER 'csp450ro'@'%' IDENTIFIED BY 'csp450ro';
+```
+Limit this user so they can **only** read data using the `SELECT` command, preventing them from deleting things:
+
+```bash
+GRANT SELECT ON *.* TO 'csp450ro'@'%';
+```
+4. Save Changes and Exit
+```bash
+FLUSH PRIVILEGES;
+EXIT;
+```
+---
+
+
+
+#  Phase 3: Relational Schema Deployment & Data Population.
+### Task 3.1: Initialize the Production Database & Tables**
+1. Log in to local MariaDB shell prompt using the Admin root credentials:
+```bash
+sudo mariadb -u root
+```
+2. Now, create the schema and name it `inventory` exactly as specified:
+
+```SQL
+CREATE DATABASE inventory;
+```
+3. Switch focus over into your new database area so your next commands know where to place the data tables:
+
+```SQL
+USE inventory;
+```
+
+4. Now, copy and paste this entire code block into your terminal and press Enter to create the empty inventory template:
+
+```SQL
+CREATE TABLE instruments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  instrument_type VARCHAR(100),
+  instcondition VARCHAR(50),
+  price DECIMAL(10,2)
+);
+```
+```SQL
+EXIT;
+```
+
+### Task 3.2: Prepare and Move the CSV Data File
+*Before continuing, make sure to edit your `populatedTable.csv` file using an application like Notepad or Excel to append your 10 unique, custom corporate branch instruments at the bottom of the document.*
+
+1. Place it into MariaDB's highly guarded private system directory:
+```bash
+sudo cp populatedTable.csv /var/lib/mysql/inventory/
+```
+2. Modify the folder ownership
+```bash
+sudo chown mysql:mysql /var/lib/mysql/inventory/populatedTable.csv
+```
+3. Log back in to MariaDB, select Inventory and use LOAD DATA INFILE:
+```bash
+sudo mariadb -u root
+```
+
+```SQL
+USE inventory;
+```
+```SQL
+LOAD DATA INFILE 'populatedTable.csv' INTO TABLE instruments
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+```
+
+4. Run a query to confirm if everything was imported:
+```SQL
+SELECT * FROM instruments LIMIT 5;
+```
+---
+
+# Phase 4: Application Integration (Apache & PHP Frontend)
+### Task 4.1: Modify the Database Frontend Script
+1. Open your local copy of the `mariaDBfrontEnd.php` script on your Client VM, find the top configuration block, and edit lines 8–14 to look like this:
+```php
+<?php
+/**
+ * CSP450 Stage 3 - Instrument Lookup
+ * Student: catalan (UID 231)
+ * Server:  catalan-Server (172.16.57.254)
+ */
+session_start();
+$db_name = 'inventory'; // Points to our new database 
+$db_user = 'csp450ro';    // Global read-only login account
+$db_pass = 'csp450ro';    // Matching password
+$db_port = 3306;
+$my_uid = 231;          // Your Unique ID
+```
+
+### Task 4.2: Move the Files Over to Your Production Server
+1. Open a terminal Client VM and securely copy (scp) the modified web app script straight to your server:
+```bash
+scp index.php catalan@172.16.57.254:/tmp/
+```
+2. On Server VM terminal run the command to pull it out of the temporary folder and place it directly into Apache's primary web directory:
+
+```bash
+sudo mv /tmp/index.php /var/www/html/index.php
+```
+3. Delete the old index.html file
+
+```bash
+sudo rm /var/www/html/index.html
+```
+
+### Task 4.3: Secure File System Permissions
+1. Change the permissions of Apache web service:
+```bash
+sudo chown www-data:www-data /var/www/html/index.php
+sudo chmod 644 /var/www/html/index.php
+```
+2. Restart Apache
+```bash
+sudo systemctl restart apache2
+```
+
+---
+
+# Phase 5: Enterprise Cross-Tenant Verification & Final Inspection
+### Task 5.1: Access Your Local Web Server Front-End
+1. In your Client VM, open browser and type the Server's IP Address:
+```bash
+172.16.57.254
+```
+2. Press Enter and you should see a webpage titled **"Instrument Lookup — Musical Instrument Sales Co."**
+
+
+### Step 5.2: Test Your Custom Instrument Search
+- Verify that your database can fetch the custom entries we appended
+    - In the **Database Server** IP box, type your own server IP: `172.16.57.254`.
+    - In the **Instrument Type** box, type: `Guitar`.
+    - In the **Condition dropdown**, select: `New`.
+    - In the **Maximum Price** box, type: `1500`.
+    - Click **Search Inventory**.
+    
+🔍 *Expected Result: Your webpage will display a clean result row showing your custom entry: `Custom Electric Guitar` priced perfectly at `$1500.00`.*
+
+
+### Task 5.3: Run a Unique Inventory Search
+ - Try searching for another one of your unique creations to prove the database filters are dynamically responsive.
+    - In the **Instrument Type** box, type: Saxophone
+    - Clear out the condition and price limits.
+    - Click **Search Inventory**.
+
+🔍 *Expected Result: The webpage will filter out everything else and display your `Vintage Alto Saxophone` priced at `$2450.00`.*
+
+
+
+### Step 5.4: Connect to a Classmate’s Database (Remote Host)
+ - Ask one of your classmates for their Server VMs IP Address.
+    - Erase your IP from the **Database Server IP** box, and type in your **classmate's Server IP** instead.
+    - Clear the other boxes.
+    - Click **Search Inventory**.
+    
+🔍 *Expected Result: Your web interface will route through your physical switches, log into their MariaDB instance using the shared reader account, and display their inventory*
+
+---
+
+### 📋 Phase 6: Final Submission Checklist
+- [ ] `index.php`: The edited frontend script containing your custom user details at the top. 
+- [ ] `populatedTable.csv`: Your modified flat-file spreadsheet featuring your 10 unique corporate branch instruments appended cleanly to the bottom. 
+*Last Updated: June 30, 2026*
