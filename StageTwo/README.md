@@ -431,23 +431,81 @@ To avoid submitting unnecessary background noise (like ARP, STP, or SSDP traffic
 <BR><BR>
 
 
-## 🔄 Post-Boot Order of Operations & Troubleshooting
-When you power on your lab pod, services may initialize out of order, causing a loss of internet access due to switch port initialization delays. If your Client cannot reach the web, execute this manual sequence on your VMs:
-1. Check Router IP Forwarding: Ensure the kernel is actively passing traffic:
+### 🔄 Mandatory Boot Sequence
 
-```Bash
-sudo sysctl -w net.ipv4.ip_forward=1
-```
-2. Reload Router Firewall & NAT Engine:
-```Bash
-sudo nft -f /etc/nftables.conf
-```
-3. Restart Routing Daemon:
-```Bash
-sudo systemctl restart frr
-```
-4. Force Workstation DHCP Renewal: On both Client and Server VMs, force a fresh lease acquisition:
-```Bash
-sudo dhclient -r && sudo dhclient -v
-```
-------
+1. **Physical Switches:** Ensure Aruba 6300 and Aruba 2530 are fully booted and configured *before* powering on any VMs.
+2. **Start Router VM (First)**: Wait until it reaches the login prompt
+    - Apply Netplan: `sudo netplan apply`
+    - Enable IP Forwarding: `sudo sysctl -w net.ipv4.ip_forward=1`
+    - Apply Nftables: `sudo nft -f /etc/nftables.conf`
+    - Start FRR: `sudo systemctl restart frr`
+    - *Wait 30 seconds for OSPF neighbors to form.*
+      - ✅Core Switch (231.231.231.231) shows state FULL/DR or FULL/BDR
+
+3. **Start Server VM (Second)**: Wait for login prompt.
+    - Renew DHCP lease immediately: `sudo dhclient -r ens33 && sudo dhclient -v ens33`
+      - ✅VERIFY: `ip a` show `ens33` returns `172.16.57.254/26`.
+4. **Start Client VM (Last)**: Only after Server confirms correct IP.
+    - Renew DHCP lease: `sudo dhclient -r ens33 && sudo dhclient -v ens33`
+      - ✅VERIFY: `ip a` show `ens33` returns address in `172.16.57.194–253` range.
+    - Test connectivity: `ping 172.16.57.193` (Gateway) → `ping 8.8.8.8` (Google DNS).
+
+---
+
+### 🔧 Troubleshooting: "Client Has No Internet After Boot"
+
+If the Client fails to reach the internet despite following the boot sequence, check these **in order**:
+
+| Check | Command / Action | Expected Result |
+| :--- | :--- | :--- |
+| **1. Client IP Assignment** | `ip a show ens33` on Client | Must be in `172.16.57.194–253` range. If it's `169.254.x.x`, DHCP failed. |
+| **2. Default Gateway Reachability** | `ping 172.16.57.193` from Client | Must reply. If not, VLAN/trunk misconfiguration on 2530/6300. |
+| **3. Router IP Forwarding** | `cat /proc/sys/net/ipv4/ip_forward` on Router | Must return `1`. If `0`, run `sudo sysctl -w net.ipv4.ip_forward=1`. |
+| **4. Nftables Masquerade Rule** | `sudo nft list chain ip nat postrouting` on Router | Must show `oifname "ens33" masquerade`. Missing = no NAT. |
+| **5. Router OSPF Neighbor State** | `show ip ospf neighbor` in `vtysh` on Router | Must show Core Switch as `FULL/DR`. If `INIT/DOWN`, fix Router ID or network statements. |
+| **6. DNS Resolution** | `nslookup youtube.com` from Client | Must resolve. If not, check Nftables DNAT rule for port 53 → `10.101.100.21`. |
+| **7. Firewall Blocking Return Traffic** | `sudo nft list chain inet filter forward` on Router | Must allow `iifname "ens33" oifname "ens37" ct state established,related accept`. |
+
+---
+
+
+## 🚨 Critical DHCP Troubleshooting Scenarios
+
+If following the mandatory boot sequence does not resolve connectivity issues, use these specific diagnostic paths based on which VMs are failing to obtain an IP address.
+
+### Scenario A: Server VM Has No IP (APIPA `169.254.x.x`)
+*The Client has internet, but the Server cannot get its static-bound IP (`172.16.57.254`).*
+
+| Check | Command / Action | Expected Result | Fix If Failed |
+| :--- | :--- | :--- | :--- |
+| **1. MAC Address Match** | Compare `ip link show ens33` on Server vs. `static-bind` in 6300 config | MACs must match **exactly** (case-insensitive) | Re-run `static-bind ip 172.16.57.254 mac <ACTUAL_MAC>` on Aruba 6300. Save memory. |
+| **2. DHCP Pool Range** | `show dhcp-server vrf default pool vlan231` on 6300 | Range includes `.254` and prefix-len is `/26` | Ensure range is `172.16.57.194 172.16.57.253`. Static binds *outside* the dynamic range are still valid, but verify syntax. |
+| **3. SVI Status** | `show ip interface brief \| include Vlan231` on 6300 | State is `up/up` | Run `interface vlan 231` → `no shutdown`. Verify VLAN 231 exists and is active. |
+| **4. Access Port Tagging** | `show interfaces ethernet 1/1/x switchport` on 2530 | Port connected to Server is `untagged 231` | If port is `tagged`, Server won't get untagged DHCP. Change to `untagged 231`. |
+| **5. Force Renew** | `sudo dhclient -r ens33 && sudo dhclient -v ens33` on Server | Should receive `172.16.57.254` | Watch verbose output for `DHCPACK`. If `DHCPNAK`, MAC or pool mismatch exists. |
+
+### Scenario B: BOTH Server & Client Have No IP
+*Neither VM receives any address from the Aruba 6300.*
+
+| Check | Command / Action | Expected Result | Fix If Failed |
+| :--- | :--- | :--- | :--- |
+| **1. Trunk Link Health** | `show interfaces ethernet 1/1/3 switchport` on 6300 | Mode: `trunk`, Native: `1`, Allowed: `all` | If trunk is down or misconfigured, no VLAN traffic reaches the 2530. Re-apply trunk config. |
+| **2. 2530 Uplink** | `show interfaces ethernet 3 switchport` on 2530 | Mode: `trunk`, Tagged: `231,217` | Port 3 on 2530 MUST be tagged for both VLANs. If untagged, only native VLAN passes. |
+| **3. OSPF Adjacency** | `show ip ospf neighbor` on 6300 | Router shows `FULL/BDR` or `FULL/DR` | If OSPF is down, the 6300 may not be routing between VLAN SVIs properly. Check Router ID conflicts. |
+| **4. DHCP Service** | `show dhcp-server vrf default statistics` on 6300 | Active leases > 0 | If service is stopped, run `dhcp-server vrf default` → `no shutdown`. |
+| **5. Physical Cabling** | Verify LED status on 6300 Port 1/1/3 and 2530 Port 3 | Both ports show solid green link light | Replace cable if amber/off. Ensure correct port mapping (Port 3 = Uplink). |
+| **6. VLAN Existence** | `show vlan` on BOTH switches | VLAN 231 and 217 exist and are `active` | VLANs created on 6300 do NOT auto-propagate to 2530. Must create manually on 2530. |
+
+### Scenario C: Client Gets IP But Cannot Reach Internet
+*Server works fine, Client has valid IP (`172.16.57.x`), but `ping 8.8.8.8` fails.*
+
+| Check | Command / Action | Expected Result | Fix If Failed |
+| :--- | :--- | :--- | :--- |
+| **1. Default Gateway** | `ip route show default` on Client | Points to `172.16.57.193` | If missing, DHCP didn't send option 3. Check `default-router` in 6300 pool config. |
+| **2. Router Forwarding** | `cat /proc/sys/net/ipv4/ip_forward` on Router | Returns `1` | Run `sudo sysctl -w net.ipv4.ip_forward=1`. Make persistent in `/etc/sysctl.conf`. |
+| **3. NAT Masquerade** | `sudo nft list chain ip nat postrouting` on Router | Shows `oifname "ens33" masquerade` | Without masquerade, return traffic from internet is dropped. Re-apply Nftables. |
+| **4. DNS Resolution** | `nslookup youtube.com` on Client | Resolves to public IP | If fails but ping works, check DNAT rule: `iifname "ens37" udp dport 53 dnat to 10.101.100.21`. |
+| **5. Firewall Forward** | `sudo nft list chain inet filter forward` on Router | Allows `ens37→ens33` and established return | Missing forward rules block LAN-to-WAN traffic entirely. |
+| **6. OSPF Route** | `vtysh -c "show ip route 0.0.0.0/0"` on Router | Shows default via `ens33` | If router has no default route, it cannot forward to Seneca network. Check `ip route 0.0.0.0 0.0.0.0 ens33`. |
+
+---
