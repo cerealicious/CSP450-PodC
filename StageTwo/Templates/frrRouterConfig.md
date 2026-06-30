@@ -6,7 +6,7 @@
 These command strings program your local routing architecture to calculate paths dynamically across the campus network topology fabric.
 
 
-```text
+```bash
 sudo vtysh
 conf t
 router ospf
@@ -18,5 +18,7 @@ ip route 0.0.0.0 0.0.0.0 ens33                # ----> Gateway-of-Last-Resort shu
 ```
 
 
-Note: I think I have to add my Local VLAN for Stage 3: <br>
+Note: I think I have to add my Local VLAN for Stage 3:
+```bash
 network 172.16.57.192/26 area 0.0.0.0         # ----> advertise your own LAN so classmates can find your store.
+```
