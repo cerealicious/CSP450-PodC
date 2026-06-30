@@ -20,11 +20,6 @@ This repository contains the deployment phase for Stage 3 of our Enterprise Infr
 * **Tenant Access Policy:** Universal cross-student read-only tenant (`csp450ro`) restricted explicitly to `SELECT` privileges to mitigate data injection or unauthorized drops.
 
 
-## 📊 System Blueprint & Implementation Phases
-All implementation steps replace generic examples with our unique corporate profile name: **catalan**.
-
----
-
 ---
 #  Phase 1: DB Infrastructure & Environment Provisioning
 1. Login to your Server VM, open terminal and run: `sudo apt update`.
