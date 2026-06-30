@@ -22,7 +22,7 @@ This repository serves as a **conceptual blueprint**, not a copy-paste solution.
 ### 🔑 Using My Prep Sheet as Your Reference Key
 Since every student has unique UIDs and subnet calculations, you cannot directly apply my commands. Instead, use my documentation to understand the *logic* behind each step:
 
-1.  **Open My Prep Sheet:** Review `catalan-PrepSheet.pdf` in this repository.
+1.  **Open My Prep Sheet:** Review `catalan-PrepSheet.txt` in this repository.
 2.  **Map the Variables:** When you see an IP address or subnet in my guide (e.g., `172.16.57.192/26`), cross-reference it with my Prep Sheet to see exactly which field it corresponds to (e.g., "Network ID for Subnet #231").
 3.  **Substitute Your Own Values:** Replace my UID-based values with the equivalent fields from **your own** completed Prep Sheet.
 
