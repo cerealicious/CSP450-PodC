@@ -16,6 +16,23 @@ Welcome to the master documentation repository for my CSP450 project. The explic
 
 ---
 
+## 🎓 Course Context & Expectations
+
+### The Capstone Challenge
+CSP450 is not just another standalone course; it is the **culmination of our entire program**. As stated in the syllabus, this project is designed to apply knowledge acquired from **CSN305 (Networking), OPS345 (Linux Admin), MST300 (Windows/Server), and SEC320 (Security)**. 
+
+If you feel lost or overwhelmed, **you are not alone**. This is a common reaction because:
+1.  **Integration Complexity:** We are no longer dealing with isolated tasks. We are building an **interconnected multi-server environment** where a mistake in one layer (e.g., VLANs) breaks another (e.g., Database connectivity).
+2.  **Simulation vs. Reality:** Many of us learned networking basics using **Cisco Packet Tracer**. While useful for theory, Packet Tracer hides the complexities of real hardware, Linux command-line nuances, and physical cabling issues. Transitioning to **real switches** and **on-premises server administration** requires a shift in mindset from "clicking buttons" to "understanding protocols."
+
+### Why This Repository Exists
+This guide aims to bridge the gap between theory and practice. It provides:
+*   **Architectural Blueprints:** How to plan your network before touching a cable.
+*   **Step-by-Step Implementation:** Detailed commands and configurations for Linux and Network devices.
+*   **Troubleshooting Logic:** How to diagnose issues when things don't work as they did in simulation.
+
+---
+
 ## 📂 Project Stages
 
 | Stage | Status | Description |
@@ -32,4 +49,4 @@ For detailed, step-by-step instructions on how the network layer was planned and
 * ~~**My Personal Screenshots**: Visual metric captures and packet verification logs used for laboratory report compliance.~~
 
 ---
-*Last Updated: June 30, 2026*
+*Last Updated: July 01, 2026*
