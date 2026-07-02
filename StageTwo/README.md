@@ -149,7 +149,7 @@ Boot your Ubuntu Router VM. Open your Netplan configuration file (`sudo nano /et
 By default, Linux blocks data packets from traveling between different network cards. Enable system routing by opening the system control configuration architecture: `sudo sysctl -w net.ipv4.ip_forward=1`. *(To make this change permanent through restarts, uncomment the line `net.ipv4.ip_forward=1` inside the `/etc/sysctl.conf` file or `/etc/sysctl.d/99-custom.conf`).*
 
 ### [ ] Task 5.3: Ignite the OSPF Routing Daemon Engine
-Open the Free Range Routing daemon settings file (`sudo nano /etc/frr/daemons`) and change the line reading `ospfd=no` to `ospfd=yes`. Restart the routing system manager: `sudo systemctl restart frr`.
+Open the Free Range Routing daemon settings file (`sudo nano /etc/frr/daemons`) and change the line reading `ospfd=no` to `ospfd=yes`. Sometimes manual file edits can accidentally change the file permissions, causing the FRR process to crash on boot because it cannot read its own config, so we have to reset the permission of the frr folder by running: `sudo chown -R frr:frr /etc/frr/`. Then restart the routing system manager by running: `sudo systemctl restart frr`.
 
 ### [ ] Task 5.4: Broadcast Local Subnet Routes
 Enter the interactive routing suite engine by typing `sudo vtysh`. Enter configuration mode (`conf t`), configure your `router ospf` environment, assign your unique router-id `231.1.1.2`, and use network command strings to advertise both your Point-to-Point WAN link and your private local subnet out to Area 0.
