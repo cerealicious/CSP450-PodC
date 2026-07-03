@@ -1,7 +1,7 @@
 ## 🗺️ Cabling Matrix
 
 | From Device | Port | To Device | Port | Cable Type | Purpose / Configuration Reference |
-| :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- | :--- |
 | **Aruba 6300 Core** | 1/1/3 | **Aruba 2530 Access** | 3 | **Inter-Switch Trunk Link**<br>Carries tagged traffic for VLAN 231 & VLAN 217.<br>*Config:* `vlan trunk native 1`, `vlan trunk allowed all` |
 | **Aruba 6300 Core** | 1/1/4 | **Catalan Router VM** | ens37 | **Catalan WAN Point-to-Point Link**<br>Subnet: `192.168.3.156/30`<br>Switch IP: `.157` \| Router IP: `.158`<br>*Config:* `ip address 192.168.3.157/30`, `ip ospf 1 area 0` |
 | **Aruba 6300 Core** | 1/1/5 | **jMalaqui Router VM** | ens37 | **jMalaqui WAN Point-to-Point Link**<br>Subnet: `192.168.3.100/30`<br>Switch IP: `.101` \| Router IP: `.102`<br>*Config:* `ip address 192.168.3.101/30`, `ip ospf 1 area 0` |
