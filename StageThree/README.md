@@ -45,18 +45,18 @@ sudo systemctl enable mariadb
 
 #  Phase 2: Phase 2: Multi-Tenant Database Access & Security Policies
 ### Database Initialization
-1. Login to your Server VM, open terminal and run: `sudo mariadb -u root`
+1. Login to your Server VM, open terminal and run: `sudo mariadb -u root`.
 *Terminal prompt will change from your regular command line to a database prompt that looks like `MariaDB [(none)]>`. This means you are now successfully inside the database engine.*
 
 2. Create your privileged Admin Account. Make sure to create your own strong password of choice:
 ```bash
 CREATE USER 'catalan_admin'@'%' IDENTIFIED BY 'P@ssw0rd';
 ```
-Give this user full administrative power over everything by typing this and hitting Enter:
+3. Give this user full administrative power over everything by typing this and hitting Enter:
 ```bash
 GRANT ALL PRIVILEGES ON *.* TO 'catalan_admin'@'%' WITH GRANT OPTION;
 ```
-3. Create the share account that our classmates will use to view your database:
+4. Create the share account that our classmates will use to view your database:
 ```bash
 CREATE USER 'csp450ro'@'%' IDENTIFIED BY 'csp450ro';
 ```
@@ -65,7 +65,7 @@ Limit this user so they can **only** read data using the `SELECT` command, preve
 ```bash
 GRANT SELECT ON *.* TO 'csp450ro'@'%';
 ```
-4. Save Changes and Exit
+5. Save Changes and Exit
 ```bash
 FLUSH PRIVILEGES;
 EXIT;
