@@ -20,9 +20,9 @@ The Linux Server will be automatically allocated the last address in this subnet
 
 Router IP subnet for address assignment: 192.168.0.0/30
 
-Network ID== 192.168.3.136/30
-First IP== 192.168.3.137
-Last IP== 192.168.3.138
-Assign the first IP to the connected port on the Aruba 6300 switch: 192.168.3.137
+Network ID== 192.168.3.88 /30
+First IP== 192.168.3.89
+Last IP== 192.168.3.90
+Assign the first IP to the connected port on the Aruba 6300 switch: 192.168.3.89
 
-The Linux Router will be statically assigned the last address in this subnet: 192.168.3.138
+The Linux Router will be statically assigned the last address in this subnet: 192.168.3.89
