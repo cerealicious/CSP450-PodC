@@ -1,9 +1,9 @@
 sudo vtysh
 conf t
 router ospf
-  router-id 206.1.1.2
-  network 10.0.0.0/8 area 0.0.0.0
-  network 192.168.3.0/24 area 0.0.0.0
+router-id 206.1.1.2
+network 10.0.0.0/8 area 0.0.0.0
+network 192.168.3.0/24 area 0.0.0.0
 
 exit
 ip route 0.0.0.0 0.0.0.0 ens33
