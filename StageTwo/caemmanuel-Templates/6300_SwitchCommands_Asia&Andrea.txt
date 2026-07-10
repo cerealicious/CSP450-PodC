@@ -73,7 +73,7 @@ pool_206
 range 172.16.51.130 172.16.51.189
 default-router 172.16.51.129
 dns-server 10.101.100.21
-static-bind ip 172.16.51.190 mac [CAEMMANUEL_SERVER_MAC_HERE]
+static-bind ip 172.16.51.190 mac 00:50:56:2C:74:C4
 exit
 
 # --- OSPF Identity ---
