@@ -106,16 +106,40 @@ EXIT;
 ```
 
 ### Task 3.2: Prepare and Move the CSV Data File
-*Before continuing, make sure to edit your `populatedTable.csv` file using an application like Notepad or Excel to append your 10 unique, custom corporate branch instruments at the bottom of the document.*
+*Before continuing, make sure to edit your `populatedTable.csv` file using an application like Notepad or Excel to append 10 unique, custom corporate branch instruments at the bottom of the document.*
 
-1. Place it into MariaDB's highly guarded private system directory:
+Example:
 ```bash
-sudo cp populatedTable.csv /var/lib/mysql/inventory/
+,Custom Electric Guitar,New,1500.00
+,Premium Maple Cello,New,1850.00
+,Vintage Brass Trombone,Used,950.00
+,Handcrafted Mahogany Ukulele,New,349.99
+,Professional Carbon Fiber Violin,New,2800.00
+,Studio Electric Bass,Refurbished,720.00
+,Concert Grand Marimba,New,4500.00
+,Classic Bamboo Flute,New,125.00
+,Pro Double-Bass Pedal Kit,Used,399.00
+,Custom 88-Key Stage Keyboard,New,1650.00
 ```
-2. Modify the folder ownership
+*Look at that very first row: `,Custom Electric Guitar,New,1500.00`.
+Later in Phase 5 during your practical verification check, the lab sheet states you must perform a search specifically for a **New Guitar at a price of $1500**. This line gives us the perfect data match to successfully pass that visual inspection.*
+
+
+1. Push the File From Your Host Workstation
+
+Open command prompt and navigate to the location of your CSV file. We will use **SCP command** to copy the CSV file and paste it on a `/tmp/` folder inside our Server-VM.
 ```bash
+cd Downloads
+scp populatedTable.csv catalan@172.16.57.254:/tmp/
+```
+*(When prompted, type `yes` to accept the security key, then enter your Server-VM  account password.)*
+
+2. Move the CSV file to the private system directory and apply file ownership permissions.
+```bash
+sudo mv /tmp/populatedTable.csv /var/lib/mysql/inventory/
 sudo chown mysql:mysql /var/lib/mysql/inventory/populatedTable.csv
 ```
+
 3. Log back in to MariaDB, select Inventory and use LOAD DATA INFILE:
 ```bash
 sudo mariadb -u root
@@ -141,7 +165,7 @@ SELECT * FROM instruments LIMIT 5;
 
 # Phase 4: Application Integration (Apache & PHP Frontend)
 ### Task 4.1: Modify the Database Frontend Script
-1. Open your local copy of the `mariaDBfrontEnd.php` script on your Client VM, find the top configuration block, and edit lines 8–14 to look like this:
+1. Open your local copy of the `mariaDBfrontEnd.php` script on your **Client VM**, find the top configuration block, and edit lines 8–14 to look like this:
 ```php
 <?php
 /**
@@ -232,6 +256,6 @@ sudo systemctl restart apache2
 
 
 ---
-*Last Updated: July 01, 2026*
+*Last Updated: July 09, 2026*
 
 
