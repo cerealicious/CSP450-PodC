@@ -1,92 +1,99 @@
+===================
+6300 (CORE) Switch
+===================
+
 en
 conf t
 hostname akarki5-caemmanuel-6300
 
 # --- akarki5's VLAN (214) ---
 vlan 214
-  spanning-tree
-  name akarki5-vlan
+name akarki5-vlan
+exit
+spanning-tree
 interface vlan 214
-  no shutdown
-  ip address 172.16.53.129/26
-  ip ospf 1 area 0
-  y
-  y
-  exit
+no shutdown
+ip address 172.16.53.129/26
+ip ospf 1 area 0
+y
+y
+exit
 
 # --- caemmanuel's VLAN (206) ---
 vlan 206
-  spanning-tree
-  name caemmanuel-vlan
+name caemmanuel-vlan
+exit
+spanning-tree
 interface vlan 206
-  no shutdown
-  ip address 172.16.51.129/26
-  ip ospf 1 area 0
-  exit
+no shutdown
+ip address 172.16.51.129/26
+ip ospf 1 area 0
+exit
 
 # --- Trunk to Access Switch (Port 1/1/3) ---
 interface 1/1/3
-  no shutdown
-  no routing
-  vlan trunk native 1
-  vlan trunk allowed all
-  exit
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed all
+exit
 
 # --- akarki5's Router Link (Port 1/1/4) ---
 interface 1/1/4
-  no shutdown
-  routing
-  ip address 192.168.3.137/30
-  ip ospf 1 area 0
-  exit
+no shutdown
+routing
+description akarki5_Router_WAN
+ip address 192.168.3.89/30
+ip ospf 1 area 0
+exit
 
 # --- caemmanuel's Router Link (Port 1/1/5) ---
 interface 1/1/5
-  no shutdown
-  routing
-  ip address 192.168.3.105/30
-  ip ospf 1 area 0
-  exit
+no shutdown
+routing
+description caemmanuel_Router_WAN
+ip address 192.168.3.57/30
+ip ospf 1 area 0
+exit
 
 # --- DHCP Server Pools ---
 dhcp-server vrf default
 
 # akarki5's Pool
-pool vlan214
-  range 172.16.53.130 172.16.53.189 prefix-len 26
-  default-router 172.16.53.129
-  static-bind ip 172.16.53.190 mac xx:xx:xx:xx:xx:xx  # REPLACE WITH akarki5'S SERVER MAC
-  dns-server 192.168.3.138
-  exit
+pool_214
+range 172.16.53.130 172.16.53.189
+default-router 172.16.53.129
+dns-server 10.101.100.21
+static-bind ip 172.16.53.190 mac [AKARKI5_SERVER_MAC_HERE]
+exit
+no shutdown
 
 # caemmanuel's Pool
-pool vlan206
-  range 172.16.51.130 172.16.51.189 prefix-len 26
-  default-router 172.16.51.129
-  static-bind ip 172.16.51.190 mac xx:xx:xx:xx:xx:xx  # REPLACE WITH caemmanuel'S SERVER MAC
-  dns-server 192.168.3.106
-  exit
+pool_206
+range 172.16.51.130 172.16.51.189
+default-router 172.16.51.129
+dns-server 10.101.100.21
+static-bind ip 172.16.51.190 mac [CAEMMANUEL_SERVER_MAC_HERE]
+exit
 
 # --- OSPF Identity ---
 enable
 router ospf 1
-  router-id 214.206.214.206
-  exit
+router-id 214.206.214.206
+exit
 
 # --- Default Routes ---
-ip route 0.0.0.0 0.0.0.0 192.168.3.138
-ip route 0.0.0.0 0.0.0.0 192.168.3.106
-
-write memory
+ip route 0.0.0.0 0.0.0.0 192.168.3.90
+ip route 0.0.0.0 0.0.0.0 192.168.3.58
 
 
 
 
 
 
-===============
-2530 Switch
-===============
+=====================
+2530 (Access) Switch
+=====================
 en
 conf t
 ip default-gateway 172.16.53.129
@@ -95,18 +102,18 @@ spanning-tree
 
 # --- akarki5's Access Port (Port 1) ---
 vlan 214
-  name akarki5-vlan
-  ip address 172.16.53.130/26
-  untagged 1
-  tagged 3
-  exit
+name akarki5-vlan
+ip address 172.16.53.130/26
+untagged 1
+tagged 3
+exit
 
 # --- caemmanuel's Access Port (Port 2) ---
 vlan 206
-  name caemmanuel-vlan
-  ip address 172.16.51.130/26
-  untagged 2
-  tagged 3
-  exit
+name caemmanuel-vlan
+ip address 172.16.51.130/26
+untagged 2
+tagged 3
+exit
 
 write memory
