@@ -47,7 +47,7 @@ This guide aims to bridge the gap between theory and practice. It provides:
 | Stage | Status | Description |
 | :--- | :--- | :--- |
 | **[Stage Two](./StageTwo/)** | ✅**Completed** | Build the network infrastructure layer (OSPF, routing pools, VLAN segmentation, and edge NAT firewalls. |
-| **[Stage Three](./StageThree/)** | 🚧**Completed** | Enterprise MariaDB integration, schema deployment, and PHP frontend connectivity. |
+| **[Stage Three](./StageThree/)** | ✅**Completed** | Enterprise MariaDB integration, schema deployment, and PHP frontend connectivity. |
 
 ## 📖 Documentation
 For detailed, step-by-step instructions on how the network layer was planned and executed, please refer to the specific stage documentation folder:
