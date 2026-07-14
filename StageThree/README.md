@@ -3,22 +3,27 @@
 ## 🎯 Project Overview
 This repository contains the deployment phase for Stage 3 of our Enterprise Infrastructure Lab. Having established an OSPF-routed network architecture with secure VLAN segmentation in Stage Two, Stage Three scales an online relational database management system (**MariaDB**) coupled to a dynamic web application frontend (**Apache/PHP**).
 
-## 🗺️ System Parameters (Profile: catalan)
-* **VLAN ID:** `231`
-* **Server Hostname:** `catalan-Server`
-* **Server Production IP:** `172.16.57.254`
-* **Database Target Engine:** `MariaDB 10.x`
-* **Application Stack:** `Apache2, PHP 8.x, PDO-MySQL Driver`
+## 🗺️ System Parameters (Profile Identity: catalan)
+* **Your Student UID / VLAN ID:** `231`
+* **Linux Client HostName:** `catalan-Client` (Sitting behind VMnet5 LAN link)
+* **Linux Server HostName:** `catalan-Server` (Statically mapped via Switch binding)
+* **Server Production SVI IP Address:** `172.16.57.254`
+* **Internal Private Subnet Domain:** `172.16.57.192/26`
+* **Default Network Gateway Router:** `172.16.57.193` (Aruba 6300 Core Switch Interface)
+* **Database Staging Directory:** `/tmp/` (Optimized to completely bypass Linux AppArmor file sandboxing blocks)
+* **Web Server Host Root Directory:** `/var/www/html/`
 
-## 📁 Repository Directory Structure
-* `/var/www/html/index.php` - Custom PHP Instrument Lookup Utility Front-End
-* `populatedTable.csv` - Sanitized flat-file containing instrument inventory dataset
+---
 
+## 🛡️ Enterprise Security & Multi-Tenant Access Model
+* **Administrative Operations Control:** Database structural changes are explicitly locked down to a hard-privilege admin account bound to your unique identifier string.
+* **Classroom Cross-Tenant Policy:** To enable global inter-branch connectivity checks without exposing root root administrative passwords, all pod networks deploy a universal read-only profile account (`csp450ro`) strictly limited to `SELECT` (read-only) database properties. This keeps our core inventory data shielded against intentional or accidental deletions or injection drop vectors.
 
-## 🛡️ Security Posture
-* **Administrative Layer:** Bound strictly to local internal administration credentials.
-* **Tenant Access Policy:** Universal cross-student read-only tenant (`csp450ro`) restricted explicitly to `SELECT` privileges to mitigate data injection or unauthorized drops.
+---
 
+## 📁 Repository Directory Structure Mapping
+* `/var/www/html/index.php` -> Custom PHP Instrument Lookup Utility web engine frontend script.
+* `/tmp/populatedTable.csv` -> Sanitized corporate flat-file spreadsheet dataset staging anchor.
 
 ---
 #  Phase 1: DB Infrastructure & Environment Provisioning
@@ -72,8 +77,6 @@ EXIT;
 ```
 ---
 
-
-
 #  Phase 3: Relational Schema Deployment & Data Population.
 ### Task 3.1: Initialize the Production Database & Tables**
 1. Log in to local MariaDB shell prompt using the Admin root credentials:
@@ -110,16 +113,16 @@ EXIT;
 
 Example:
 ```bash
-,Custom Electric Guitar,New,1500.00
-,Premium Maple Cello,New,1850.00
-,Vintage Brass Trombone,Used,950.00
-,Handcrafted Mahogany Ukulele,New,349.99
-,Professional Carbon Fiber Violin,New,2800.00
-,Studio Electric Bass,Refurbished,720.00
-,Concert Grand Marimba,New,4500.00
-,Classic Bamboo Flute,New,125.00
-,Pro Double-Bass Pedal Kit,Used,399.00
-,Custom 88-Key Stage Keyboard,New,1650.00
+,Custom Electric Guitar,New,1500
+,Premium Maple Cello,New,1850
+,Vintage Brass Trombone,Used,950
+,Handcrafted Mahogany Ukulele,New,349
+,Professional Carbon Fiber Violin,New,2800
+,Studio Electric Bass,Refurbished,720
+,Concert Grand Marimba,New,4500
+,Classic Bamboo Flute,New,125
+,Pro Double-Bass Pedal Kit,Used,399
+,Custom 88-Key Stage Keyboard,New,1650
 ```
 *Look at that very first row: `,Custom Electric Guitar,New,1500.00`.
 Later in Phase 5 during your practical verification check, the lab sheet states you must perform a search specifically for a **New Guitar at a price of $1500**. This line gives us the perfect data match to successfully pass that visual inspection.*
@@ -134,32 +137,40 @@ scp populatedTable.csv catalan@172.16.57.254:/tmp/
 ```
 *(When prompted, type `yes` to accept the security key, then enter your Server-VM  account password.)*
 
-2. Move the CSV file to the private system directory and apply file ownership permissions.
+2. Return to your **Ubuntu Server VM** and change the permissions by running:
 ```bash
-sudo mv /tmp/populatedTable.csv /var/lib/mysql/inventory/
-sudo chown mysql:mysql /var/lib/mysql/inventory/populatedTable.csv
+sudo chown mysql:mysql /tmp/populatedTable.csv
+sudo chmod 644 /tmp/populatedTable.csv
 ```
 
 3. Log back in to MariaDB, select Inventory and use LOAD DATA INFILE:
 ```bash
-sudo mariadb -u root
+sudo mariadb -u root --local-infile=1
 ```
 
 ```SQL
 USE inventory;
 ```
 ```SQL
-LOAD DATA INFILE 'populatedTable.csv' INTO TABLE instruments
+USE inventory;
+
+LOAD DATA LOCAL INFILE '/tmp/populatedTable.csv' 
+INTO TABLE instruments
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
-IGNORE 1 LINES;
-
+IGNORE 1 LINES
+(instrument_type, instcondition, price);
 ```
 
 4. Run a query to confirm if everything was imported:
 ```SQL
-SELECT * FROM instruments LIMIT 5;
+SELECT * FROM instruments LIMIT 15;
+```
+
+5. Once you see the contents of the CSV, you can now leave the relational prompt.
+```SQL
+EXIT;
 ```
 ---
 
@@ -180,19 +191,19 @@ $db_pass = 'csp450ro';    // Matching password
 $db_port = 3306;
 $my_uid = 231;          // Your Unique ID
 ```
+2. Save the updated web file exactly as **`index.php`**. Do not keep the name `mariaDBfrontEnd.php`.
 
 ### Task 4.2: Move the Files Over to Your Production Server
 1. Open a terminal Client VM and securely copy (scp) the modified web app script straight to your server:
 ```bash
 scp index.php catalan@172.16.57.254:/tmp/
 ```
-2. On Server VM terminal run the command to pull it out of the temporary folder and place it directly into Apache's primary web directory:
+2. On **Server VM** terminal run the command to pull it out of the temporary folder and place it directly into Apache's primary web directory:
 
 ```bash
 sudo mv /tmp/index.php /var/www/html/index.php
 ```
 3. Delete the old index.html file
-
 ```bash
 sudo rm /var/www/html/index.html
 ```
@@ -212,12 +223,11 @@ sudo systemctl restart apache2
 
 # Phase 5: Enterprise Cross-Tenant Verification & Final Inspection
 ### Task 5.1: Access Your Local Web Server Front-End
-1. In your Client VM, open browser and type the Server's IP Address:
+1. In your **Client VM**, open browser and type the Server's IP Address:
 ```bash
 172.16.57.254
 ```
 2. Press Enter and you should see a webpage titled **"Instrument Lookup — Musical Instrument Sales Co."**
-
 
 ### Step 5.2: Test Your Custom Instrument Search
 - Verify that your database can fetch the custom entries you appended
@@ -229,15 +239,13 @@ sudo systemctl restart apache2
     
 🔍 *Expected Result: Your webpage will display a clean result row showing your custom entry: `Custom Electric Guitar` priced perfectly at `$1500.00`.*
 
-
 ### Task 5.3: Run a Unique Inventory Search
  - Try searching for another one of your unique creations to prove the database filters are dynamically responsive.
-    - In the **Instrument Type** box, type: Saxophone
+    - In the **Instrument Type** box, type: `Cello`
     - Clear out the condition and price limits.
     - Click **Search Inventory**.
 
-🔍 *Expected Result: The webpage will filter out everything else and display your `Vintage Alto Saxophone` priced at `$2450.00`.*
-
+🔍 *Expected Result: The webpage will filter out everything else and display your `Premium Maple Cello` priced at `$1850`.*
 
 
 ### Step 5.4: Connect to a Classmate’s Database (Remote Host)
@@ -246,16 +254,15 @@ sudo systemctl restart apache2
     - Clear the other boxes.
     - Click **Search Inventory**.
     
-🔍 *Expected Result: Your web interface will route through your physical switches, log into their MariaDB instance using the shared reader account, and display their inventory*
+🔍 *Expected Result: Your webpage will intercept the trigger command, route data packets across your physical OSPF switch trunk trunks, log securely into their database using the matching read-only `csp450ro` token variables, and display their custom branch store assets right on your local screen!*
 
 ---
-
 ### 📋 Phase 6: Final Submission Checklist
 - [ ] `index.php`: The edited frontend script containing your custom user details at the top. 
 - [ ] `populatedTable.csv`: Your modified flat-file spreadsheet featuring your 10 unique corporate branch instruments appended cleanly to the bottom. 
 
 
 ---
-*Last Updated: July 09, 2026*
+*Last Updated: July 13, 2026*
 
 
