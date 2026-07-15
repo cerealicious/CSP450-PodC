@@ -1,3 +1,5 @@
+
+
 # CSP450 Stage Two Setup and Configurations
 
 ## Pre-Flight Requirements Before Beginning
@@ -36,20 +38,20 @@ sudo systemctl enable --now nftables
 ## PHASE 1: HOST VM NETWORK PLUMBING & MAPPING
 **Goal:** Rebuild the virtual network environment on your Windows Host machine before booting any Virtual Machines.
 
-### [ ] Task 1.1: Reconstruct the Virtual Network Editor Layout
+###  Task 1.1: Reconstruct the Virtual Network Editor Layout
 Open VMware Workstation Virtual Network Editor as an Administrator. Delete any stock settings and map the following three required virtual networks strictly to your physical computer network cards:
 
 * **VMnet5** &rarr; Change type to **Bridged**, and set "**Bridged to:**" explicitly to your **primary Ethernet Family Controller card** (this physical port handles your internal LAN facing the Access Switch).
 * **VMnet6** &rarr; Change type to **Bridged**, and set "**Bridged to:**" explicitly to your **Intel Ethernet Connection card** (this physical port connects directly to the Seneca network for internet access).
 * **VMnet7** &rarr; Change type to **Bridged**, and set "**Bridged to:**" explicitly to your **secondary Ethernet Family Controller #2 card** (this physical port handles your external OSPF WAN link to the Core Switch).
 
-### [ ] Task 1.2: Correct Router Virtual Hardware Mapping
+###  Task 1.2: Correct Router Virtual Hardware Mapping
 Right-click your Router VM settings (**Ensure the VM is powered OFF**). Verify that your network adapters are bound to the correct VMnets so that Linux aligns them with the proper internal names (`ens33` and `ens37`):
 
 * **Network Adapter 1:** Must be set to **Custom: VMnet6** (Faces the Internet / Seneca Network via interface `ens33`).
 * **Network Adapter 2:** Must be set to **Custom: VMnet7** (Faces the Aruba 6300 Core Switch via interface `ens37`).
 
-### [ ] Task 1.3: Map Workstation Virtual Hardware
+###  Task 1.3: Map Workstation Virtual Hardware
 Right-click your Client VM and Server VM settings. Set their Network Adapters strictly to **Custom: VMnet5** (Faces the local office LAN switch ports via interface `ens33`).
 
 ---
@@ -57,20 +59,20 @@ Right-click your Client VM and Server VM settings. Set their Network Adapters st
 ## PHASE 2: PHYSICAL MANAGEMENT LAYER CUTOVER
 **Goal:** Establish direct communications from your desk to the console of the physical hardware switches.
 
-### [ ] Task 2.1: Run Physical Management Cables
+###  Task 2.1: Run Physical Management Cables
 Go into the back server rack room and look at your assigned Pod letter rack.
 
 * **For Switch 2 (Aruba 6300 Core):** Run a physical network patch cable from the port labeled **MGMT** on the back of the switch into your desk's corresponding patch panel port (example: Port C5 if you sit at desk C5).
 * **For Switch 1 (Aruba 2500 / 2530 / 6300):** Your partner runs a second network patch cable from the management port into their desk's patch panel port. *(Note: On 2500/2530 switches, use the dedicated port or Port 23/24).*
 
-### [ ] Task 2.2: Hardcode the Windows Host Management IP Address
+###  Task 2.2: Hardcode the Windows Host Management IP Address
 Back at your desk, open **View Network Connections** in Windows. Right-click the network card icon corresponding to your physical management cable connection, open **IPv4 Properties**, and enter:
 
 * **IP Address:** Choose an available IP inside your Pod's specific switch management block (e.g., if the switch is `10.10.10.34`, set your PC to `10.10.10.35`).
 * **Subnet Mask:** Enter the exact mask listed on your pod's chart (typically `255.255.255.240` for a `/28` block).
 * **Default Gateway:** Leave completely blank.
 
-### [ ] Task 2.3: Verify Management Link Adjacency
+###  Task 2.3: Verify Management Link Adjacency
 Open the Windows Command Prompt and test the physical line: `ping [Your Switch Management IP]`.
 
 Once you receive stable replies, open PuTTY, choose **SSH**, type the **Switch Management IP**, and log in using `"student"`.
@@ -84,18 +86,18 @@ Once you receive stable replies, open PuTTY, choose **SSH**, type the **Switch M
 * **When to use it:** Tasks 3.1 & 3.2
 * **How it's used:** You will open an SSH session via PuTTY directly to the switches over your temporary management lines. You will copy the entire block of commands from your text file and paste them directly into the terminal window to automate building your VLANs, inter-switch links, routing interfaces, and DHCP server scopes.
 
-### [ ] Task 3.1: Provision Switch 2 (The Aruba 6300 Core Switch)
+###  Task 3.1: Provision Switch 2 (The Aruba 6300 Core Switch)
 Once logged into the 6300 CLI, enter privileged mode (`en` then `conf t`). Paste your pre-edited configuration block to execute the following logic:
 1. Create your branch virtual domain (VLAN 231) and your partner's branch domain (VLAN 217).
 2. Turn on OSPF Routing Area 0 on those VLAN interfaces.
 3. Change interfaces `1/1/4` and `1/1/5` into fully layer-3 routed ports (`routing`) and assign your Point-to-Point WAN transit IP addresses.
 4. Build the `dhcp-server vrf default` pools for both network segments, ensuring you update the static-bind hardware MAC address strings with the actual fingerprints of your respective Ubuntu Server VMs.
 
-### [ ] Task 3.2: Provision Switch 1 (Choose your Hardware Route below)
+###  Task 3.2: Provision Switch 1 (Choose your Hardware Route below)
 * **ROUTE A (If Switch 1 is an older Aruba 2500/2530 Access Switch):** Log into the switch console. Use classic ProCurve syntax to set the management gateway (`ip default-gateway`), create both student VLANs, and apply physical port mapping rules: Set Port 1 as Untagged for your VLAN, Port 2 as Untagged for your partner's VLAN, and Port 3 as Tagged to act as the trunk uplink wire to the core switch.
 * **ROUTE B (If Switch 1 is a modern Aruba 6300 Core Switch):** Log into the switch console. Use modern ArubaOS-CX syntax to match Switch 2. Replicate both student VLAN IDs, assign respective access IPs, and configure interface `1/1/3` on both switches as an enterprise trunk network line (`vlan trunk allowed all`).
 
-### [ ] Task 3.3: Production Cable Cutover & Physical Wiring Plan
+###  Task 3.3: Production Cable Cutover & Physical Wiring Plan
 Once both switch configurations are done, return to the back rack room. Unplug your temporary management lines and execute the complete structural layout patch according to the matrix below:
 
 #### Physical Cable & Topology Matrix
@@ -117,15 +119,14 @@ Once both switch configurations are done, return to the back rack room. Unplug y
 * **When to use:** Task 4.1
 * **How it's used:** Once your Server VM is booted on VMnet5, you will open a terminal inside Ubuntu and write these configurations into your Netplan system folder at `/etc/netplan/dhcpAssignment.yaml`. Running `sudo netplan apply` forces the server to look across the switch network via DHCP, matching its MAC address to claim its reserved `.254` IP.
 
-### [ ] Task 4.1: Bring Corporate Server Online
+###  Task 4.1: Bring Corporate Server Online
 Boot your Ubuntu Server VM on VMnet5. Ensure its netplan is configured to look for DHCP (`dhcp4: true`). Once booted, run `ip a` to verify that it successfully caught its reserved static profile IP address (the very last usable address in your pool, like `172.16.57.254`) directly from the switch engine.
 
-### [ ] Task 4.2: Bring Corporate Client Online
+###  Task 4.2: Bring Corporate Client Online
 Boot your Ubuntu Client VM on VMnet5. Verify that it automatically pulls a dynamic IP address from your switch's configured lease range (`172.16.57.194` to `172.16.57.253`).
 
-### [ ] Task 4.3: Validate Local Network Fabric
+###  Task 4.3: Validate Local Network Fabric
 Open a terminal screen on your Client VM and execute a continuous ping directly to your Server VM: `ping 172.16.57.254`. Ensure this routes successfully with zero dropped packets.
-
 
 ---
 
@@ -135,23 +136,22 @@ Open a terminal screen on your Client VM and execute a continuous ping directly 
 * **File needed:** `staticAssignment.yaml` (Originally `staticAssignment.yaml.txt`)
 * **When to use:** Task 5.1
 * **How it's used:** As soon as your Router VM boots up, you will write this block into the Netplan directory at `/etc/netplan/staticAssignment.yaml`. This manual step assigns the hardcoded point-to-point IP (`192.168.3.158/30`) to your switch-facing interface card (`ens37`), setting up your primary connection to the core network switch.
-
-<br>
+<p>
 
 * **File needed:** `frrRouterConfig.txt`
 * **When to use:** Task 5.4
 * **How it's used:** After confirming that the `ospfd` routing engine daemon has been toggled to `yes`, you will type `sudo vtysh` in the terminal to enter the multi-vendor shell environment. From there, you copy and paste the commands from this file into the prompt to tell your router how to dynamically exchange network paths with the other student pods using OSPF.
 
-### [ ] Task 5.1: Initialize Static WAN Routing Link
+###  Task 5.1: Initialize Static WAN Routing Link
 Boot your Ubuntu Router VM. Open your Netplan configuration file (`sudo nano /etc/netplan/staticAssignment.yaml`). Bind your tight point-to-point IP address profile directly to your switch-facing interface `ens37` with `dhcp4: false`. Run `sudo netplan apply` to lock it into place.
 
-### [ ] Task 5.2: Activate Structural System Kernel Forwarding
+###  Task 5.2: Activate Structural System Kernel Forwarding
 By default, Linux blocks data packets from traveling between different network cards. Enable system routing by opening the system control configuration architecture: `sudo sysctl -w net.ipv4.ip_forward=1`. *(To make this change permanent through restarts, uncomment the line `net.ipv4.ip_forward=1` inside the `/etc/sysctl.conf` file or `/etc/sysctl.d/99-custom.conf`).*
 
-### [ ] Task 5.3: Ignite the OSPF Routing Daemon Engine
+###  Task 5.3: Ignite the OSPF Routing Daemon Engine
 Open the Free Range Routing daemon settings file (`sudo nano /etc/frr/daemons`) and change the line reading `ospfd=no` to `ospfd=yes`. Sometimes manual file edits can accidentally change the file permissions, causing the FRR process to crash on boot because it cannot read its own config, so we have to reset the permission of the frr folder by running: `sudo chown -R frr:frr /etc/frr/`. Then restart the routing system manager by running: `sudo systemctl restart frr`.
 
-### [ ] Task 5.4: Broadcast Local Subnet Routes
+###  Task 5.4: Broadcast Local Subnet Routes
 Enter the interactive routing suite engine by typing `sudo vtysh`. Enter configuration mode (`conf t`), configure your `router ospf` environment, assign your unique router-id `231.1.1.2`, and use network command strings to advertise both your Point-to-Point WAN link and your private local subnet out to Area 0.
 
 ---
@@ -163,13 +163,13 @@ Enter the interactive routing suite engine by typing `sudo vtysh`. Enter configu
 * **When to use:** Task 6.1
 * **How to use:** In your Router VM, open your main system security file at `/etc/nftables.conf` on the router, wipe out any stock parameters, and paste this entire security rule layout. Running `sudo nft -f /etc/nftables.conf` turns on your firewall, forces local corporate DNS masking, and enables internet connection Sharing (NAT masquerading) out through interface `ens33`.
 
-### [ ] Task 6.1: Load Security Rules and Outbound NAT Masking
+###  Task 6.1: Load Security Rules and Outbound NAT Masking
 Open your firewall ruleset deployment file (`sudo nano /etc/nftables.conf`). Paste your customized packet-filtering strings to enable established-state tracking on interface `ens33` and transparently proxy internal corporate DNS queries directly over to the main lab resolver address (`10.101.100.21`). Turn the rules live using: `sudo nft -f /etc/nftables.conf`.
 
-### [ ] Task 6.2: Disable VMware Backdoors & Test Edge Routing
+###  Task 6.2: Disable VMware Backdoors & Test Edge Routing
 Go to your Client VM and Server VM network options. Ensure that any standalone second network cards that connect straight to the internet via VMware are completely disabled or disconnected. Your workstations must now access the open web exclusively by passing traffic through your Aruba switch up to your custom Linux Router.
 
-### [ ] Task 6.3: Capture Lab Deliverable Sign-Off Metrics
+###  Task 6.3: Capture Lab Deliverable Sign-Off Metrics
 From your isolated Client VM, test your new network architecture:
 1. **Verify edge path tracking** by running a ping and traceroute: `traceroute google.ca`.
 2. **Verify your multi-vendor OSPF neighbor tables are active.** Inside your Router's vtysh and your Aruba 6300 core terminal, run: `show ip ospf neighbor` and `show ip route`. You should see your network expanding as your classmates' subnets dynamically pop into your screen!
@@ -203,21 +203,21 @@ Before verifying, make sure all dynamic VMware internet backdoors on the Client 
     ```
 
 #### Required SCREENSHOTs for Report
-* [ ] **📸SCREENSHOT #1:** The complete terminal output window showing a successful traceroute path tracking matrix straight from the client to your own router gateway interface.
-* [ ] **📸SCREENSHOT #2:** The complete terminal output window showing a successful traceroute path tracking matrix from the client to YouTube.
+*  **📸SCREENSHOT #1:** The complete terminal output window showing a successful traceroute path tracking matrix straight from the client to your own router gateway interface.
+*  **📸SCREENSHOT #2:** The complete terminal output window showing a successful traceroute path tracking matrix from the client to YouTube.
 
 ---
 ### 2. Server VM Verification & Hardening Inspection
 Your production server relies on the Aruba core switch's DHCP service matching its physical interface MAC address layout to map its dedicated static reservation profile. It must also have its password entry backdoors permanently locked down for the audit user.
 
 #### Live Commands to Run
-* **Renew Statically Bound IP Lease Mapping:**
+* **1. Renew Statically Bound IP Lease Mapping:**
     ```bash
     sudo dhclient -r && sudo dhclient -v
     ```
     *Verify that the server adapter captures its exact reservation address layout (`172.16.57.254`).*
 
-* **Initialize the Audit User Profile & Disable Password Authentication:**
+* **2. Initialize the Audit User Profile & Disable Password Authentication:**
     ```bash
     # Create the mandatory laboratory user
     sudo adduser SSHtest
@@ -225,15 +225,44 @@ Your production server relies on the Aruba core switch's DHCP service matching i
     # Lock the password field to completely disable password-based logins
     sudo passwd -l SSHtest
     ```
-    *(Note: This forces the account to only accept secure, pre-authorized cryptographic key handshakes).*
+  (Note: This forces the account to only accept secure, pre-authorized cryptographic key handshakes).*
+  
+   #### 2.1 Harden the SSH Service Config (Disable Password Logins)
+   a.) On your **Server VM**, open the master SSH configuration file:
+   ```bash
+   sudo nano /etc/ssh/sshd_config
+   ```
+   b.) Scroll down and find the line: `#PasswordAuthentication yes` (or `PasswordAuthentication yes`).
+   c.) Uncomment it (remove the `#`) and change it to:
+   ```bash
+   PasswordAuthentication no
+   ```
+   d.) Save and close nano (**Ctrl+O**, **Enter**, then **Ctrl+X**)
 
-* **Verify Outbound Internet Edge Routing:**
-    ```bash
-    ping -c 4 www.google.ca
-    ```
+   e.) Restart the SSH service
+   ```bash
+   sudo systemctl restart ssh
+   ```
+   f.) Verify the SSHtest Local Password Lockout
+   On your **Server VM**, run:
+   ```bash
+   sudo passwd -S SSHtest
+   ```
+   **🔎Expected Output:** `SSHtest L 07/15/2026...` **L** means **locked**.
+
+   g.)  Verify SSHtest Network Password Rejection
+   ```bash
+   ssh SSHtest@172.16.57.254
+   ```
+   **🔎Expected Output:** `SSHtest@172.16.57.254: Permission denied (publickey)`.
+
+#### 3. Verify Outbound Internet Edge Routing:**
+```bash
+ping -c 4 www.google.ca
+```
 
 #### Required SCREENSHOTs for Report
-* [ ] **📸SCREENSHOT #3:** Verification showing that internet access is fully functional from the Server by pinging www.google.ca with 0% packet loss.
+*  **📸SCREENSHOT #3:** Verification showing that internet access is fully functional from the Server by pinging www.google.ca with 0% packet loss.
 
 
 ---
@@ -264,9 +293,9 @@ The Linux Router VM handles your secure firewall boundary rules, dynamic NAT pac
     ```
 
 #### Required SCREENSHOTs for Report
-* [ ] **📸SCREENSHOT #4:** The full terminal output window of your `nft list ruleset` capture, displaying your live firewall and NAT rules.
-* [ ] **📸SCREENSHOT #5:** Your interactive routing console displaying the comprehensive metrics from running your OSPF process verification check (`show ip ospf`).
-* [ ] **📸SCREENSHOT #6:** The complete kernel routing table matrix (`show ip route`) highlighting the dynamically learned paths (`O`) generated by your partner's pod and other classmate subnets.
+*  **📸SCREENSHOT #4:** The full terminal output window of your `nft list ruleset` capture, displaying your live firewall and NAT rules.
+*  **📸SCREENSHOT #5:** Your interactive routing console displaying the comprehensive metrics from running your OSPF process verification check (`show ip ospf`).
+*  **📸SCREENSHOT #6:** The complete kernel routing table matrix (`show ip route`) highlighting the dynamically learned paths (`O`) generated by your partner's pod and other classmate subnets.
 
 ---
 
@@ -278,11 +307,11 @@ The Linux Router VM handles your secure firewall boundary rules, dynamic NAT pac
 3. Enter execution mode: `en`
 
 #### Required SCREENSHOTs for Report
-* [ ] **📸SCREENSHOT #7 (`show vlan`):** Run this command to verify that your branch domain (VLAN 231) and your partner `jmalaquis`'s branch domain (VLAN 217) are successfully mapped and operational on the core switch fabric.
-* [ ] **📸SCREENSHOT #8 (`show ip route`):** Run this to verify your backbone routing pathways. Ensure your fallback static default paths point straight to your Linux Router's switch-facing IP interface address (`192.168.3.158`)
-* [ ] **📸SCREENSHOT #9 (`show ip interface brief`):** Run this to verify that your virtual SVI gateways (`vlan231` and `vlan217`) and the physical routing uplink ports (`1/1/4` and `1/1/5`) are reading fully as `up/up`.
-* [ ] **📸SCREENSHOT #10 (`show dhcp-server vrf default`):** Run this to display your dynamic subnet allocation counters and prove your server's hardware MAC address reservation profile is active.
-* [ ] **📸SCREENSHOT #11 (`show running-config`):** Run this and scroll down to verify that all dual-tenant scopes, OSPF routing zones, and configuration lines are securely saved to non-volatile memory.
+*  **📸SCREENSHOT #7 (`show vlan`):** Run this command to verify that your branch domain (VLAN 231) and your partner `jmalaquis`'s branch domain (VLAN 217) are successfully mapped and operational on the core switch fabric.
+*  **📸SCREENSHOT #8 (`show ip route`):** Run this to verify your backbone routing pathways. Ensure your fallback static default paths point straight to your Linux Router's switch-facing IP interface address (`192.168.3.158`)
+*  **📸SCREENSHOT #9 (`show ip interface brief`):** Run this to verify that your virtual SVI gateways (`vlan231` and `vlan217`) and the physical routing uplink ports (`1/1/4` and `1/1/5`) are reading fully as `up/up`.
+*  **📸SCREENSHOT #10 (`show dhcp-server vrf default`):** Run this to display your dynamic subnet allocation counters and prove your server's hardware MAC address reservation profile is active.
+*  **📸SCREENSHOT #11 (`show running-config`):** Run this and scroll down to verify that all dual-tenant scopes, OSPF routing zones, and configuration lines are securely saved to non-volatile memory.
 
 
 #### Aruba 2500/2530 Access Switch Commands
@@ -290,9 +319,9 @@ The Linux Router VM handles your secure firewall boundary rules, dynamic NAT pac
    ```bash
    ssh student@172.16.57.194
    ```
-[ ] **📸SCREENSHOT #12 (`show vlan`)**: Run this to confirm Port 1 is untagged for your network (VLAN 231) and Port 2 is untagged for your partner (VLAN 217).
+ **📸SCREENSHOT #12 (`show vlan`)**: Run this to confirm Port 1 is untagged for your network (VLAN 231) and Port 2 is untagged for your partner (VLAN 217).
 
-[ ] **📸SCREENSHOT #13 (`show vlans ports 3`)**: Do not run 'show trunks' as it will throw a syntax error on this specific hardware model. Run `show vlans ports 3` instead to capture your inter-switch trunk pipeline. Verify that Port 3 shows up as explicitly Tagged for both VLAN 231 and VLAN 217.
+ **📸SCREENSHOT #13 (`show vlans ports 3`)**: Do not run 'show trunks' as it will throw a syntax error on this specific hardware model. Run `show vlans ports 3` instead to capture your inter-switch trunk pipeline. Verify that Port 3 shows up as explicitly Tagged for both VLAN 231 and VLAN 217.
 
 ---
 
@@ -315,27 +344,9 @@ ssh-copy-id catalan@192.168.3.158
 #Push key to your Ubuntu Server
 ssh-copy-id catalan@172.16.57.254
 ```
-*(Note: Type "yes" when prompted to accept the host authenticity, then enter your user's password to complete the transmission).*
+*(Note: Type "yes" when prompted to accept host authenticity, then enter your user's password one final time to authorize the transmission).*
 
-#### Step C: Manually Inject Key into the Aruba 6300 Core Switch
-1. View and highlight your public key text string on your **Client VM terminal**:
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
-
-2. Copy the entire resulting line starts with `ssh-ed25519`.
-3. SSH into your switch `ssh student@172.16.57.193`, enter configuration mode and tie the key directly to your switch admin profile:
-
-```bash
-catalan-6300# conf t
-catalan-6300(config)# ssh-server authorized-key student ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOYPmLnudbsXK2jELT9h3vezI3zqkYX+8ihUbUUEPcFA catalan@catalan-Client
-catalan-6300(config)# exit
-catalan-6300# write memory
-```
-*make sure to use your own GENERATED KEY*
-
-
-#### Step D: Verify if all the keys are working.
+#### Step C: Verify if all the keys are working.
 Open a new TERMINAL on your **Client VM**, and run these tests. You should log into all of them instantly without being prompted for a password:
 
 ```bash
@@ -344,10 +355,12 @@ exit
 
 ssh catalan@192.168.3.158
 exit
+```
 
+Test also if you can ssh to your Core Switch using `student` as both username and password
+```bash
 ssh student@172.16.57.193
 exit
-
 ```
 
 ### Additional Routing Verification Checks
@@ -357,34 +370,29 @@ Open a new TERMINAL on your **Client VM** and execute the final path-validation 
 traceroute 192.168.3.158
 ```
 
-**[ ] 📸SCREENSHOT #14:** The complete terminal output window showing a successful `traceroute` path tracking matrix straight from the client to your Ubuntu router interface (`192.168.3.158`).
+** 📸SCREENSHOT #14:** The complete terminal output window showing a successful `traceroute` path tracking matrix straight from the client to your Ubuntu router interface (`192.168.3.158`).
 
 On your **Client VM** terminal run:
 ```bash
 traceroute youtube.com
 ```
 
-**[ ] 📸SCREENSHOT #15:** The complete terminal output window showing a successful traceroute path tracking matrix from the client out to YouTube, confirming outbound edge traversal.
+** 📸SCREENSHOT #15:** The complete terminal output window showing a successful traceroute path tracking matrix from the client out to YouTube, confirming outbound edge traversal.
 
-To prove that passwordless key delegation is working cleanly without just dropping into an interactive shell, you must execute a remote validation command string directly from your Client terminal.
+---
+---
 
-
- 
-#### Step E: Executing the Remote `SSHtest`
-
-To prove that passwordless key delegation is working cle
-
-
-### Part A: Wireshark Packet Capture & Trimming Guide
+## Wireshark Packet Capture & Trimming Guide
 This procedure outlines how to capture, filter, and export only the required transaction packets to keep your submission file clean. 
-### A1: Initialize the Wireshark Capture Engine
+### 1: Initialize the Wireshark Capture Engine
+
 1. Boot your Client VM and open terminal and run `sudo wireshark`.
 2. Double-click your primary network adapter interface card (typically listed as `ens33`). A live, scrolling window of network packets will appear.
 3. Click **Capture** or the **Blue Fin**.
 4. Minimize the Wireshark application window.
 
 
-### A2: Execute the Traffic Trigger Sequence
+### 2: Execute the Traffic Trigger Sequence
 Execute these commands in sequence to generate the necessary packet traces:
 ```bash
 # Trigger 1: SSH from Client to Server & response
@@ -420,7 +428,7 @@ nslookup youtube.com
 ### A4: Export the Sub-Selected Capture File
 To avoid submitting unnecessary background noise (like ARP, STP, or SSDP traffic), follow these steps to save only the filtered packets:
 
-1.In the top menu bar, navigate to **File → Export Specified Packets...**
+1. In the top menu bar, navigate to **File → Export Specified Packets...**
 
 2. In the file dialogue box:
 * Name your file: `stage_two_capture.pcapng`
@@ -428,10 +436,8 @@ To avoid submitting unnecessary background noise (like ARP, STP, or SSDP traffic
 3. Click *Save*. Open your new file in Wireshark to confirm it contains only the specific requested packets before uploading it to Blackboard.
 
 ---
-<BR><BR>
-
-
-### 🔄 Mandatory Boot Sequence
+---
+## 🔄 Mandatory Boot Sequence
 
 1. **Physical Switches:** Ensure Aruba 6300 and Aruba 2530 are fully booted and configured *before* powering on any VMs.
 2. **Start Router VM (First)**: Wait until it reaches the login prompt
@@ -509,4 +515,4 @@ If following the mandatory boot sequence does not resolve connectivity issues, u
 | **6. OSPF Route** | `vtysh -c "show ip route 0.0.0.0/0"` on Router | Shows default via `ens33` | If router has no default route, it cannot forward to Seneca network. Check `ip route 0.0.0.0 0.0.0.0 ens33`. |
 
 ---
-*Last Updated: July 01, 2026*
+*Last Updated: July 15, 2026*
