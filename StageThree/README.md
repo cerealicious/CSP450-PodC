@@ -181,7 +181,7 @@ scp populatedTable.csv catalan@172.16.57.254:/tmp/
     ENCLOSED BY '"'
     LINES TERMINATED BY '\n'
     IGNORE 1 LINES
-    (instrument_type, instcondition, price);
+    (id, instrument_type, instcondition, price);
     ```
 4.  I verified the import:
     ```sql
