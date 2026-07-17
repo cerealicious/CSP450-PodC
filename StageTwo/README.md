@@ -2,12 +2,12 @@
 
 # CSP450 Stage Two Setup and Configurations
 
-## Pre-Flight Requirements Before Beginning
-1. **Your UID / VLAN ID:** `231`
-2. **Your Partner's UID / VLAN ID:** `217`
-3. **Your LAN Subnet Space:** `172.16.57.192/26`
-4. **Your Point-to-Point WAN Link:** `192.168.3.156/30`
-5. **Your Switch Management Subnet:** Check the pod chart on your specific rack (e.g., `10.10.10.X/28`).
+
+## 📌[Generate the scripts for you and your partner here!](https://cerealicious.github.io/CSP450/)
+<p>
+This site will compute your StageOne Prepsheet and this is where you can download all the scripts that you will need for this stage.
+
+*Note: For those with **UID above 255**, make sure to edit the **router ID** as the maximum for each octet is only up to 255.*
 
 ---
 
