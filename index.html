@@ -61,7 +61,7 @@
             </div>
             <div class="flex items-center gap-2 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700/60 text-xs font-semibold text-slate-300">
                 <i class="fa-solid fa-code-branch text-brand-gold"></i>
-                <span>Made by Cerealicious | Github</span>
+                <span><a href="https://github.com/cerealicious">Made by Cerealicious | Github</a></span>
             </div>
         </div>
     </header>
@@ -247,7 +247,6 @@
                             <option value="staticAssignment">Router PtP Link (staticAssignment.yaml)</option>
                             <option value="frrRouterConfig">Router FRR Routing Engine (frrRouterConfig.txt)</option>
                             <option value="NFtablesRulesNAT">Router Firewall & NAT (NFtablesRulesNAT.txt)</option>
-                            <option value="sshHardening">Server SSH Auditing (sshd_config & SSHtest)</option>
                         </select>
                     </div>
 
@@ -279,7 +278,6 @@
                             <option value="staticAssignment">Router PtP Link (staticAssignment.yaml)</option>
                             <option value="frrRouterConfig">Router FRR Routing Engine (frrRouterConfig.txt)</option>
                             <option value="NFtablesRulesNAT">Router Firewall & NAT (NFtablesRulesNAT.txt)</option>
-                            <option value="sshHardening">Server SSH Auditing (sshd_config & SSHtest)</option>
                         </select>
                     </div>
 
@@ -329,6 +327,33 @@
 
         </section>
     </main>
+
+    <!-- Sticky Footer Container -->
+    <footer class="bg-brand-navy border-t border-slate-800 text-slate-300 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <!-- Left Side support text -->
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 text-center md:text-left">
+                <span>If you find this project useful, you can support my work by buying me a</span>
+                <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-md border border-amber-500/20 font-medium">
+                    <i class="fa-solid fa-mug-hot"></i> coffee
+                </span>
+                <span>, a</span>
+                <span class="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-md border border-yellow-500/20 font-medium">
+                    <i class="fa-solid fa-stroopwafel"></i> waffle
+                </span>
+                <span>or an</span>
+                <span class="inline-flex items-center gap-1 bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-md border border-orange-500/20 font-medium">
+                    <i class="fa-solid fa-cheese"></i> Ultimate Grilled Cheese
+                </span>
+            </div>
+
+            <!-- Right Side developer branding link -->
+            <div class="flex items-center gap-1.5 bg-slate-800/60 border border-slate-700/80 px-3.5 py-1 rounded-full text-slate-400 hover:text-white transition-all">
+                <i class="fa-brands fa-github text-brand-gold"></i>
+                <a href="https://github.com/cerealicious" target="_blank" class="font-bold hover:underline">cerealicious</a>
+            </div>
+        </div>
+    </footer>
 
     <!-- Modal Notifications Container -->
     <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 hidden backdrop-blur-sm px-4">
@@ -708,33 +733,6 @@ table ip nat {
     oifname "ens33" masquerade
     }
 }`;
-            }
-
-            else if (fileType === 'sshHardening') {
-                targetCodeElement.textContent = `# Target host: ${metrics.serverHost} VM
-# Task 1: Create SSHtest Audit User and Lock Credential Database Field
-# Run these commands sequentially on the Server:
-sudo adduser SSHtest
-sudo passwd -l SSHtest
-
-# Task 2: Modify SSH Daemon Configuration File
-# Location: /etc/ssh/sshd_config
-# Remove the Comment '#' in PasswordAuthentication
-# Then Change PasswordAuthentication to 'no' to force key-only access:
-#
-# PasswordAuthentication no
-
-# Task 3: Restart SSH Daemon
-sudo systemctl restart ssh
-
-# Task 4: Verification Checks
-# Check local database lock status:
-sudo passwd -S SSHtest
-# Expected status: 'SSHtest L ...' (L = Locked)
-
-# Test remote passwordless lookup from Client VM:
-# ssh SSHtest@${metrics.wanRouterIP}
-# Expected status: Immediately drops with 'Permission denied (publickey)'`;
             }
 
             else if (fileType === 'coreConfig') {
