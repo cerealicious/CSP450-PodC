@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Configuration Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0F172A',
+                            gold: '#B7791F',
+                            teal: '#0D9488',
+                            slate: '#334155'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-800 flex flex-col min-h-screen">
+
+    <header class="bg-brand-navy text-white shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-gold p-2.5 rounded-lg text-white shadow-inner flex items-center justify-center">
+                    <i class="fa-solid fa-network-wired text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight">CSP450 Network Configuration Generator</h1>
+                    <p class="text-xs text-slate-400 font-medium">Stage Two Automated Multi-Vendor Deployment Planner</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700/60 text-xs font-semibold text-slate-300">
+                <i class="fa-solid fa-code-branch text-brand-gold"></i>
+                <span>Made by Cerealicious | Github</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Side: Interactive Parameter Configuration Panel -->
+        <section class="w-full lg:w-1/3 flex flex-col gap-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-5">
+                    <i class="fa-solid fa-sliders text-brand-teal text-lg"></i>
+                    <h2 class="text-base font-bold text-slate-900">1. Parameter Input Control</h2>
+                </div>
+
+                <form id="networkForm" onsubmit="event.preventDefault();" class="space-y-5">
+                    <!-- User (Your Profile) -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Your Local Branch (User A)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-400 mb-1">MySenecaID</label>
+                                <input type="text" id="userID" value="Ceril" placeholder="e.g. catalan" required
+                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-400 mb-1">UID (0-1023)</label>
+                                <input type="number" id="userUID" value="6" min="0" max="1023" required
+                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hardware Architecture Switch Selection -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Pod Physical Switches</label>
+                        <select id="switchModel" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium bg-white">
+                            <option value="6300-2530">Aruba 6300 (Core) + Aruba 2530/2540 (Access)</option>
+                            <option value="6300-6300">Both Aruba 6300 (Core Switches)</option>
+                        </select>
+                        <p class="text-[10px] text-slate-400 leading-normal">Determines switch syntax translation (modern ArubaOS-CX vs older ProCurve CLI command logic).</p>
+                    </div>
+
+                    <!-- Partner Profile -->
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Partner Branch (User B)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-400 mb-1">Partner SenecaID</label>
+                                <input type="text" id="partnerID" value="Anthony" placeholder="e.g. srapted" required
+                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold text-slate-400 mb-1">Partner UID (0-1023)</label>
+                                <input type="number" id="partnerUID" value="7" min="0" max="1023" required
+                                    class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Device Specific Details -->
+                    <div class="space-y-3 pt-2 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Device Hardware Identifiers</label>
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-400 mb-1">Your Server MAC Address (Used for Static Lease)</label>
+                            <input type="text" id="userMAC" value="00:0c:29:49:77:77" placeholder="e.g. 00:0c:29:ab:cd:ef" required
+                                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-mono text-xs">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-semibold text-slate-400 mb-1">Partner's Server MAC Address</label>
+                            <input type="text" id="partnerMAC" value="00:0c:29:77:77:77" placeholder="e.g. 00:0c:29:ef:gh:ij" required
+                                class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-mono text-xs">
+                        </div>
+                    </div>
+
+                    <!-- Action Trigger -->
+                    <button type="button" onclick="generateConfiguration()" 
+                        class="w-full bg-brand-teal hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 mt-4">
+                        <i class="fa-solid fa-gears"></i>
+                        <span>Generate Lab Blueprint</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Diagnostics Check Panel -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4 mb-4">
+                    <i class="fa-solid fa-microscope text-brand-gold text-lg"></i>
+                    <h2 class="text-base font-bold text-slate-900">2. Pre-Flight Diagnostics</h2>
+                </div>
+                <div id="diagnosticsBox" class="space-y-3 text-xs">
+                    <!-- Dynamic Diagnostic Items -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: Config Tabs and Active Generator Area -->
+        <section class="w-full lg:w-2/3 flex flex-col gap-6">
+            
+            <!-- Tab Controller -->
+            <div class="bg-slate-200/60 p-1 rounded-xl flex gap-1 border border-slate-200/80">
+                <button onclick="switchTab('tab-prepsheets')" id="btn-prepsheets" class="tab-btn flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all bg-white text-slate-900 shadow-sm flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-clipboard-list text-brand-gold"></i>
+                    <span>Prep Sheets</span>
+                </button>
+                <button onclick="switchTab('tab-user-files')" id="btn-user-files" class="tab-btn flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-laptop text-brand-teal"></i>
+                    <span>Your VM Files (User A)</span>
+                </button>
+                <button onclick="switchTab('tab-partner-files')" id="btn-partner-files" class="tab-btn flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-user-group text-sky-600"></i>
+                    <span>Partner VM Files (User B)</span>
+                </button>
+                <button onclick="switchTab('tab-switch-scripts')" id="btn-switch-scripts" class="tab-btn flex-1 py-2 px-3 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-server text-purple-600"></i>
+                    <span>Switch Scripts</span>
+                </button>
+            </div>
+
+            <!-- Tab 1: Prep Sheets Side by Side -->
+            <div id="tab-prepsheets" class="tab-content space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Your Prep Sheet Metrics -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <span class="flex items-center gap-2 font-bold text-slate-900">
+                                <i class="fa-solid fa-id-card text-brand-teal"></i>
+                                <span id="userA-Title">Your Prep Sheet (VLAN ...)</span>
+                            </span>
+                            <span class="px-2 py-0.5 bg-teal-50 text-brand-teal border border-teal-200 rounded text-[10px] font-bold font-mono uppercase tracking-wider">A-Side</span>
+                        </div>
+                        <div class="flex-grow">
+                            <table class="w-full text-xs text-left text-slate-600 border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                        <th class="py-2">Metric Parameter</th>
+                                        <th class="py-2 text-right">Computed Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userA-PrepBody" class="divide-y divide-slate-100">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Partner's Prep Sheet Metrics -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                            <span class="flex items-center gap-2 font-bold text-slate-900">
+                                <i class="fa-solid fa-user-group text-sky-600"></i>
+                                <span id="userB-Title">Partner's Prep Sheet (VLAN ...)</span>
+                            </span>
+                            <span class="px-2 py-0.5 bg-sky-50 text-sky-600 border border-sky-200 rounded text-[10px] font-bold font-mono uppercase tracking-wider">B-Side</span>
+                        </div>
+                        <div class="flex-grow">
+                            <table class="w-full text-xs text-left text-slate-600 border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                        <th class="py-2">Metric Parameter</th>
+                                        <th class="py-2 text-right">Computed Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="partnerB-PrepBody" class="divide-y divide-slate-100">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Your VM Files (User A) -->
+            <div id="tab-user-files" class="tab-content hidden space-y-6">
+                <!-- Dropdown selector inside the tab panel to inspect each generated file -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900">Your Local Linux Configuration Files</h3>
+                            <p class="text-xs text-slate-400">Copy these blocks directly into your corresponding Router and Server VMs</p>
+                        </div>
+                        <select id="userFileSelector" onchange="renderActiveFile('user')" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-lg border border-slate-200 focus:outline-none">
+                            <option value="dhcpAssignment">Server Netplan (dhcpAssignment.yaml)</option>
+                            <option value="staticAssignment">Router PtP Link (staticAssignment.yaml)</option>
+                            <option value="frrRouterConfig">Router FRR Routing Engine (frrRouterConfig.txt)</option>
+                            <option value="NFtablesRulesNAT">Router Firewall & NAT (NFtablesRulesNAT.txt)</option>
+                            <option value="sshHardening">Server SSH Auditing (sshd_config & SSHtest)</option>
+                        </select>
+                    </div>
+
+                    <!-- Code Box -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadActiveFile('user')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('user-code')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-900 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="user-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Partner VM Files (User B) -->
+            <div id="tab-partner-files" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900">Partner's Linux Configuration Files</h3>
+                            <p class="text-xs text-slate-400">Provide these configuration scripts to your lab partner to maintain identical system topologies</p>
+                        </div>
+                        <select id="partnerFileSelector" onchange="renderActiveFile('partner')" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-lg border border-slate-200 focus:outline-none">
+                            <option value="dhcpAssignment">Server Netplan (dhcpAssignment.yaml)</option>
+                            <option value="staticAssignment">Router PtP Link (staticAssignment.yaml)</option>
+                            <option value="frrRouterConfig">Router FRR Routing Engine (frrRouterConfig.txt)</option>
+                            <option value="NFtablesRulesNAT">Router Firewall & NAT (NFtablesRulesNAT.txt)</option>
+                            <option value="sshHardening">Server SSH Auditing (sshd_config & SSHtest)</option>
+                        </select>
+                    </div>
+
+                    <!-- Code Box -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadActiveFile('partner')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('partner-code')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-900 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="partner-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Switch Scripts -->
+            <div id="tab-switch-scripts" class="tab-content hidden space-y-6">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900">Switch Commands (Shared Dual-Tenant Provisioning)</h3>
+                            <p class="text-xs text-slate-400">SSH into your switches over the temporary management network and run these configurations</p>
+                        </div>
+                        <select id="switchFileSelector" onchange="renderActiveFile('switch')" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 rounded-lg border border-slate-200 focus:outline-none">
+                            <option value="coreConfig">Switch 1: Aruba 6300 Core Configuration</option>
+                            <option value="accessConfig">Switch 2: Aruba Access Configuration</option>
+                        </select>
+                    </div>
+
+                    <!-- Code Box -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadActiveFile('switch')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('switch-code')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-900 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="switch-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Modal Notifications Container -->
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 hidden backdrop-blur-sm px-4">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center gap-3">
+                <div id="modalIconBg" class="p-2.5 rounded-xl text-white flex items-center justify-center">
+                    <!-- Dynamic Icon -->
+                </div>
+                <div>
+                    <h3 id="modalTitle" class="text-sm font-extrabold text-slate-900">Notification</h3>
+                    <p id="modalCategory" class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">System Agent</p>
+                </div>
+            </div>
+            <p id="modalMessage" class="text-xs leading-normal text-slate-500"></p>
+            <div class="flex justify-end">
+                <button onclick="closeCustomModal()" class="px-4 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-xs font-bold shadow-sm transition-all">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global memory space holds active state configurations for dynamic rendering
+        let generatedData = {};
+
+        // Run configuration auto-generator on mount
+        window.onload = function() {
+            generateConfiguration();
+        };
+
+        // Custom Modal controller
+        function showCustomModal(title, msg, type = 'info') {
+            const modal = document.getElementById('customModal');
+            const titleEl = document.getElementById('modalTitle');
+            const msgEl = document.getElementById('modalMessage');
+            const iconBg = document.getElementById('modalIconBg');
+
+            titleEl.textContent = title;
+            msgEl.textContent = msg;
+
+            // Reset theme color patterns
+            iconBg.className = 'p-2.5 rounded-xl text-white flex items-center justify-center ';
+            if (type === 'success') {
+                iconBg.className += 'bg-brand-teal';
+                iconBg.innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
+            } else if (type === 'warning') {
+                iconBg.className += 'bg-amber-600';
+                iconBg.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-lg"></i>';
+            } else {
+                iconBg.className += 'bg-slate-900';
+                iconBg.innerHTML = '<i class="fa-solid fa-circle-info text-lg"></i>';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function copyCodeBlock(elementId) {
+            const codeEl = document.getElementById(elementId);
+            const textToCopy = codeEl.textContent;
+
+            // Use a temporary textarea trick as standard clipboard permissions fail inside iframe contexts
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCustomModal("Code Block Copied", "File content copied successfully to your clipboard. You can paste it safely.", "success");
+                } else {
+                    showCustomModal("Copy Failed", "Your browser did not allow copying. Please highlight and use Ctrl+C.", "warning");
+                }
+            } catch (err) {
+                showCustomModal("Copy Error", "An unexpected security block occurred. Please copy the text block manually.", "warning");
+            }
+            document.body.removeChild(dummy);
+        }
+
+        function downloadActiveFile(owner) {
+            let selector, filename;
+            if (owner === 'user') {
+                selector = document.getElementById('userFileSelector').value;
+                filename = `${selector === 'dhcpAssignment' || selector === 'staticAssignment' ? selector + '.yaml' : selector + '.txt'}`;
+            } else if (owner === 'partner') {
+                selector = document.getElementById('partnerFileSelector').value;
+                filename = `${selector === 'dhcpAssignment' || selector === 'staticAssignment' ? selector + '.yaml' : selector + '.txt'}`;
+            } else {
+                selector = document.getElementById('switchFileSelector').value;
+                filename = `${selector}.txt`;
+            }
+
+            const codeText = document.getElementById(`${owner}-code`).textContent;
+            const blob = new Blob([codeText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-white', 'text-slate-900', 'shadow-sm');
+                el.classList.add('text-slate-600', 'hover:text-slate-900');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${tabId.split('-')[1]}`);
+            activeBtn.classList.remove('text-slate-600', 'hover:text-slate-900');
+            activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm');
+        }
+
+        function calculateMetrics(uid, senecaId) {
+            const clientHost = `${senecaId}-Client`;
+            const serverHost = `${senecaId}-Server`;
+            const routerHost = `${senecaId}-Router`;
+
+            // LAN: 172.16.0.0/16 with /26 block offsets (Offset size = 64 bytes per user)
+            const lanOffset = uid * 64;
+            const lanOctet3 = Math.floor(lanOffset / 256);
+            const lanOctet4 = lanOffset % 256;
+
+            const lanNetworkID = `172.16.${lanOctet3}.${lanOctet4}`;
+            const lanSubnetMask = "255.255.255.192"; // /26
+            const lanGateway = `172.16.${lanOctet3}.${lanOctet4 + 1}`;
+            const lanBroadcast = `172.16.${lanOctet3}.${lanOctet4 + 63}`;
+            const serverStaticIP = `172.16.${lanOctet3}.${lanOctet4 + 62}`; // Last host in /26 block
+            const dhcpStart = `172.16.${lanOctet3}.${lanOctet4 + 2}`;
+            const dhcpEnd = `172.16.${lanOctet3}.${lanOctet4 + 61}`;
+
+            // WAN: 192.168.0.0/16 with /30 block offsets (Offset size = 4 bytes per user)
+            const wanOffset = uid * 4;
+            const wanOctet3 = Math.floor(wanOffset / 256);
+            const wanOctet4 = wanOffset % 256;
+
+            const wanNetworkID = `192.168.${wanOctet3}.${wanOctet4}`;
+            const wanSubnetMask = "255.255.255.252"; // /30
+            const wanSwitchIP = `192.168.${wanOctet3}.${wanOctet4 + 1}`;
+            const wanRouterIP = `192.168.${wanOctet3}.${wanOctet4 + 2}`;
+            const wanBroadcast = `192.168.${wanOctet3}.${wanOctet4 + 3}`;
+
+            const ospfRouterID = `${uid}.1.1.2`;
+            const ospfSwitchID = `${uid}.1.1.1`;
+
+            return {
+                uid, senecaId, clientHost, serverHost, routerHost,
+                lanNetworkID, lanSubnetMask, lanGateway, lanBroadcast, serverStaticIP, dhcpStart, dhcpEnd,
+                wanNetworkID, wanSubnetMask, wanSwitchIP, wanRouterIP, wanBroadcast,
+                ospfRouterID, ospfSwitchID
+            };
+        }
+
+        function generateConfiguration() {
+            const userUID = parseInt(document.getElementById('userUID').value);
+            const userSeneca = document.getElementById('userID').value.trim();
+            const partnerUID = parseInt(document.getElementById('partnerUID').value);
+            const partnerSeneca = document.getElementById('partnerID').value.trim();
+            const userMAC = document.getElementById('userMAC').value.trim();
+            const partnerMAC = document.getElementById('partnerMAC').value.trim();
+            const switchTopology = document.getElementById('switchModel').value;
+
+            // Simple user validation
+            if (!userSeneca || !partnerSeneca) {
+                showCustomModal("Incomplete Profiles", "Please provide a valid Seneca ID for both you and your partner.", "warning");
+                return;
+            }
+            if (userUID === partnerUID) {
+                showCustomModal("UID Matching Conflict", "You and your partner cannot use the identical UID or VLAN configurations inside the same pod framework. Please check your assigned UID list.", "warning");
+                return;
+            }
+
+            // Calculations
+            const userMetrics = calculateMetrics(userUID, userSeneca);
+            const partnerMetrics = calculateMetrics(partnerUID, partnerSeneca);
+
+            // Save metrics to globally active cache memory
+            generatedData.user = userMetrics;
+            generatedData.partner = partnerMetrics;
+            generatedData.userMAC = userMAC;
+            generatedData.partnerMAC = partnerMAC;
+            generatedData.topology = switchTopology;
+
+            // Render UI Headers
+            document.getElementById('userA-Title').textContent = `Your Prep Sheet (VLAN ${userUID})`;
+            document.getElementById('userB-Title').textContent = `Partner's Prep Sheet (VLAN ${partnerUID})`;
+
+            // Populate Prep Sheet Table A
+            populateTable('userA-PrepBody', userMetrics, userMAC, "Core Switch Port 1/1/4");
+            // Populate Prep Sheet Table B
+            populateTable('partnerB-PrepBody', partnerMetrics, partnerMAC, "Core Switch Port 1/1/5");
+
+            // Evaluate Diagnostics
+            runDiagnostics(userUID, partnerUID, userMAC, partnerMAC);
+
+            // Render current file selections
+            renderActiveFile('user');
+            renderActiveFile('partner');
+            renderActiveFile('switch');
+        }
+
+        function populateTable(elementId, metrics, mac, portLabel) {
+            const tbody = document.getElementById(elementId);
+            tbody.innerHTML = `
+                <tr><td class="py-2.5 font-medium text-slate-500">Seneca Host Prefix</td><td class="py-2.5 text-right font-semibold text-slate-800">${metrics.senecaId}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">VLAN ID Containment</td><td class="py-2.5 text-right font-semibold text-brand-teal font-mono">VLAN ${metrics.uid}</td></tr>
+                <tr class="bg-slate-50/50"><td class="py-2.5 font-bold text-slate-800 uppercase tracking-wider text-[9px]" colspan="2">LAN Subnet Parameters (${metrics.lanNetworkID}/26)</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Network ID Space</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.lanNetworkID}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">SVI Core Gateway IP</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.lanGateway}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Dynamic Lease Range</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.dhcpStart} - ${metrics.dhcpEnd}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Server Static Bound IP</td><td class="py-2.5 text-right font-semibold text-teal-600 font-bold font-mono">${metrics.serverStaticIP}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Broadcast Boundary</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.lanBroadcast}</td></tr>
+                <tr class="bg-slate-50/50"><td class="py-2.5 font-bold text-slate-800 uppercase tracking-wider text-[9px]" colspan="2">Point-to-Point WAN Subnet (${metrics.wanNetworkID}/30)</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">WAN Network ID</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.wanNetworkID}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Switch Facing IP</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.wanSwitchIP}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Router Facing IP</td><td class="py-2.5 text-right font-semibold text-brand-gold font-bold font-mono">${metrics.wanRouterIP}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Broadcast Boundary</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.wanBroadcast}</td></tr>
+                <tr class="bg-slate-50/50"><td class="py-2.5 font-bold text-slate-800 uppercase tracking-wider text-[9px]" colspan="2">OSPF Routing ID Configuration</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Linux Router ID</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.ospfRouterID}</td></tr>
+                <tr><td class="py-2.5 font-medium text-slate-500">Core Switch OSPF ID</td><td class="py-2.5 text-right font-semibold text-slate-800 font-mono">${metrics.ospfSwitchID}</td></tr>
+            `;
+        }
+
+        function runDiagnostics(userUID, partnerUID, userMAC, partnerMAC) {
+            const box = document.getElementById('diagnosticsBox');
+            box.innerHTML = '';
+
+            let diagFlags = [];
+
+            // Target Checks for UIDs up to 1023 (limit of standard octet rollover math)
+            if (userUID > 1023 || partnerUID > 1023 || userUID < 0 || partnerUID < 0) {
+                diagFlags.push({ text: "VLAN ID out of range (UIDs must be between 0 and 1023 to fit standard IP subnet boundaries).", type: "error" });
+            } else if (userUID > 255 || partnerUID > 255) {
+                diagFlags.push({ text: "UID exceeds 255. Standard IP octet math will roll over cleanly into the next octets. Ensure your physical switch VLAN database supports IDs up to 1023.", type: "warning" });
+            } else {
+                diagFlags.push({ text: "UID constraints structurally verified.", type: "success" });
+            }
+
+            // MAC checks
+            const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+            if (!macRegex.test(userMAC) || !macRegex.test(partnerMAC)) {
+                diagFlags.push({ text: "One or more MAC addresses appear malformed. Core Switch DHCP reservation may drop leases.", type: "warning" });
+            } else {
+                diagFlags.push({ text: "Hardware MAC address syntax matches standard formats.", type: "success" });
+            }
+
+            // Render items
+            diagFlags.forEach(item => {
+                const icon = item.type === 'success' ? 'fa-circle-check text-brand-teal' : (item.type === 'warning' ? 'fa-triangle-exclamation text-amber-500' : 'fa-circle-xmark text-red-500');
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-2 text-slate-600 leading-normal";
+                div.innerHTML = `
+                    <i class="fa-solid ${icon} mt-0.5 text-sm"></i>
+                    <span>${item.text}</span>
+                `;
+                box.appendChild(div);
+            });
+        }
+
+        function renderActiveFile(owner) {
+            const metrics = generatedData[owner] || generatedData.user;
+            const targetCodeElement = document.getElementById(`${owner}-code`);
+            let fileType;
+
+            if (owner === 'user') {
+                fileType = document.getElementById('userFileSelector').value;
+            } else if (owner === 'partner') {
+                fileType = document.getElementById('partnerFileSelector').value;
+            } else {
+                fileType = document.getElementById('switchFileSelector').value;
+            }
+
+            // Render files depending on type selected
+            if (fileType === 'dhcpAssignment') {
+                targetCodeElement.textContent = `# Target host: ${metrics.serverHost} VM
+# Location: /etc/netplan/dhcpAssignment.yaml
+# Run validation: sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      dhcp4: true
+      optional: true`;
+            } 
+            
+            else if (fileType === 'staticAssignment') {
+                targetCodeElement.textContent = `# Target host: ${metrics.routerHost} VM
+# Location: /etc/netplan/staticAssignment.yaml
+# Run validation: sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      dhcp4: true
+      optional: true
+    ens37:
+      dhcp4: false
+      addresses:
+        - ${metrics.wanRouterIP}/30
+      optional: true`;
+            } 
+            
+            else if (fileType === 'frrRouterConfig') {
+                targetCodeElement.textContent = `! Target host: ${metrics.routerHost} VM
+! Command tool: sudo vtysh
+! BEFORE APPLYING: Ensure 'ospfd=yes' is enabled in /etc/frr/daemons
+! and restart daemon using: sudo systemctl restart frr
+
+router ospf
+ ospf router-id ${metrics.ospfRouterID}
+ network 10.0.0.0/8 area 0
+ network ${metrics.wanNetworkID}/24 area 0
+ network ${metrics.lanNetworkID}/26 area 0  //This should be added when you are in Stage Three
+!
+line vty
+!
+end
+write memory`;
+            } 
+            
+            else if (fileType === 'NFtablesRulesNAT') {
+                targetCodeElement.textContent = `#!/usr/sbin/nft -f
+# Target host: ${metrics.routerHost} VM
+# Location: /etc/nftables.conf
+# Run validation: sudo nft -f /etc/nftables.conf
+
+flush ruleset
+
+table inet filter {
+  chain input {
+    type filter hook input priority 0; policy accept;
+    iifname "ens33" ct state established,related accept
+    iifname "ens37" accept
+  }
+
+  chain forward {
+    type filter hook forward priority 0; policy accept;
+    iifname "ens37" oifname "ens33" accept
+    iifname "ens33" oifname "ens37" ct state established,related accept
+  }
+
+  chain output {
+    type filter hook output priority 0; policy accept;
+    oifname "ens33" accept
+  }
+}
+
+table ip nat {
+  chain prerouting {
+    type nat hook prerouting priority -100; policy accept;
+    iifname "ens37" udp dport 53 dnat to 10.101.100.21
+    iifname "ens37" tcp dport 53 dnat to 10.101.100.21
+  }
+
+  chain input {
+    type nat hook input priority 100; policy accept;
+  }
+
+  chain output {
+    type nat hook output priority -100; policy accept;
+  }
+
+  chain postrouting {
+    type nat hook postrouting priority 100; policy accept;
+    oifname "ens33" masquerade
+    }
+}`;
+            }
+
+            else if (fileType === 'sshHardening') {
+                targetCodeElement.textContent = `# Target host: ${metrics.serverHost} VM
+# Task 1: Create SSHtest Audit User and Lock Credential Database Field
+# Run these commands sequentially on the Server:
+sudo adduser SSHtest
+sudo passwd -l SSHtest
+
+# Task 2: Modify SSH Daemon Configuration File
+# Location: /etc/ssh/sshd_config
+# Remove the Comment '#' in PasswordAuthentication
+# Then Change PasswordAuthentication to 'no' to force key-only access:
+#
+# PasswordAuthentication no
+
+# Task 3: Restart SSH Daemon
+sudo systemctl restart ssh
+
+# Task 4: Verification Checks
+# Check local database lock status:
+sudo passwd -S SSHtest
+# Expected status: 'SSHtest L ...' (L = Locked)
+
+# Test remote passwordless lookup from Client VM:
+# ssh SSHtest@${metrics.wanRouterIP}
+# Expected status: Immediately drops with 'Permission denied (publickey)'`;
+            }
+
+            else if (fileType === 'coreConfig') {
+                // Aruba 6300 Core Switch configuration script
+                const u = generatedData.user;
+                const p = generatedData.partner;
+                
+                targetCodeElement.textContent =
+`en
+configure terminal
+hostname ${u.senecaId}-${p.senecaId}-6300
+
+# --- ${u.senecaId}'s VLAN (${u.uid}) ---
+vlan ${u.uid}
+name ${u.senecaId}-VLAN
+exit
+spanning-tree
+interface vlan ${u.uid}
+no shutdown
+ip address ${u.lanGateway}/26
+ip ospf 1 area 0
+y
+y
+exit
+
+# --- ${p.senecaId}'s VLAN (${p.uid}) ---
+vlan ${p.uid}
+name ${p.senecaId}-VLAN
+exit
+spanning-tree
+interface vlan ${p.uid}
+no shutdown
+ip address ${p.lanGateway}/26
+ip ospf 1 area 0
+exit
+
+# --- Trunk to Access Switch (Port 1/1/3) ---
+interface 1/1/3
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed all
+exit
+
+# --- ${u.senecaId}'s Router Link (Port 1/1/4) ---
+interface 1/1/4
+no shutdown
+routing
+description ${u.senecaId}_Router_WAN
+ip address ${u.wanSwitchIP}/30
+ip ospf 1 area 0
+exit
+
+# --- ${p.senecaId}'s Router Link (Port 1/1/5) ---
+interface 1/1/5
+no shutdown
+routing
+description ${p.senecaId}_Router_WAN
+ip address ${p.wanSwitchIP}/30
+ip ospf 1 area 0
+exit
+
+# --- DHCP Server Pools ---
+dhcp-server vrf default
+
+# ${u.uid}'s Pool
+pool_${u.uid}
+range ${u.dhcpStart} ${u.dhcpEnd}
+default-router ${u.lanGateway}
+dns-server 10.101.100.21
+static-bind ip ${u.serverStaticIP} mac ${generatedData.userMAC}
+exit
+
+# ${p.uid}'s Pool
+pool_${p.uid}
+range ${p.dhcpStart} ${p.dhcpEnd}
+default-router ${p.lanGateway}
+dns-server 10.101.100.21
+static-bind ip ${p.serverStaticIP} mac ${generatedData.partnerMAC}
+exit
+no shutdown
+
+# --- OSPF Identity ---
+enable
+router ospf 1
+router-id ${u.uid}.${p.uid}.${u.uid}.${p.uid}
+exit
+
+ip route 0.0.0.0 0.0.0.0 ${u.wanRouterIP}
+ip route 0.0.0.0 0.0.0.0 ${p.wanRouterIP}
+
+exit
+`;
+            }
+
+            else if (fileType === 'accessConfig') {
+                const u = generatedData.user;
+                const p = generatedData.partner;
+
+                if (generatedData.topology === '6300-2530') {
+                    // Classic HP ProCurve syntax for Access Switch 2530
+                    targetCodeElement.textContent = `en
+configure terminal
+ip default-gateway ${u.lanGateway}
+hostname "${u.senecaId}-${p.senecaId}-6300"
+spanning-tree
+
+# --- ${u.senecaId}'s Access Port (Port 1) ---
+vlan ${u.uid}
+name ${u.senecaId}-vlan
+ip address ${u.dhcpStart}
+untagged 1
+tagged 3
+exit
+
+# --- ${p.senecaId}'s Access Port (Port 2) ---
+vlan ${p.uid}
+name ${p.senecaId}-vlan
+ip address ${p.dhcpStart}
+untagged 2
+tagged 3
+exit
+
+write memory`;
+                } else {
+                    // Modern AOS-CX 6300 Syntax for Switch 1
+                    targetCodeElement.textContent = `en
+configure terminal
+hostname "${p.senecaId}-6300"
+
+# --- Replicate ${u.senecaId}'s Local VLAN (${u.uid}) ---
+vlan ${u.uid}
+spanning-tree
+name ${u.senecaId}-vlan
+interface vlan ${u.uid}
+no shutdown
+ip address ${u.dhcpStart}
+exit
+
+# --- Replicate ${p.senecaId}'s Local VLAN (${p.uid}) ---
+vlan ${p.uid}
+spanning-tree
+name ${p.senecaId}-vlan
+interface vlan ${p.uid}
+no shutdown
+ip address ${p.dhcpStart}
+exit
+
+# --- Trunk Port Interface 1/1/3 ---
+interface 1/1/3 
+no shutdown 
+no routing 
+vlan trunk native 1 
+vlan trunk allowed all
+exit
+
+write memory`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
