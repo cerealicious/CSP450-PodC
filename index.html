@@ -83,12 +83,12 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[10px] font-semibold text-slate-400 mb-1">MySenecaID</label>
-                                <input type="text" id="userID" value="Ceril" placeholder="e.g. catalan" required
+                                <input type="text" id="userID" value="CerilAnthony" placeholder="e.g. catalan" required
                                     class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-semibold text-slate-400 mb-1">UID (0-1023)</label>
-                                <input type="number" id="userUID" value="6" min="0" max="1023" required
+                                <input type="number" id="userUID" value="231" min="0" max="1023" required
                                     class="w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-teal focus:border-transparent font-medium font-mono">
                             </div>
                         </div>
@@ -743,7 +743,7 @@ table ip nat {
                 targetCodeElement.textContent =
 `en
 configure terminal
-hostname ${u.senecaId}-${p.senecaId}-6300
+hostname ${u.senecaId}-6300
 
 # --- ${u.senecaId}'s VLAN (${u.uid}) ---
 vlan ${u.uid}
@@ -799,7 +799,7 @@ exit
 dhcp-server vrf default
 
 # ${u.uid}'s Pool
-pool_${u.uid}
+pool ${u.uid}
 range ${u.dhcpStart} ${u.dhcpEnd}
 default-router ${u.lanGateway}
 dns-server 10.101.100.21
@@ -807,7 +807,7 @@ static-bind ip ${u.serverStaticIP} mac ${generatedData.userMAC}
 exit
 
 # ${p.uid}'s Pool
-pool_${p.uid}
+pool ${p.uid}
 range ${p.dhcpStart} ${p.dhcpEnd}
 default-router ${p.lanGateway}
 dns-server 10.101.100.21
