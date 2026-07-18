@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSP450 Stage Four - Redundancy Configuration Workspace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0B0F19',
+                            indigo: '#4F46E5',
+                            violet: '#7C3AED',
+                            amber: '#F59E0B',
+                            slate: '#1E293B',
+                            accent: '#8B5CF6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-slate-200 bg-brand-dark flex flex-col min-h-screen custom-scrollbar">
+
+    <header class="bg-brand-dark border-b border-slate-800 text-white shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-tr from-brand-indigo to-brand-violet p-2.5 rounded-lg text-white shadow-lg flex items-center justify-center">
+                    <i class="fa-solid fa-shield-halved text-2xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-indigo via-brand-accent to-brand-amber bg-clip-text text-transparent">CSP450 Stage Four Redundancy Workspace</h1>
+                    <p class="text-xs text-slate-400 font-medium tracking-wide">High-Availability VRRP &amp; Core OSPF Integration Panel</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 bg-slate-800/80 px-4 py-2 rounded-full border border-slate-700 text-xs font-semibold text-slate-300">
+                <i class="fa-solid fa-code-merge text-brand-amber"></i>
+                <span><a href="https://github.com/cerealicious" target="_blank" class="hover:text-brand-amber transition-colors">Made by Cerealicious | Github</a></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Side: Interactive Parameter Configuration Panel -->
+        <section class="w-full lg:w-1/3 flex flex-col gap-6">
+            <div class="bg-slate-800/50 rounded-2xl border border-slate-700 shadow-lg p-6 backdrop-blur-md">
+                <div class="flex items-center gap-2.5 border-b border-slate-700 pb-4 mb-5">
+                    <i class="fa-solid fa-sliders text-brand-amber text-lg"></i>
+                    <h2 class="text-base font-bold text-slate-100">1. Pod Parameter Inputs</h2>
+                </div>
+
+                <form id="networkForm" onsubmit="event.preventDefault();" class="space-y-4">
+                    <!-- User 1 (A-Side) -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 1: (Router 1 / Core 1 Port 1/1/3)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">SenecaID</label>
+                                <input type="text" id="id1" value="catalan" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-medium font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">UID</label>
+                                <input type="number" id="uid1" value="231" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-400 mb-1">Server MAC Address</label>
+                            <input type="text" id="mac1" value="00:0C:29:05:00:B6" required
+                                class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono text-center">
+                        </div>
+                    </div>
+
+                    <!-- User 2 (B-Side) -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 2: (Router 2 / Core 1 Port 1/1/4)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">SenecaID</label>
+                                <input type="text" id="id2" value="jmalaqui" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-medium font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">UID</label>
+                                <input type="number" id="uid2" value="217" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-400 mb-1">Server MAC Address</label>
+                            <input type="text" id="mac2" value="00:0C:29:47:FE:85" required
+                                class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono text-center">
+                        </div>
+                    </div>
+
+                    <!-- User 3 (C-Side) -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 3: (Router 3 / Core 2 Port 1/1/3)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">SenecaID</label>
+                                <input type="text" id="id3" value="akarki5" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-medium font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">UID</label>
+                                <input type="number" id="uid3" value="214" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-400 mb-1">Server MAC Address</label>
+                            <input type="text" id="mac3" value="00:50:56:20:37:EB" required
+                                class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono text-center">
+                        </div>
+                    </div>
+
+                    <!-- User 4 (D-Side) -->
+                    <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
+                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 4: (Router 4 / Core 2 Port 1/1/4)</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">SenecaID</label>
+                                <input type="text" id="id4" value="caemmanuel" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-medium font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-semibold text-slate-400 mb-1">UID</label>
+                                <input type="number" id="uid4" value="206" required
+                                    class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] font-semibold text-slate-400 mb-1">Server MAC Address</label>
+                            <input type="text" id="mac4" value="00:50:56:2E:34:2C" required
+                                class="w-full px-3 py-1.5 text-xs bg-slate-800 rounded-lg border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-violet text-white font-mono text-center">
+                        </div>
+                    </div>
+
+                    <!-- Action Trigger -->
+                    <button type="button" onclick="generateStageFourConfigs()" 
+                        class="w-full bg-gradient-to-r from-brand-indigo to-brand-violet hover:from-indigo-600 hover:to-violet-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4">
+                        <i class="fa-solid fa-arrows-spin text-lg"></i>
+                        <span>GENERATE</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Pre-Flight Diagnostics Check Panel -->
+            <div class="bg-slate-800/50 rounded-2xl border border-slate-700 shadow-lg p-6 backdrop-blur-md">
+                <div class="flex items-center gap-2.5 border-b border-slate-700 pb-4 mb-4">
+                    <i class="fa-solid fa-microscope text-brand-amber text-lg"></i>
+                    <h2 class="text-base font-bold text-slate-100">2. Redundancy Audits</h2>
+                </div>
+                <div id="diagnosticsBox" class="space-y-3 text-xs">
+                    <!-- Dynamic Diagnostic Items -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Side: Config Tabs and Active Generator Area -->
+        <section class="w-full lg:w-2/3 flex flex-col gap-6">
+            
+            <!-- Tab Controller -->
+            <div class="bg-slate-800/80 p-1.5 rounded-xl flex gap-1.5 border border-slate-700 shadow-md">
+                <button onclick="switchTab('tab-prepsheets')" id="btn-prepsheets" class="tab-btn flex-1 py-2.5 px-3 text-xs font-bold rounded-lg transition-all bg-gradient-to-r from-brand-indigo to-brand-violet text-white shadow-md flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-clipboard-list text-brand-amber"></i>
+                    <span>SVI/VRRP Prep Sheets</span>
+                </button>
+                <button onclick="switchTab('tab-core-scripts')" id="btn-core-scripts" class="tab-btn flex-1 py-2.5 px-3 text-xs font-bold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-layer-group text-violet-400"></i>
+                    <span>Core Switch Scripts</span>
+                </button>
+                <button onclick="switchTab('tab-access-scripts')" id="btn-access-scripts" class="tab-btn flex-1 py-2.5 px-3 text-xs font-bold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-network-wired text-emerald-400"></i>
+                    <span>Access Switch Scripts</span>
+                </button>
+                <button onclick="switchTab('tab-vm-configs')" id="btn-vm-configs" class="tab-btn flex-1 py-2.5 px-3 text-xs font-bold rounded-lg transition-all text-slate-400 hover:text-slate-200 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-desktop text-sky-400"></i>
+                    <span>Router/Server VM Files</span>
+                </button>
+            </div>
+
+            <!-- Tab 1: Prep Sheets Side by Side -->
+            <div id="tab-prepsheets" class="tab-content space-y-6">
+                <!-- Mathematical Formula Callout card with fully dynamic 4-tenant information grid -->
+                <div class="bg-slate-800/40 border border-slate-700/60 p-5 rounded-2xl flex flex-col gap-3">
+                    <div class="flex items-center gap-4">
+                        <div class="text-brand-amber text-2xl bg-amber-500/10 p-3 rounded-xl border border-amber-500/20">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-100 mb-0.5">Stage Four VRRP Multi-Tenant Gateway Metrics</h4>
+                            <p class="text-xs text-slate-400 leading-normal">
+                                All LAN boundaries use a 64-block multiplier (Offset = UID x 64). Core 1 SVI uses Priority 10 (Master) and Core 2 SVI uses Priority 5 (Standby Backup) across all respective tenant subnets.
+                            </p>
+                        </div>
+                    </div>
+                    <div id="vrrp-formula-desc" class="pt-2 border-t border-slate-800">
+                        <!-- Dynamically filled with Tenant SVI gateway listings on calculation -->
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tenant 1 & 2 Prep Card -->
+                    <div class="bg-slate-800/50 rounded-2xl border border-slate-700 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                            <span class="flex items-center gap-2 font-bold text-slate-100">
+                                <i class="fa-solid fa-network-wired text-brand-indigo"></i>
+                                <span id="userA-Title">Tenant 1 &amp; 2 VRRP Paths</span>
+                            </span>
+                            <span class="px-2.5 py-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded text-[10px] font-bold tracking-wider">CORE 1 PRIMARY</span>
+                        </div>
+                        <div class="flex-grow">
+                            <table class="w-full text-xs text-left text-slate-300 border-collapse">
+                                <tbody id="userA-PrepBody" class="divide-y divide-slate-700/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tenant 3 & 4 Prep Card -->
+                    <div class="bg-slate-800/50 rounded-2xl border border-slate-700 shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
+                            <span class="flex items-center gap-2 font-bold text-slate-100">
+                                <i class="fa-solid fa-network-wired text-brand-violet"></i>
+                                <span id="partnerB-Title">Tenant 3 &amp; 4 VRRP Paths</span>
+                            </span>
+                            <span class="px-2.5 py-0.5 bg-violet-500/10 text-violet-400 border border-violet-500/20 rounded text-[10px] font-bold tracking-wider">CORE 2 PRIMARY</span>
+                        </div>
+                        <div class="flex-grow">
+                            <table class="w-full text-xs text-left text-slate-300 border-collapse">
+                                <tbody id="partnerB-PrepBody" class="divide-y divide-slate-700/60">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3: Dynamic Physical Cable Connection Matrix Table -->
+                <div class="bg-slate-800/50 rounded-2xl border border-slate-700 shadow-sm p-6">
+                    <div class="flex items-center gap-2.5 border-b border-slate-700 pb-3 mb-4">
+                        <i class="fa-solid fa-circle-nodes text-brand-amber text-lg"></i>
+                        <h3 class="text-sm font-bold text-slate-100">3. Physical Cable Connection Matrix</h3>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-xs text-left text-slate-300 border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr class="border-b border-slate-700 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                    <th class="py-2.5 px-3">From Device</th>
+                                    <th class="py-2.5 px-3">Port</th>
+                                    <th class="py-2.5 px-3">To Device</th>
+                                    <th class="py-2.5 px-3">Port</th>
+                                    <th class="py-2.5 px-3">Purpose / Configuration Reference</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cable-matrix-body" class="divide-y divide-slate-700/60">
+                                <!-- Dynamic dynamic rows populated via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Core Switch Configs -->
+            <div id="tab-core-scripts" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800/50 rounded-2xl border border-slate-700 p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-700 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-100">ArubaOS-CX 6300 Core Configuration Panel</h3>
+                            <p class="text-xs text-slate-400">Deploy these setups across both of your active Layer 3 Core physical hosts</p>
+                        </div>
+                        <select id="coreSwitchSelector" onchange="renderCoreSwitchConfig()" class="px-3 py-1.5 text-xs font-bold text-slate-200 bg-slate-900 rounded-lg border border-slate-700 focus:outline-none">
+                            <option value="core1">Switch 1: Aruba 6300 (Primary Master)</option>
+                            <option value="core2">Switch 2: Aruba 6300 (Backup Standby)</option>
+                        </select>
+                    </div>
+
+                    <!-- Code Container -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadCoreFile()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('core-code')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="core-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Access Switch Configs -->
+            <div id="tab-access-scripts" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800/50 rounded-2xl border border-slate-700 p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-700 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-100">Access Switch Configuration Panel</h3>
+                            <p class="text-xs text-slate-400">Deploy these setups across your physical client-facing edge access nodes</p>
+                        </div>
+                        <select id="accessSwitchSelector" onchange="renderAccessSwitchConfig()" class="px-3 py-1.5 text-xs font-bold text-slate-200 bg-slate-900 rounded-lg border border-slate-700 focus:outline-none">
+                            <option value="access1_2530">Access Switch 1: (Aruba 2530 - ProCurve Syntax)</option>
+                            <option value="access2_2530">Access Switch 2: (Aruba 2530 - ProCurve Syntax)</option>
+                            <option value="access1_6300">Access Switch 1: (Aruba 6300 - AOS-CX Syntax)</option>
+                            <option value="access2_6300">Access Switch 2: (Aruba 6300 - AOS-CX Syntax)</option>
+                        </select>
+                    </div>
+
+                    <!-- Code Container -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadAccessFile()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('access-code')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="access-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: VM Configs -->
+            <div id="tab-vm-configs" class="tab-content hidden space-y-6">
+                <div class="bg-slate-800/50 rounded-2xl border border-slate-700 p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-700 pb-4 mb-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-100">Linux VM Infrastructure Configuration Files</h3>
+                            <p class="text-xs text-slate-400">Generate target configurations by selecting any member of your four-man pod</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <select id="userVMToggle" onchange="renderVMFiles()" class="px-3 py-1.5 text-xs font-bold text-slate-200 bg-slate-900 rounded-lg border border-slate-700 focus:outline-none">
+                                <option value="1">catalan (VLAN 231)</option>
+                                <option value="2">jmalaqui (VLAN 217)</option>
+                                <option value="3">akarki5 (VLAN 214)</option>
+                                <option value="4">caemmanuel (VLAN 206)</option>
+                            </select>
+                            <select id="vmFileSelector" onchange="renderVMFiles()" class="px-3 py-1.5 text-xs font-bold text-slate-200 bg-slate-900 rounded-lg border border-slate-700 focus:outline-none">
+                                <option value="dhcpAssignment">Server Netplan (dhcpAssignment.yaml)</option>
+                                <option value="staticAssignment">Router PtP Link (staticAssignment.yaml)</option>
+                                <option value="frrRouterConfig">Router FRR OSPF config (frrRouterConfig.txt)</option>
+                                <option value="NFtablesRulesNAT">Router Firewall &amp; NAT (NFtablesRulesNAT.txt)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Code Container -->
+                    <div class="relative">
+                        <div class="absolute top-3 right-3 flex items-center gap-2">
+                            <button onclick="downloadVMFile()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-download"></i> Download
+                            </button>
+                            <button onclick="copyCodeBlock('vm-code')" class="bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all">
+                                <i class="fa-solid fa-copy"></i> Copy
+                            </button>
+                        </div>
+                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border border-slate-800"><code id="vm-code" class="block whitespace-pre"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Sticky Footer Container -->
+    <footer class="bg-brand-dark border-t border-slate-800 text-slate-400 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+            <!-- Left Side support text -->
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 text-center md:text-left">
+                <span>Support me or show me your appreciation. Buy me a</span>
+                <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-md border border-amber-500/20 font-medium">
+                    <i class="fa-solid fa-mug-hot"></i> coffee
+                </span>
+                <span>, a</span>
+                <span class="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-md border border-yellow-500/20 font-medium">
+                    <i class="fa-solid fa-stroopwafel"></i> waffle
+                </span>
+                <span>or</span>
+                <span class="inline-flex items-center gap-1 bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-md border border-orange-500/20 font-medium">
+                    <i class="fa-solid fa-bread-slice"></i> Ultimate Grilled Cheese
+                </span>
+            </div>
+
+            <!-- Right Side developer branding link -->
+            <div class="flex items-center gap-1.5 bg-slate-800/60 border border-slate-700/80 px-3.5 py-1 rounded-full text-slate-400 hover:text-white transition-all">
+                <i class="fa-brands fa-github text-brand-gold"></i>
+                <a href="https://github.com/cerealicious" target="_blank" class="font-bold hover:underline">cerealicious</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Notifications Container -->
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 hidden backdrop-blur-sm px-4">
+        <div class="bg-slate-900 rounded-2xl shadow-xl border border-slate-800 max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center gap-3">
+                <div id="modalIconBg" class="p-2.5 rounded-xl text-white flex items-center justify-center">
+                    <!-- Dynamic Icon -->
+                </div>
+                <div>
+                    <h3 id="modalTitle" class="text-sm font-extrabold text-slate-100">Notification</h3>
+                    <p id="modalCategory" class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">System Agent</p>
+                </div>
+            </div>
+            <p id="modalMessage" class="text-xs leading-normal text-slate-400"></p>
+            <div class="flex justify-end">
+                <button onclick="closeCustomModal()" class="px-4 py-1.5 bg-brand-violet hover:bg-violet-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables holding calculated data
+        let userCalculatedData = {};
+
+        // CRITICAL FIX: Defined at the absolute top level to prevent ReferenceError during inline button invocation.
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-gradient-to-r', 'from-brand-indigo', 'to-brand-violet', 'text-white', 'shadow-md');
+                el.classList.add('text-slate-400', 'hover:text-slate-200');
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const targetBtnId = `btn-${tabId.split('-')[1]}`;
+            const activeBtn = document.getElementById(targetBtnId);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200');
+                activeBtn.classList.add('bg-gradient-to-r', 'from-brand-indigo', 'to-brand-violet', 'text-white', 'shadow-md');
+            }
+        }
+
+        // Run calculation sequence on mount
+        window.onload = function() {
+            generateStageFourConfigs();
+        };
+
+        // Custom Modal controller
+        function showCustomModal(title, msg, type = 'info') {
+            const modal = document.getElementById('customModal');
+            const titleEl = document.getElementById('modalTitle');
+            const msgEl = document.getElementById('modalMessage');
+            const iconBg = document.getElementById('modalIconBg');
+
+            titleEl.textContent = title;
+            msgEl.textContent = msg;
+
+            iconBg.className = 'p-2.5 rounded-xl text-white flex items-center justify-center ';
+            if (type === 'success') {
+                iconBg.className += 'bg-brand-violet';
+                iconBg.innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
+            } else if (type === 'warning') {
+                iconBg.className += 'bg-amber-600';
+                iconBg.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-lg"></i>';
+            } else {
+                iconBg.className += 'bg-slate-900';
+                iconBg.innerHTML = '<i class="fa-solid fa-circle-info text-lg"></i>';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function copyCodeBlock(elementId) {
+            const codeEl = document.getElementById(elementId);
+            const textToCopy = codeEl.textContent;
+
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCustomModal("Code Block Copied", "File content copied successfully to your clipboard. You can paste it safely.", "success");
+                } else {
+                    showCustomModal("Copy Failed", "Your browser did not allow copying. Please highlight and use Ctrl+C.", "warning");
+                }
+            } catch (err) {
+                showCustomModal("Copy Error", "An unexpected security block occurred. Please copy the text block manually.", "warning");
+            }
+            document.body.removeChild(dummy);
+        }
+
+        function computeUserMetrics(uid, senecaId) {
+            // LAN subnet boundaries calculated via UID offsets (block size 64)
+            const lanOffset = uid * 64;
+            const lanOctet3 = Math.floor(lanOffset / 256);
+            const lanOctet4 = lanOffset % 256;
+
+            const lanNetworkID = `172.16.${lanOctet3}.${lanOctet4}`;
+            const virtualGateway = `172.16.${lanOctet3}.${lanOctet4 + 1}`;
+            const core1IP = `172.16.${lanOctet3}.${lanOctet4 + 2}`;
+            const core2IP = `172.16.${lanOctet3}.${lanOctet4 + 3}`;
+            const dhcpStart = `172.16.${lanOctet3}.${lanOctet4 + 4}`;
+            const dhcpEnd = `172.16.${lanOctet3}.${lanOctet4 + 61}`;
+            const serverStaticIP = `172.16.${lanOctet3}.${lanOctet4 + 62}`;
+            const lanBroadcast = `172.16.${lanOctet3}.${lanOctet4 + 63}`;
+
+            // WAN point-to-point links (block size 4)
+            const wanOffset = uid * 4;
+            const wanOctet3 = Math.floor(wanOffset / 256);
+            const wanOctet4 = wanOffset % 256;
+
+            const wanNetworkID = `192.168.${wanOctet3}.${wanOctet4}`;
+            const switchWanIP = `192.168.${wanOctet3}.${wanOctet4 + 1}`;
+            const routerWanIP = `192.168.${wanOctet3}.${wanOctet4 + 2}`;
+            const wanBroadcast = `192.168.${wanOctet3}.${wanOctet4 + 3}`;
+
+            const ospfRouterID = `${uid}.1.1.2`;
+            const ospfSwitchID = `${uid}.1.1.1`;
+
+            return {
+                uid, senecaId, lanNetworkID, virtualGateway, core1IP, core2IP,
+                dhcpStart, dhcpEnd, serverStaticIP, lanBroadcast,
+                wanNetworkID, switchWanIP, routerWanIP, wanBroadcast,
+                ospfRouterID, ospfSwitchID, lanOctet4, wanOctet3
+            };
+        }
+
+        function generateStageFourConfigs() {
+            // Read 4 users
+            const users = [
+                { id: document.getElementById('id1').value.trim(), uid: parseInt(document.getElementById('uid1').value), mac: document.getElementById('mac1').value.trim() },
+                { id: document.getElementById('id2').value.trim(), uid: parseInt(document.getElementById('uid2').value), mac: document.getElementById('mac2').value.trim() },
+                { id: document.getElementById('id3').value.trim(), uid: parseInt(document.getElementById('uid3').value), mac: document.getElementById('mac3').value.trim() },
+                { id: document.getElementById('id4').value.trim(), uid: parseInt(document.getElementById('uid4').value), mac: document.getElementById('mac4').value.trim() }
+            ];
+
+            // Validate
+            for (let i = 0; i < users.length; i++) {
+                if (!users[i].id) {
+                    showCustomModal("Missing Credentials", "All 4 Tenants must have a valid SenecaID profile.", "warning");
+                    return;
+                }
+                for (let j = i + 1; j < users.length; j++) {
+                    if (users[i].uid === users[j].uid) {
+                        showCustomModal("UID Collision", `Tenants cannot share identical UIDs (Duplicate: ${users[i].uid}). Please align your settings!`, "warning");
+                        return;
+                    }
+                }
+            }
+
+            // Calculations
+            userCalculatedData = {
+                t1: { ...computeUserMetrics(users[0].uid, users[0].id), mac: users[0].mac },
+                t2: { ...computeUserMetrics(users[1].uid, users[1].id), mac: users[1].mac },
+                t3: { ...computeUserMetrics(users[2].uid, users[2].id), mac: users[2].mac },
+                t4: { ...computeUserMetrics(users[3].uid, users[3].id), mac: users[3].mac }
+            };
+
+            // DYNAMIC PORT DROP-DOWN REBUILD TRIGGER!
+            const opt1 = document.querySelector("#userVMToggle option[value='1']");
+            const opt2 = document.querySelector("#userVMToggle option[value='2']");
+            const opt3 = document.querySelector("#userVMToggle option[value='3']");
+            const opt4 = document.querySelector("#userVMToggle option[value='4']");
+            
+            if (opt1) opt1.textContent = `${users[0].id} (VLAN ${users[0].uid})`;
+            if (opt2) opt2.textContent = `${users[1].id} (VLAN ${users[1].uid})`;
+            if (opt3) opt3.textContent = `${users[2].id} (VLAN ${users[2].uid})`;
+            if (opt4) opt4.textContent = `${users[3].id} (VLAN ${users[3].uid})`;
+
+            // DYNAMIC DOCUMENTATION RE-WRITE TRIGGER!
+            const t1 = userCalculatedData.t1;
+            const t2 = userCalculatedData.t2;
+            const t3 = userCalculatedData.t3;
+            const t4 = userCalculatedData.t4;
+            
+            const descParagraph = document.getElementById('vrrp-formula-desc');
+            if (descParagraph) {
+                descParagraph.innerHTML = `
+                    <div class="text-[11px] font-bold text-slate-300 mb-1">Calculated Redundant Gateways (Core 1 / Core 2 / Shared VRRP VIP):</div>
+                    <ul class="list-none grid grid-cols-1 md:grid-cols-2 gap-2 font-mono text-[10px] text-slate-400">
+                        <li class="bg-slate-900/40 p-2 rounded-lg border border-slate-800">
+                            <span class="text-brand-indigo font-bold">${t1.senecaId} (VLAN ${t1.uid}):</span> VIP at <span class="text-emerald-400">.${t1.lanOctet4 + 1}</span>, Core 1 SVI at .${t1.lanOctet4 + 2}, Core 2 SVI at .${t1.lanOctet4 + 3}
+                        </li>
+                        <li class="bg-slate-900/40 p-2 rounded-lg border border-slate-800">
+                            <span class="text-brand-violet font-bold">${t2.senecaId} (VLAN ${t2.uid}):</span> VIP at <span class="text-emerald-400">.${t2.lanOctet4 + 1}</span>, Core 1 SVI at .${t2.lanOctet4 + 2}, Core 2 SVI at .${t2.lanOctet4 + 3}
+                        </li>
+                        <li class="bg-slate-900/40 p-2 rounded-lg border border-slate-800">
+                            <span class="text-brand-accent font-bold">${t3.senecaId} (VLAN ${t3.uid}):</span> VIP at <span class="text-emerald-400">.${t3.lanOctet4 + 1}</span>, Core 1 SVI at .${t3.lanOctet4 + 2}, Core 2 SVI at .${t3.lanOctet4 + 3}
+                        </li>
+                        <li class="bg-slate-900/40 p-2 rounded-lg border border-slate-800">
+                            <span class="text-emerald-400 font-bold">${t4.senecaId} (VLAN ${t4.uid}):</span> VIP at <span class="text-emerald-400">.${t4.lanOctet4 + 1}</span>, Core 1 SVI at .${t4.lanOctet4 + 2}, Core 2 SVI at .${t4.lanOctet4 + 3}
+                        </li>
+                    </ul>`;
+            }
+
+            // Render tables
+            populatePrepSheet('userA-PrepBody', userCalculatedData.t1, userCalculatedData.t2);
+            populatePrepSheet('partnerB-PrepBody', userCalculatedData.t3, userCalculatedData.t4);
+
+            // Populate Cable Connection Matrix
+            populateCableMatrix();
+
+            // Audits / Diagnostics
+            runRedundancyDiagnostics(users);
+
+            // Populate currently selected tabs
+            renderCoreSwitchConfig();
+            renderAccessSwitchConfig();
+            renderVMFiles();
+        }
+
+        function populatePrepSheet(tbodyId, tenantA, tenantB) {
+            const tbody = document.getElementById(tbodyId);
+            tbody.innerHTML = `
+                <tr class="bg-slate-900/40"><td class="py-2 px-3 font-bold text-brand-amber uppercase" colspan="3">VLAN ${tenantA.uid} (${tenantA.senecaId}) Parameters</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">LAN Subnet</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantA.lanNetworkID}/26</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Virtual VIP Gateway</td><td class="py-2 px-3 text-right text-emerald-400 font-bold font-mono" colspan="2">${tenantA.virtualGateway}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Core 1 Gateway IP</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantA.core1IP}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Core 2 Gateway IP</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantA.core2IP}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Server Static Bound</td><td class="py-2 px-3 text-right font-mono text-cyan-400" colspan="2">${tenantA.serverStaticIP}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Point-to-Point WAN</td><td class="py-2 px-3 text-right font-mono text-slate-300" colspan="2">${tenantA.wanNetworkID}/30</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Router IP Address</td><td class="py-2 px-3 text-right font-mono text-slate-300" colspan="2">${tenantA.routerWanIP}</td></tr>
+
+                <tr class="bg-slate-900/40"><td class="py-2 px-3 font-bold text-brand-violet uppercase" colspan="3">VLAN ${tenantB.uid} (${tenantB.senecaId}) Parameters</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">LAN Subnet</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantB.lanNetworkID}/26</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Virtual VIP Gateway</td><td class="py-2 px-3 text-right text-emerald-400 font-bold font-mono" colspan="2">${tenantB.virtualGateway}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Core 1 Gateway IP</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantB.core1IP}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Core 2 Gateway IP</td><td class="py-2 px-3 text-right font-mono" colspan="2">${tenantB.core2IP}</td></tr>
+                <tr><td class="py-2.5 px-3 text-slate-400">Server Static Bound</td><td class="py-2 px-3 text-right font-mono text-cyan-400" colspan="2">${tenantB.serverStaticIP}</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Point-to-Point WAN</td><td class="py-2 px-3 text-right font-mono text-slate-300" colspan="2">${tenantB.wanNetworkID}/30</td></tr>
+                <tr><td class="py-2 px-3 text-slate-400">Router IP Address</td><td class="py-2 px-3 text-right font-mono text-slate-300" colspan="2">${tenantB.routerWanIP}</td></tr>
+            `;
+        }
+
+        function populateCableMatrix() {
+            const body = document.getElementById('cable-matrix-body');
+            const t1 = userCalculatedData.t1;
+            const t2 = userCalculatedData.t2;
+            const t3 = userCalculatedData.t3;
+            const t4 = userCalculatedData.t4;
+
+            body.innerHTML = `
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 1</td>
+                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/1</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">Aruba 6300 Core 2</td>
+                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/1</td>
+                    <td class="py-2 px-3 text-slate-400">Inter-Core Backbone Redundancy Trunk (Allows VLANs ${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 1</td>
+                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/2</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">Aruba 6300 Core 2</td>
+                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/2</td>
+                    <td class="py-2 px-3 text-slate-400">Inter-Core Secondary High-Availability Interconnect</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 1</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">1/1/3</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t1.senecaId}-Router VM</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">ens37</td>
+                    <td class="py-2 px-3 text-slate-400">Tenant 1 WAN link (${t1.wanNetworkID}/30) | Switch: ${t1.switchWanIP} / Router: ${t1.routerWanIP}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 1</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">1/1/4</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t2.senecaId}-Router VM</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">ens37</td>
+                    <td class="py-2 px-3 text-slate-400">Tenant 2 WAN link (${t2.wanNetworkID}/30) | Switch: ${t2.switchWanIP} / Router: ${t2.routerWanIP}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 2</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">1/1/3</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t3.senecaId}-Router VM</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">ens37</td>
+                    <td class="py-2 px-3 text-slate-400">Tenant 3 WAN link (${t3.wanNetworkID}/30) | Switch: ${t3.switchWanIP} / Router: ${t3.routerWanIP}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 6300 Core 2</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">1/1/4</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t4.senecaId}-Router VM</td>
+                    <td class="py-2 px-3 font-mono text-emerald-400">ens37</td>
+                    <td class="py-2 px-3 text-slate-400">Tenant 4 WAN link (${t4.wanNetworkID}/30) | Switch: ${t4.switchWanIP} / Router: ${t4.routerWanIP}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 1</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 1</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t1.senecaId} Client/Server</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
+                    <td class="py-2 px-3 text-slate-400">Private LAN Untagged VLAN ${t1.uid} | Gateway: ${t1.virtualGateway}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 1</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 2</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t2.senecaId} Client/Server</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
+                    <td class="py-2 px-3 text-slate-400">Private LAN Untagged VLAN ${t2.uid} | Gateway: ${t2.virtualGateway}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 2</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 1</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t3.senecaId} Client/Server</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
+                    <td class="py-2 px-3 text-slate-400">Private LAN Untagged VLAN ${t3.uid} | Gateway: ${t3.virtualGateway}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 2</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 2</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">${t4.senecaId} Client/Server</td>
+                    <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
+                    <td class="py-2 px-3 text-slate-400">Private LAN Untagged VLAN ${t4.uid} | Gateway: ${t4.virtualGateway}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 1</td>
+                    <td class="py-2 px-3 font-mono text-pink-500">Port 3</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">Aruba 6300 Core 1</td>
+                    <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
+                    <td class="py-2 px-3 text-slate-400">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-3 font-bold text-slate-100">Aruba 2530 Access 2</td>
+                    <td class="py-2 px-3 font-mono text-pink-500">Port 3</td>
+                    <td class="py-2 px-3 font-bold text-slate-300">Aruba 6300 Core 2</td>
+                    <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
+                    <td class="py-2 px-3 text-slate-400">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
+                </tr>
+            `;
+        }
+
+        function runRedundancyDiagnostics(users) {
+            const box = document.getElementById('diagnosticsBox');
+            box.innerHTML = '';
+
+            let diagnostics = [];
+
+            // Boundary Checks
+            users.forEach((u, idx) => {
+                if (u.uid > 1023 || u.uid < 0) {
+                    diagnostics.push({ text: `VLAN ID (${u.id}) is mathematically illegal. Adjust range under 1023.`, type: 'error' });
+                } else if (u.uid > 255) {
+                    diagnostics.push({ text: `Tenant ${u.id} UID exceeds 255. Division offsets will spill cleanly into the next private LAN IP blocks.`, type: 'warning' });
+                }
+            });
+
+            // MAC Address Format Audit
+            const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+            users.forEach((u) => {
+                if (!macRegex.test(u.mac)) {
+                    diagnostics.push({ text: `Tenant ${u.id}'s Server MAC address lacks proper colon format. SVI bindings may fail.`, type: 'warning' });
+                }
+            });
+
+            if (diagnostics.length === 0) {
+                diagnostics.push({ text: "Redundant cluster boundaries are 100% syntactically verified. Ready to apply physical scripts.", type: "success" });
+            }
+
+            diagnostics.forEach(item => {
+                const icon = item.type === 'success' ? 'fa-circle-check text-emerald-400' : (item.type === 'warning' ? 'fa-triangle-exclamation text-amber-500' : 'fa-circle-xmark text-rose-500');
+                const div = document.createElement('div');
+                div.className = "flex items-start gap-2 text-slate-300 leading-normal";
+                div.innerHTML = `<i class="fa-solid ${icon} mt-0.5 text-sm"></i><span>${item.text}</span>`;
+                box.appendChild(div);
+            });
+        }
+
+        function renderCoreSwitchConfig() {
+            const mode = document.getElementById('coreSwitchSelector').value;
+            const codeBox = document.getElementById('core-code');
+
+            const t1 = userCalculatedData.t1;
+            const t2 = userCalculatedData.t2;
+            const t3 = userCalculatedData.t3;
+            const t4 = userCalculatedData.t4;
+
+            if (mode === 'core1') {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Core-6300-1
+vlan 1,${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+spanning-tree
+
+# --- ${t1.senecaId}'s VLAN (${t1.uid}) ---
+interface vlan ${t1.uid}
+no shutdown
+ip address ${t1.core1IP}/26
+vrrp ${t1.uid} address-family ipv4
+address ${t1.virtualGateway} primary
+priority 10
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- ${t2.senecaId}'s VLAN (${t2.uid}) ---
+interface vlan ${t2.uid}
+no shutdown
+ip address ${t2.core1IP}/26
+vrrp ${t2.uid} address-family ipv4
+address ${t2.virtualGateway} primary
+priority 10
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- akarki5's VLAN (${t3.uid}) ---
+interface vlan ${t3.uid}
+no shutdown
+ip address ${t3.core1IP}/26
+vrrp ${t3.uid} address-family ipv4
+address ${t3.virtualGateway} primary
+priority 10
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- ${t4.senecaId}'s VLAN (${t4.uid}) ---
+interface vlan ${t4.uid}
+no shutdown
+ip address ${t4.core1IP}/26
+vrrp ${t4.uid} address-family ipv4
+address ${t4.virtualGateway} primary
+priority 10
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+interface 1/1/1
+no shutdown
+no routing
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+exit
+
+interface 1/1/2
+no shutdown
+no routing
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+exit
+
+interface 1/1/3
+no shutdown
+routing
+description ${t1.senecaId}_Router_WAN
+ip address ${t1.switchWanIP}/30
+ip ospf 1 area 0
+exit
+
+interface 1/1/4
+no shutdown
+routing
+description ${t2.senecaId}_Router_WAN
+ip address ${t2.switchWanIP}/30
+ip ospf 1 area 0
+exit
+
+dhcp-server vrf default
+pool ${t1.uid}
+range ${t1.dhcpStart} ${t1.dhcpEnd} prefix-len 26
+default-router ${t1.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t1.serverStaticIP} mac ${t1.mac}
+exit
+
+pool ${t2.uid}
+range ${t2.dhcpStart} ${t2.dhcpEnd} prefix-len 26
+default-router ${t2.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t2.serverStaticIP} mac ${t2.mac}
+exit
+
+pool ${t3.uid}
+range ${t3.dhcpStart} ${t3.dhcpEnd} prefix-len 26
+default-router ${t3.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t3.serverStaticIP} mac ${t3.mac}
+exit
+
+pool ${t4.uid}
+range ${t4.dhcpStart} ${t4.dhcpEnd} prefix-len 26
+default-router ${t4.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t4.serverStaticIP} mac ${t4.mac}
+exit
+no shutdown
+
+router ospf 1
+router-id 1.1.1.1
+exit
+router vrrp enable
+exit`;
+            } else {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Core-6300-2
+vlan 1,${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+spanning-tree
+
+# --- ${t1.senecaId}'s VLAN (${t1.uid}) ---
+interface vlan ${t1.uid}
+no shutdown
+ip address ${t1.core2IP}/26
+vrrp ${t1.uid} address-family ipv4
+address ${t1.virtualGateway} primary
+priority 5
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- ${t2.senecaId}'s VLAN (${t2.uid}) ---
+interface vlan ${t2.uid}
+no shutdown
+ip address ${t2.core2IP}/26
+vrrp ${t2.uid} address-family ipv4
+address ${t2.virtualGateway} primary
+priority 5
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- akarki5's VLAN (${t3.uid}) ---
+interface vlan ${t3.uid}
+no shutdown
+ip address ${t3.core2IP}/26
+vrrp ${t3.uid} address-family ipv4
+address ${t3.virtualGateway} primary
+priority 5
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+# --- ${t4.senecaId}'s VLAN (${t4.uid}) ---
+interface vlan ${t4.uid}
+no shutdown
+ip address ${t4.core2IP}/26
+vrrp ${t4.uid} address-family ipv4
+address ${t4.virtualGateway} primary
+priority 5
+no shutdown
+exit
+ip ospf 1 area 0
+exit
+
+interface 1/1/1
+no shutdown
+no routing
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+exit
+
+interface 1/1/2
+no shutdown
+no routing
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+exit
+
+interface 1/1/3
+no shutdown
+routing
+description akarki5_Router_WAN
+ip address ${t3.switchWanIP}/30
+ip ospf 1 area 0
+exit
+
+interface 1/1/4
+no shutdown
+routing
+description ${t4.senecaId}_Router_WAN
+ip address ${t4.switchWanIP}/30
+ip ospf 1 area 0
+exit
+
+dhcp-server vrf default
+
+pool ${t1.uid}
+range ${t1.dhcpStart} ${t1.dhcpEnd} prefix-len 26
+default-router ${t1.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t1.serverStaticIP} mac ${t1.mac}
+exit
+
+pool ${t2.uid}
+range ${t2.dhcpStart} ${t2.dhcpEnd} prefix-len 26
+default-router ${t2.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t2.serverStaticIP} mac ${t2.mac}
+exit
+
+pool ${t3.uid}
+range ${t3.dhcpStart} ${t3.dhcpEnd} prefix-len 26
+default-router ${t3.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t3.serverStaticIP} mac ${t3.mac}
+exit
+
+pool ${t4.uid}
+range ${t4.dhcpStart} ${t4.dhcpEnd} prefix-len 26
+default-router ${t4.virtualGateway}
+dns-server 10.101.100.21
+static-bind ip ${t4.serverStaticIP} mac ${t4.mac}
+exit
+no shutdown
+
+router ospf 1
+router-id 2.2.2.2
+exit
+router vrrp enable
+`;
+            }
+        }
+
+        function renderAccessSwitchConfig() {
+            const mode = document.getElementById('accessSwitchSelector').value;
+            const codeBox = document.getElementById('access-code');
+
+            const t1 = userCalculatedData.t1;
+            const t2 = userCalculatedData.t2;
+            const t3 = userCalculatedData.t3;
+            const t4 = userCalculatedData.t4;
+
+            if (mode === 'access1_2530') {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Access-2530-1
+spanning-tree
+vlan ${t1.uid}
+name "${t1.senecaId}-vlan"
+untagged 1
+tagged 3,5
+exit
+
+vlan ${t2.uid}
+name "${t2.senecaId}-vlan"
+untagged 2
+tagged 3,5
+exit
+
+vlan ${t3.uid}
+name "${t3.senecaId}-vlan"
+tagged 3,5
+exit
+
+vlan ${t4.uid}
+name "${t4.senecaId}-vlan"
+tagged 3,5
+exit
+
+write memory`;
+            } else if (mode === 'access2_2530') {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Access-2530-2
+spanning-tree
+
+vlan ${t1.uid}
+name "${t1.senecaId}-vlan"
+tagged 3,5
+exit
+
+vlan ${t2.uid}
+name "${t2.senecaId}-vlan"
+tagged 3,5
+exit
+
+vlan ${t3.uid}
+name "${t3.senecaId}-vlan"
+untagged 1
+tagged 3,5
+exit
+
+vlan ${t4.uid}
+name "${t4.senecaId}-vlan"
+untagged 2
+tagged 3,5
+
+exit
+
+write memory`;
+            } else if (mode === 'access1_6300') {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Access-6300-1
+vlan 1,${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+spanning-tree
+vlan ${t1.uid}
+name ${t1.senecaId}-vlan
+vlan ${t2.uid}
+name ${t2.senecaId}-vlan
+vlan ${t3.uid}
+name ${t3.senecaId}-vlan
+vlan ${t4.uid}
+name ${t4.senecaId}-vlan
+
+interface 1/1/1
+no shutdown
+no routing
+vlan access ${t1.uid}
+
+interface 1/1/2
+no shutdown
+no routing
+vlan access ${t2.uid}
+
+interface 1/1/3
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+
+interface 1/1/5
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+`;
+            } else if (mode === 'access2_6300') {
+                codeBox.textContent = `en
+configure terminal
+hostname Pod-Access-6300-2
+vlan 1,${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+spanning-tree
+vlan ${t1.uid}
+name ${t1.senecaId}-vlan
+vlan ${t2.uid}
+name ${t2.senecaId}-vlan
+vlan ${t3.uid}
+name ${t3.senecaId}-vlan
+vlan ${t4.uid}
+name ${t4.senecaId}-vlan
+
+interface 1/1/1
+no shutdown
+no routing
+vlan access ${t3.uid}
+
+interface 1/1/2
+no shutdown
+no routing
+vlan access ${t4.uid}
+
+interface 1/1/3
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+
+interface 1/1/5
+no shutdown
+no routing
+vlan trunk native 1
+vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
+
+write memory`;
+            }
+        }
+
+        function renderVMFiles() {
+            const userIndex = document.getElementById('userVMToggle').value;
+            const fileType = document.getElementById('vmFileSelector').value;
+            const codeBox = document.getElementById('vm-code');
+
+            let u;
+            if (userIndex === "1") u = userCalculatedData.t1;
+            else if (userIndex === "2") u = userCalculatedData.t2;
+            else if (userIndex === "3") u = userCalculatedData.t3;
+            else u = userCalculatedData.t4;
+
+            if (fileType === 'dhcpAssignment') {
+                codeBox.textContent = `# Target host: ${u.senecaId}-Server VM
+# Location: /etc/netplan/dhcpAssignment.yaml
+# Run validation: sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      dhcp4: true
+      optional: true`;
+            } 
+            
+            else if (fileType === 'staticAssignment') {
+                codeBox.textContent = `# Target host: ${u.senecaId}-Router VM
+# Location: /etc/netplan/staticAssignment.yaml
+# Run validation: sudo netplan apply
+
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      dhcp4: true
+      optional: true
+    ens37:
+      dhcp4: false
+      addresses:
+        - ${u.routerWanIP}/30
+      optional: true`;
+            } 
+            
+            else if (fileType === 'frrRouterConfig') {
+                // Dynamic aggregation logic - always advertises to class using standard .0 octet format.
+                const wanPrefix = u.wanNetworkID.split('.').slice(0, 3).join('.');
+                codeBox.textContent = `! Target host: ${u.senecaId}-Router VM
+! Command tool: sudo vtysh
+! Ensure 'ospfd=yes' is turned on inside /etc/frr/daemons before applying.
+
+configure terminal
+router ospf
+ospf router-id ${u.ospfRouterID}
+network 10.33.0.0/16 area 0
+network ${wanPrefix}.0/24 area 0
+default-information originate
+
+line vty
+end
+
+write memory`;
+            } 
+            
+            else if (fileType === 'NFtablesRulesNAT') {
+                codeBox.textContent = `#!/usr/sbin/nft -f
+# Target host: ${u.senecaId}-Router VM
+# Location: /etc/nftables.conf
+# Run validation: sudo nft -f /etc/nftables.conf
+
+flush ruleset
+
+table inet filter {
+  chain input {
+    type filter hook input priority 0; policy accept;
+    iifname "ens33" ct state established,related accept
+    iifname "ens37" accept
+  }
+
+  chain forward {
+    type filter hook forward priority 0; policy accept;
+    iifname "ens37" oifname "ens33" accept
+    iifname "ens33" oifname "ens37" ct state established,related accept
+  }
+
+  chain output {
+    type filter hook output priority 0; policy accept;
+    oifname "ens33" accept
+  }
+}
+
+table ip nat {
+  chain prerouting {
+    type nat hook prerouting priority -100; policy accept;
+    # Forward DNS requests seamlessly to school DNS server
+    iifname "ens37" udp dport 53 dnat to 10.101.100.21
+    iifname "ens37" tcp dport 53 dnat to 10.101.100.21
+  }
+
+  chain input {
+    type nat hook input priority 100; policy accept;
+  }
+
+  chain output {
+    type nat hook output priority -100; policy accept;
+  }
+
+  chain postrouting {
+    type nat hook postrouting priority 100; policy accept;
+    oifname "ens33" masquerade
+  }
+}`;
+            }
+        }
+
+        // Direct Download Handlers for dynamic files
+        function downloadCoreFile() {
+            const mode = document.getElementById('coreSwitchSelector').value;
+            let filename = "6300_Master.txt";
+            if (mode === 'core2') {
+                filename = "6300_Backup.txt";
+            }
+            const codeText = document.getElementById('core-code').textContent;
+            const fileBlob = new Blob([codeText], { type: 'text/plain' });
+            const element = document.createElement('a');
+            element.href = URL.createObjectURL(fileBlob);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function downloadAccessFile() {
+            const mode = document.getElementById('accessSwitchSelector').value;
+            let filename = "Aruba2530-1.txt";
+            if (mode.includes('access2')) {
+                filename = "Aruba2530-2.txt";
+            }
+            const codeText = document.getElementById('access-code').textContent;
+            const fileBlob = new Blob([codeText], { type: 'text/plain' });
+            const element = document.createElement('a');
+            element.href = URL.createObjectURL(fileBlob);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function downloadVMFile() {
+            const userIndex = document.getElementById('userVMToggle').value;
+            const fileType = document.getElementById('vmFileSelector').value;
+            
+            let u;
+            if (userIndex === "1") u = userCalculatedData.t1;
+            else if (userIndex === "2") u = userCalculatedData.t2;
+            else if (userIndex === "3") u = userCalculatedData.t3;
+            else u = userCalculatedData.t4;
+
+            const senecaID = u ? u.senecaId : "unknown";
+            let filename = "LinuxConfig.txt";
+
+            // Properly naming files with custom prefixes (such as catalan-StaticAssignment.yaml)
+            if (fileType === 'dhcpAssignment') {
+                filename = `${senecaID}-dhcpAssignment.yaml`;
+            } else if (fileType === 'staticAssignment') {
+                filename = `${senecaID}-StaticAssignment.yaml`;
+            } else if (fileType === 'frrRouterConfig') {
+                filename = `${senecaID}-FRRConfig.txt`;
+            } else if (fileType === 'NFtablesRulesNAT') {
+                filename = `${senecaID}-NFtablesRulesNAT.txt`;
+            }
+
+            const codeText = document.getElementById('vm-code').textContent;
+            const fileBlob = new Blob([codeText], { type: 'text/plain' });
+            const element = document.createElement('a');
+            element.href = URL.createObjectURL(fileBlob);
+            element.download = filename;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
+</body>
+</html>
