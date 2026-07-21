@@ -29,7 +29,7 @@ This repository contains the deployment phase for Stage 3 of our Enterprise Infr
 # Phase 1: Installing & Configuring the Database Server
 
 ### Step 1.1: Update System Packages
-First, I made sure my Ubuntu Server had the latest software lists.
+First, I made sure my **Server-VM** had the latest software lists.
 ```bash
 sudo apt update
 ```
@@ -75,6 +75,18 @@ sudo ss -tulpn | grep 3306
 ```
 **✅ Success Check:** You should see output containing `0.0.0.0:3306` or `*:3306`. If you only see `127.0.0.1`, repeat Step 1.3.
 
+
+
+### Step 1.6: Install MariaDB on Client-VM
+During visual inspection, we will be running MariaDB using the** Client-VM** to verify that we can log into our MariaDB database using the read-only user that we will create later.
+
+So on my Client-VM, I opened terminal and run these commands.
+```bash
+sudo apt update
+```
+```bash
+sudo apt install mariadb-client -y
+```
 ---
 
 # Phase 2: Creating Database Users & Permissions
@@ -191,15 +203,12 @@ scp populatedTable.csv catalan@172.16.57.254:/tmp/
     ```sql
     EXIT;
     ```
-
-
 ---
-
 # Phase 4: Deploying the Web Application
 
 ### Step 4.1: Configure the PHP Frontend
 1.  On my **Client VM**, I opened the provided `mariaDBfrontEnd.php` file in a text editor.
-2.  I edited lines 8–14 to match my specific details:
+2.  I edited lines **8–14** to match my specific details:
     ```php
     <?php
     session_start();
@@ -213,7 +222,7 @@ scp populatedTable.csv catalan@172.16.57.254:/tmp/
 3.  **Save As:** `index.php`.
 
 ### Step 4.2: Upload to Server
-From your **Client VM** terminal, I copied the file to the server:
+From my **Client VM** terminal, I copied the `index.php` file to the `/tmp/` folder on my Server-VM:
 ```bash
 scp index.php catalan@172.16.57.254:/tmp/
 ```
@@ -243,74 +252,76 @@ On my **Server VM**:
 # Phase 5: Testing & Verification
 
 ### Test 1: Local Web Access
-1.  On my **Client VM**, I opened a web browser.
-2.  Navigated to: `http://172.16.57.254`
+1.  On your**Client VM**, open a web browser (Firefox).
+2.  Navigate to: `http://172.16.57.254`
 3.  You should see the **"Instrument Lookup"** page.
 
 ### Test 2: Search Functionality
-1.  **Searching for your custom guitar:**
+1.  **Searching for the Custom Guitar:**
     *   Instrument Type: `Guitar`
     *   Condition: `New`
     *   Max Price: `1500`
     *   Click **Search**.
     *  🔍*Result:* Should show "Custom Electric Guitar" at $1500.
 2.  **Search for another custom item:**
-    *   Tried searching for "Cello" or another item you added.
+    *   Try searching for `Cello` or another item you added.
     *   🔍*Result:* Should display your unique entry.
 
 ### Test 3: Cross-Tenant Connectivity (Classmate Check)
-1.  I asked a classmate for their **Server IP Address**.
-2.  In my browser, I replaced my IP with their IP.
-3.  I clicked **Search Inventory**.
-    *   🔍*Result:* I saw their instruments. This proved that OSPF routing and the `csp450ro` user were working correctly across the network.
+1.  Ask a classmate/partner for their **Server-VM's IP Address**.
+2.  On your browser, replace the IP with their IP Address.
+3.  Click **Search Inventory**.
+    *   🔍*Result:* You should see their instruments. This proved that OSPF routing and the `csp450ro` user were working correctly across the network.
 
 ---
 
 # Phase 6: Visual Inspection Guide
 
-### 1. From your Client, demonstrate that you can log into your MariaDB database using the read only user that you created as per the specification.
+### 1. From your Client, demonstrate that you can log into your MariaDB database using the read-only user that you created as per the specification.
 1. Open a terminal window on your **Linux Client VM (`catalan-Client`)**.
 2. Establish a remote database mapping context target pointing directly to your Server VM's static IP address (`172.16.57.254`):
 ```bash
 mariadb -u csp450ro -p -h 172.16.57.254
 ```
-Your system shell header prompt will instantly close out, dropping you into the live database engine shell. Your terminal cursor pointer line will read exactly: `MariaDB [(none)]>`
+If it prompted you for passsword, enter `csp450ro`.
 
-### 2. From your Client, demonstrate that you can log into another student’s MariaDB database using the read only user that they created as per the specification.
+🔍*Result:* Your system shell header prompt will instantly close out, dropping you into the live database engine shell. Your terminal cursor pointer line will read exactly: `MariaDB [(none)]>`
+
+### 2. From your Client, demonstrate that you can log into another student’s MariaDB database using the read-only user that they created as per the specification.
 
 1. Coordinate with a classmate or neighbor pod to pull their exact **Server VM IP Address**.
-2. From your open Client VM terminal workspace console, run the routing mapping command:
+2. From your open Client VM terminal, run the routing mapping command:
 ```bash
 mariadb -u csp450ro -p -h CLASSMATE_SERVER_IP
 ```
-3. Input the shared student reader security password string `csp450ro` and hit Enter.
-You will cleanly slide past their node firewall ruleset and drop right onto their prompt line `MariaDB [(none)]>`
+If it prompted you for a password, enter `csp450ro`.
+
+🔍*Result:* You will cleanly slide past their node firewall ruleset and drop right onto their prompt line `MariaDB [(none)]>`
 
 ### 3. Display your flat file and show the custom additions you made (your unique 10 instruments).
 
-1. Open a terminal on your **Server VM**.
+1. Open a terminal on your **Server-VM**.
 2. Authenticate locally into your database administrator shell using root privileges:
 ```Bash
 sudo mariadb -u root
 ```
-
 3. Attach your workspace session strictly to the target branch inventory space:
 ```bash
 USE inventory;
 ```
-
 4. Run a direct index-targeted row calculation check to locate your added assets:
 ```bash
-SELECT * FROM instruments ORDER BY id DESC LIMIT 15;
+SELECT * FROM instruments ORDER BY id DESC LIMIT 10;
 ```
+🔍*Result:* You should see the last 10 unique instruments you added earlier.
 
 5. Leave the interactive relational context prompt loop:
 ```bash
 EXIT;
 ```
-### 4. From your client, access your database and perform a search for a New Guitar at a price of $1500.
+### 4. From your Client, access your database and perform a search for a `New Guitar` at a price of `$1500`.
 
-1. Open your web browser app inside your **Client VM**.
+1. Open your web browser on your **Client VM**.
 2. Type your Server-VM's static network IP address directly into the address bar: `172.16.57.254`
 
 3. Once the "**Instrument Lookup**" graphical dashboard appears, input these explicit variables into the target parameter fields:
@@ -319,27 +330,31 @@ EXIT;
 - In the **Maximum Price** box, type: `1500`.
 - Click **Search Inventory**.
 
-### 5. From your client, access your database and perform a search that will display a unique instrument from your inventory.
+### 5. From your Client, access your database and perform a search that will display a unique instrument from your inventory.
 
 1. While still inside your Client-VMs browser try searching for another one of your unique creations to prove the database filters are dynamically responsive.
 - In the **Instrument Type** box, type: *a musical instrument you added yourself*
 - Clear out the condition and price limits.
 - Click **Search Inventory**.
 
-### 6. From your client, access another student’s database in the classroom and perform a search that will display a unique instrument from their inventory.
+🔍*Result:* You should see the specific item that item you just searched for.
+
+### 6. From your Client, access another student’s database in the classroom and perform a search that will display a unique instrument from their inventory.
 
 1. Still inside your **Client VM's** browser, erase your Server-VM's IP address from the address bar.
-2. Input your partner's or classmate's operational Server-VMs address *(make sure they finished Stage Two and Three)*.
+2. Input your partner's or classmate's Server-VM address *(make sure they finished Stage Two and Three)*.
 		
 		Note: I will input my partner jmalaqui's Server VM IP Address ( 172.16.54.126)
 3. Clear all other instrument parameters and click **Search Inventory**.
+🔍*Result:* You should see their own inventory, together with the 10 unique music instruments they added.
+
 ---
 
 ---
 
 ## 📋 Submission Requirements
 Ensure the following files are ready for upload to GitHub:
-- [ ] `index.php` (Your edited frontend script)
-- [ ] `populatedTable.csv` (Your CSV with 10 unique custom entries)
+- ✅ `index.php` (Your edited frontend script - mariaDBfrontEnd.php)
+- ✅`populatedTable.csv` (The CSV with 10 unique custom entries)
 
-*Last Updated: July 14, 2026*
+*Last Updated: July 21, 2026*
