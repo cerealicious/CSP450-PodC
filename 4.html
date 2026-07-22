@@ -33,142 +33,146 @@
     </script>
     <style>
         :root {
-            /* 1. Calm Cobalt (Dark Theme - Default) */
-            --bg-base: #0B132B;
-            --bg-card: rgba(28, 37, 65, 0.65);
-            --bg-input: #1C2541;
-            --border-color: #3A506B;
-            --border-input: #3A506B;
-            --text-main: #F4F6F9;
-            --text-muted: #8D99AE;
-            --text-input: #F4F6F9;
-            --brand-indigo: #48CAE4;
-            --brand-violet: #0077B6;
-            --brand-amber: #E0A96D;
-            --brand-dark: #0B132B;
-            --brand-slate: #1C2541;
-            --brand-accent: #0096C7;
+            /* 1. Dark Mode (Standard / Perfect Vision - Default) */
+            --bg-base: #121212;
+            --bg-card: #1E1E1E;
+            --bg-input: #1E1E1E;
+            --border-color: #2D2D2D;
+            --border-input: #383838;
+            --text-main: #E0E0E0;
+            --text-muted: #A0AAB2;
+            --text-input: #E0E0E0;
+            --brand-indigo: #3D8BFD;
+            --brand-violet: #3D8BFD;
+            --brand-amber: #2ECC71;
+            --brand-dark: #121212;
+            --brand-slate: #1E1E1E;
+            --brand-accent: #3D8BFD;
 
-            /* Tab Interaction Variables */
-            --tab-active-bg: linear-gradient(135deg, #48CAE4, #0077B6);
-            --tab-active-text: #0B132B;
-            --tab-inactive-text: #8D99AE;
-            --tab-inactive-hover: #F4F6F9;
+            --tab-active-bg: linear-gradient(135deg, #3D8BFD, #2B73DD);
+            --tab-active-text: #121212;
+            --tab-inactive-text: #A0AAB2;
+            --tab-inactive-hover: #E0E0E0;
             --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
         }
 
-        .theme-amber-dark {
-            --bg-base: #141311;
-            --bg-card: rgba(30, 28, 25, 0.7);
-            --bg-input: #23201C;
-            --border-color: #403B36;
-            --border-input: #4A433D;
-            --text-main: #F7F5F0;
-            --text-muted: #A89F95;
-            --text-input: #F7F5F0;
-            --brand-indigo: #D4A373;
-            --brand-violet: #C68B59;
-            --brand-amber: #E0A96D;
-            --brand-dark: #141311;
-            --brand-slate: #23201C;
-            --brand-accent: #E0A96D;
+        .theme-light {
+            /* 2. Light Mode (Standard / Perfect Vision) */
+            --bg-base: #FFFFFF;
+            --bg-card: #F8F9FA;
+            --bg-input: #FFFFFF;
+            --border-color: #DEE2E6;
+            --border-input: #CED4DA;
+            --text-main: #212529;
+            --text-muted: #6C757D;
+            --text-input: #212529;
+            --brand-indigo: #0D6EFD;
+            --brand-violet: #0D6EFD;
+            --brand-amber: #198754;
+            --brand-dark: #FFFFFF;
+            --brand-slate: #F8F9FA;
+            --brand-accent: #0D6EFD;
 
-            --tab-active-bg: linear-gradient(135deg, #E0A96D, #C68B59);
-            --tab-active-text: #141311;
-            --tab-inactive-text: #A89F95;
-            --tab-inactive-hover: #F7F5F0;
-            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
-        }
-
-        .theme-plum-dark {
-            --bg-base: #140F1F;
-            --bg-card: rgba(32, 24, 48, 0.65);
-            --bg-input: #221A35;
-            --border-color: #483A5C;
-            --border-input: #503C6A;
-            --text-main: #F4EFFA;
-            --text-muted: #B3A4C9;
-            --text-input: #F4EFFA;
-            --brand-indigo: #B5838D;
-            --brand-violet: #8338EC;
-            --brand-amber: #E09F3E;
-            --brand-dark: #140F1F;
-            --brand-slate: #221A35;
-            --brand-accent: #E09F3E;
-
-            --tab-active-bg: linear-gradient(135deg, #B5838D, #8338EC);
-            --tab-active-text: #F4EFFA;
-            --tab-inactive-text: #B3A4C9;
-            --tab-inactive-hover: #F4EFFA;
-            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
-        }
-
-        .theme-slate-light {
-            --bg-base: #F8FAFC;
-            --bg-card: #FFFFFF;
-            --bg-input: #F1F5F9;
-            --border-color: #E2E8F0;
-            --border-input: #CBD5E1;
-            --text-main: #0F172A;
-            --text-muted: #64748B;
-            --text-input: #0F172A;
-            --brand-indigo: #4F46E5;
-            --brand-violet: #3B82F6;
-            --brand-amber: #B45309;
-            --brand-dark: #0F172A;
-            --brand-slate: #F1F5F9;
-            --brand-accent: #2563EB;
-
-            --tab-active-bg: linear-gradient(135deg, #4F46E5, #3B82F6);
+            --tab-active-bg: linear-gradient(135deg, #0D6EFD, #0B5ED7);
             --tab-active-text: #FFFFFF;
-            --tab-inactive-text: #64748B;
-            --tab-inactive-hover: #0F172A;
+            --tab-inactive-text: #6C757D;
+            --tab-inactive-hover: #212529;
             --tab-inactive-hover-bg: rgba(0, 0, 0, 0.04);
         }
 
-        .theme-sand-light {
-            --bg-base: #FDFBF7;
-            --bg-card: #FFFFFF;
-            --bg-input: #F4F1EA;
-            --border-color: #EBE5DB;
-            --border-input: #D6CBB7;
-            --text-main: #2B1D12;
-            --text-muted: #7A6953;
-            --text-input: #2B1D12;
-            --brand-indigo: #7F5539;
-            --brand-violet: #9C6644;
-            --brand-amber: #B58D3D;
-            --brand-dark: #2B1D12;
-            --brand-slate: #F4F1EA;
-            --brand-accent: #9C6644;
+        .theme-deuteranopia-dark {
+            /* 3. Dark Mode for Red-Green Color Blindness (Deuteranopia / Protanopia) */
+            --bg-base: #0B0F19;
+            --bg-card: #1F2937;
+            --bg-input: #1F2937;
+            --border-color: #374151;
+            --border-input: #4B5563;
+            --text-main: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --text-input: #F9FAFB;
+            --brand-indigo: #60A5FA;
+            --brand-violet: #60A5FA;
+            --brand-amber: #FBBF24;
+            --brand-dark: #0B0F19;
+            --brand-slate: #1F2937;
+            --brand-accent: #60A5FA;
 
-            --tab-active-bg: linear-gradient(135deg, #7F5539, #9C6644);
+            --tab-active-bg: linear-gradient(135deg, #60A5FA, #3B82F6);
+            --tab-active-text: #0B0F19;
+            --tab-inactive-text: #9CA3AF;
+            --tab-inactive-hover: #F9FAFB;
+            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        .theme-tritanopia-light {
+            /* 4. Light Mode for Blue-Yellow Color Blindness (Tritanopia) */
+            --bg-base: #FAFAFA;
+            --bg-card: #FFFFFF;
+            --bg-input: #FFFFFF;
+            --border-color: #E4E4E7;
+            --border-input: #D4D4D8;
+            --text-main: #18181B;
+            --text-muted: #71717A;
+            --text-input: #18181B;
+            --brand-indigo: #E11D48;
+            --brand-violet: #E11D48;
+            --brand-amber: #0284C7;
+            --brand-dark: #FAFAFA;
+            --brand-slate: #FFFFFF;
+            --brand-accent: #E11D48;
+
+            --tab-active-bg: linear-gradient(135deg, #E11D48, #BE123C);
             --tab-active-text: #FFFFFF;
-            --tab-inactive-text: #7A6953;
-            --tab-inactive-hover: #2B1D12;
+            --tab-inactive-text: #71717A;
+            --tab-inactive-hover: #18181B;
             --tab-inactive-hover-bg: rgba(0, 0, 0, 0.04);
         }
 
-        .theme-teal-light {
-            --bg-base: #F0F7F7;
-            --bg-card: #FFFFFF;
-            --bg-input: #E0EEEE;
-            --border-color: #D2E2E2;
-            --border-input: #B6CDCD;
-            --text-main: #0A2424;
-            --text-muted: #537777;
-            --text-input: #0A2424;
-            --brand-indigo: #134074;
-            --brand-violet: #007F5F;
-            --brand-amber: #A0522D;
-            --brand-dark: #0A2424;
-            --brand-slate: #E0EEEE;
-            --brand-accent: #134074;
+        .theme-tritanopia-dark {
+            /* 5. Dark Mode for Blue-Yellow Color Blindness (Tritanopia) */
+            --bg-base: #180D0E;
+            --bg-card: #271C1E;
+            --bg-input: #271C1E;
+            --border-color: #3F2C2E;
+            --border-input: #573D40;
+            --text-main: #F4F4F5;
+            --text-muted: #A1A1AA;
+            --text-input: #F4F4F5;
+            --brand-indigo: #FB7185;
+            --brand-violet: #FB7185;
+            --brand-amber: #2DD4BF;
+            --brand-dark: #180D0E;
+            --brand-slate: #271C1E;
+            --brand-accent: #FB7185;
 
-            --tab-active-bg: linear-gradient(135deg, #134074, #007F5F);
+            --tab-active-bg: linear-gradient(135deg, #FB7185, #F43F5E);
+            --tab-active-text: #180D0E;
+            --tab-inactive-text: #A1A1AA;
+            --tab-inactive-hover: #F4F4F5;
+            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        .theme-deuteranopia-light {
+            /* 6. Light Mode for Red-Green Color Blindness (Deuteranopia / Protanopia) */
+            --bg-base: #F4F6F8;
+            --bg-card: #FFFFFF;
+            --bg-input: #FFFFFF;
+            --border-color: #D1D5DB;
+            --border-input: #9CA3AF;
+            --text-main: #111827;
+            --text-muted: #4B5563;
+            --text-input: #111827;
+            --brand-indigo: #0055FF;
+            --brand-violet: #0055FF;
+            --brand-amber: #FFB000;
+            --brand-dark: #F4F6F8;
+            --brand-slate: #FFFFFF;
+            --brand-accent: #0055FF;
+
+            --tab-active-bg: linear-gradient(135deg, #0055FF, #0040CC);
             --tab-active-text: #FFFFFF;
-            --tab-inactive-text: #537777;
-            --tab-inactive-hover: #0A2424;
+            --tab-inactive-text: #4B5563;
+            --tab-inactive-hover: #111827;
             --tab-inactive-hover-bg: rgba(0, 0, 0, 0.04);
         }
 
@@ -264,32 +268,29 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-brand-indigo via-brand-accent to-brand-amber bg-clip-text text-transparent">CSP450 Stage Four Redundancy Workspace</h1>
-                    <p class="text-xs text-slate-300 font-medium tracking-wide">High-Availability VRRP &amp; Core OSPF Integration Panel</p>
+                    <p class="text-xs theme-text-muted font-medium tracking-wide">High-Availability VRRP &amp; Core OSPF Integration Panel</p>
                 </div>
             </div>
 
             <!-- Accessible Palette Theme Selector -->
-            <div class="flex flex-wrap items-center gap-4 bg-brand-slate/40 px-4 py-2 rounded-2xl border theme-border shadow-md">
+            <div class="flex flex-wrap items-center gap-4 bg-brand-slate px-4 py-2 rounded-2xl border theme-border shadow-md">
                 <div class="flex items-center gap-1.5">
                     <i class="fa-solid fa-palette text-brand-indigo text-xs"></i>
-                    <span class="text-[9px] font-extrabold uppercase tracking-widest text-slate-300">Accessibility Palette:</span>
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest theme-text-muted">Color Palette:</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="flex gap-1.5" title="Low Eye-Strain Dark Modes">
-                        <button onclick="setTheme('default')" class="w-5 h-5 rounded-full bg-blue-600 border border-slate-900 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Calm Cobalt (Deuteranope Safe)"></button>
-                        <button onclick="setTheme('amber-dark')" class="w-5 h-5 rounded-full bg-amber-600 border border-slate-900 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Warm Amber Obsidian (Protanope Safe)"></button>
-                        <button onclick="setTheme('plum-dark')" class="w-5 h-5 rounded-full bg-fuchsia-800 border border-slate-900 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Muted Amethyst (Tritanope Safe)"></button>
-                    </div>
-                    <div class="w-px h-4 theme-border border-l"></div>
-                    <div class="flex gap-1.5" title="Glare-Reduced Light Modes">
-                        <button onclick="setTheme('slate-light')" class="w-5 h-5 rounded-full bg-indigo-600 border border-white hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Slate Contrast (High Contrast Daylight Mode)"></button>
-                        <button onclick="setTheme('sand-light')" class="w-5 h-5 rounded-full bg-amber-100 border border-white hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Warm Sand (Sepia-Easy View)"></button>
-                        <button onclick="setTheme('teal-light')" class="w-5 h-5 rounded-full bg-teal-200 border border-white hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="Soft Sky Teal (Sage Comfort)"></button>
+                    <div class="flex gap-1.5" title="Alternating Dark-Light Accessible Palettes">
+                        <button onclick="setTheme('default')" class="w-5 h-5 rounded-full bg-[#3D8BFD] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="1. Dark Mode (Standard)"></button>
+                        <button onclick="setTheme('light')" class="w-5 h-5 rounded-full bg-[#0D6EFD] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="2. Light Mode (Standard)"></button>
+                        <button onclick="setTheme('deuteranopia-dark')" class="w-5 h-5 rounded-full bg-[#60A5FA] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="3. Dark Mode (Red-Green Color Blindness)"></button>
+                        <button onclick="setTheme('tritanopia-light')" class="w-5 h-5 rounded-full bg-[#E11D48] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="4. Light Mode (Blue-Yellow Color Blindness)"></button>
+                        <button onclick="setTheme('tritanopia-dark')" class="w-5 h-5 rounded-full bg-[#FB7185] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="5. Dark Mode (Blue-Yellow Color Blindness)"></button>
+                        <button onclick="setTheme('deuteranopia-light')" class="w-5 h-5 rounded-full bg-[#0055FF] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="6. Light Mode (Red-Green Color Blindness)"></button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-xs font-semibold text-slate-200 shadow-lg">
+            <div class="text-xs font-semibold theme-text-main">
                 <span><a href="https://github.com/cerealicious" target="_blank" class="hover:text-brand-indigo transition-colors hover:underline flex items-center gap-2">
                     <span>Made by Cerealicious</span>
                     <img src="https://avatars.githubusercontent.com/u/5056960?v=4" alt="cerealicious profile" class="w-12 h-12 rounded-full border theme-border shadow-inner">
@@ -305,13 +306,13 @@
             <div class="theme-card rounded-2xl border shadow-lg p-6 backdrop-blur-md">
                 <div class="flex items-center gap-2.5 border-b theme-border pb-4 mb-5">
                     <i class="fa-solid fa-sliders text-brand-amber text-lg"></i>
-                    <h2 class="text-base font-bold theme-text-main">1. Pod Parameter Inputs</h2>
+                    <h2 class="text-base font-bold theme-text-main">1. Tenant Parameter Inputs</h2>
                 </div>
 
                 <form id="networkForm" onsubmit="event.preventDefault();" class="space-y-4">
                     <!-- Branch 1 (A-Side) -->
-                    <div class="bg-brand-slate/20 p-4 rounded-xl border theme-border space-y-3">
-                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Branch 1: (Router 1 / Core 1 Port 1/1/3)</label>
+                    <div class="bg-brand-slate p-4 rounded-xl border theme-border space-y-3">
+                        <label class="block text-[12px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 1</label>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[9px] font-semibold theme-text-muted mb-1">SenecaID</label>
@@ -325,15 +326,15 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server MAC Address</label>
+                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server-VM MAC Address</label>
                             <input type="text" id="mac1" value="00:0C:29:05:00:B6" required
                                 class="w-full px-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-2 focus:ring-brand-violet font-mono text-center theme-input">
                         </div>
                     </div>
 
                     <!-- Branch 2 (B-Side) -->
-                    <div class="bg-brand-slate/20 p-4 rounded-xl border theme-border space-y-3">
-                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Branch 2: (Router 2 / Core 1 Port 1/1/4)</label>
+                    <div class="bg-brand-slate p-4 rounded-xl border theme-border space-y-3">
+                        <label class="block text-[12px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 2</label>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[9px] font-semibold theme-text-muted mb-1">SenecaID</label>
@@ -347,15 +348,15 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server MAC Address</label>
+                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server-VM MAC Address</label>
                             <input type="text" id="mac2" value="00:0C:29:47:FE:85" required
                                 class="w-full px-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-2 focus:ring-brand-violet font-mono text-center theme-input">
                         </div>
                     </div>
 
                     <!-- Branch 3 (C-Side) -->
-                    <div class="bg-brand-slate/20 p-4 rounded-xl border theme-border space-y-3">
-                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Branch 3: (Router 3 / Core 2 Port 1/1/3)</label>
+                    <div class="bg-brand-slate p-4 rounded-xl border theme-border space-y-3">
+                        <label class="block text-[12px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 3</label>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[9px] font-semibold theme-text-muted mb-1">SenecaID</label>
@@ -369,15 +370,15 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server MAC Address</label>
+                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server-VM MAC Address</label>
                             <input type="text" id="mac3" value="00:50:56:20:37:EB" required
                                 class="w-full px-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-2 focus:ring-brand-violet font-mono text-center theme-input">
                         </div>
                     </div>
 
                     <!-- Branch 4 (D-Side) -->
-                    <div class="bg-brand-slate/20 p-4 rounded-xl border theme-border space-y-3">
-                        <label class="block text-[10px] font-bold text-brand-indigo uppercase tracking-wider">Branch 4: (Router 4 / Core 2 Port 1/1/4)</label>
+                    <div class="bg-brand-slate p-4 rounded-xl border theme-border space-y-3">
+                        <label class="block text-[12px] font-bold text-brand-indigo uppercase tracking-wider">Tenant 4</label>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-[9px] font-semibold theme-text-muted mb-1">SenecaID</label>
@@ -391,7 +392,7 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server MAC Address</label>
+                            <label class="block text-[9px] font-semibold theme-text-muted mb-1">Server-VM MAC Address</label>
                             <input type="text" id="mac4" value="00:50:56:2E:34:2C" required
                                 class="w-full px-3 py-1.5 text-xs rounded-lg border focus:outline-none focus:ring-2 focus:ring-brand-violet font-mono text-center theme-input">
                         </div>
@@ -399,9 +400,9 @@
 
                     <!-- Action Trigger -->
                     <button type="button" onclick="generateStageFourConfigs()" 
-                        class="w-full bg-gradient-to-r from-brand-indigo to-brand-violet hover:from-indigo-600 hover:to-violet-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4 cursor-pointer">
+                        class="w-full bg-gradient-to-r from-brand-indigo to-brand-violet text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4 cursor-pointer hover:opacity-90">
                         <i class="fa-solid fa-arrows-spin text-lg"></i>
-                        <span>Generate Redundancy Fabric</span>
+                        <span>Generate</span>
                     </button>
                 </form>
             </div>
@@ -422,7 +423,7 @@
         <section class="w-full lg:w-2/3 flex flex-col gap-6">
             
             <!-- Tab Controller -->
-            <div class="bg-brand-slate/80 p-1.5 rounded-xl flex flex-wrap sm:flex-nowrap gap-1.5 border theme-border shadow-md w-full">
+            <div class="bg-brand-slate p-1.5 rounded-xl flex flex-wrap sm:flex-nowrap gap-1.5 border theme-border shadow-md w-full">
                 <button onclick="switchTab('tab-prepsheets')" id="btn-prepsheets" class="tab-btn tab-btn-active flex-1 py-2.5 px-3 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer">
                     <i class="fa-solid fa-clipboard-list text-brand-amber"></i>
                     <span>SVI/VRRP Prep Sheets</span>
@@ -445,7 +446,7 @@
             <div id="tab-prepsheets" class="tab-content space-y-6">
                 <div class="theme-card border p-5 rounded-2xl flex flex-col gap-3 shadow-md">
                     <div class="flex items-center gap-4">
-                        <div class="text-brand-amber text-2xl bg-brand-amber/10 p-3 rounded-xl border border-brand-amber/20">
+                        <div class="text-brand-amber text-2xl bg-brand-slate p-3 rounded-xl border theme-border">
                             <i class="fa-solid fa-calculator"></i>
                         </div>
                         <div>
@@ -468,7 +469,7 @@
                                 <i class="fa-solid fa-network-wired text-brand-indigo"></i>
                                 <span id="userA-Title" class="text-[13px]">Branch 1 &amp; 2 VRRP Paths</span>
                             </span>
-                            <span class="px-2.5 py-0.5 bg-brand-indigo/10 text-brand-indigo border border-brand-indigo/20 rounded text-[8px] font-bold tracking-wider">CORE 1 PRIMARY</span>
+                            <span class="px-2.5 py-0.5 bg-brand-slate text-brand-indigo border theme-border rounded text-[8px] font-bold tracking-wider">CORE 1 PRIMARY</span>
                         </div>
                         <div class="flex-grow">
                             <table class="w-full text-xs text-left theme-text-main border-collapse table-fixed font-sans">
@@ -486,7 +487,7 @@
                                 <i class="fa-solid fa-network-wired text-brand-violet"></i>
                                 <span id="partnerB-Title" class="text-[12px]">Branch 3 &amp; 4 VRRP Paths</span>
                             </span>
-                            <span class="px-2.5 py-0.5 bg-brand-violet/10 text-brand-indigo border border-brand-indigo/20 rounded text-[8px] font-bold tracking-wider">CORE 2 PRIMARY</span>
+                            <span class="px-2.5 py-0.5 bg-brand-slate text-brand-indigo border theme-border rounded text-[8px] font-bold tracking-wider">CORE 2 PRIMARY</span>
                         </div>
                         <div class="flex-grow">
                             <table class="w-full text-xs text-left theme-text-main border-collapse table-fixed font-sans">
@@ -509,7 +510,7 @@
                             <thead>
                                 <tr class="border-b theme-border theme-text- font-bold uppercase tracking-wider text-[13px]">
                                     <th class="py-2.5 px-3 w-36">From Device</th>
-                                    <th class="py-2.5 px-3 w-16">Port</th>
+                                    <th class="py-2.5 px-3 w-20">Port</th>
                                     <th class="py-2.5 px-3 w-1/5">To Device</th>
                                     <th class="py-2.5 px-3 w-16">Port</th>
                                     <th class="py-2.5 px-3 w-[45%]">Purpose / Configuration Reference</th>
@@ -540,14 +541,14 @@
                     <!-- Code Container -->
                     <div class="relative">
                         <div class="absolute top-3 right-3 flex items-center gap-2">
-                            <button onclick="downloadCoreFile()" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="downloadCoreFile()" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-download"></i> Download
                             </button>
-                            <button onclick="copyCodeBlock('core-code')" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="copyCodeBlock('core-code')" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </div>
-                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="core-code" class="block whitespace-pre"></code></pre>
+                        <pre class="bg-brand-card theme-text-main p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="core-code" class="block whitespace-pre"></code></pre>
                     </div>
                 </div>
             </div>
@@ -572,14 +573,14 @@
                     <!-- Code Container -->
                     <div class="relative">
                         <div class="absolute top-3 right-3 flex items-center gap-2">
-                            <button onclick="downloadAccessFile()" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="downloadAccessFile()" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-download"></i> Download
                             </button>
-                            <button onclick="copyCodeBlock('access-code')" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="copyCodeBlock('access-code')" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </div>
-                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="access-code" class="block whitespace-pre"></code></pre>
+                        <pre class="bg-brand-card theme-text-main p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="access-code" class="block whitespace-pre"></code></pre>
                     </div>
                 </div>
             </div>
@@ -611,14 +612,14 @@
                     <!-- Code Container -->
                     <div class="relative">
                         <div class="absolute top-3 right-3 flex items-center gap-2">
-                            <button onclick="downloadVMFile()" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="downloadVMFile()" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-download"></i> Download
                             </button>
-                            <button onclick="copyCodeBlock('vm-code')" class="bg-brand-slate hover:opacity-90 text-slate-200 hover:text-white px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer">
+                            <button onclick="copyCodeBlock('vm-code')" class="bg-brand-slate theme-text-main hover:opacity-90 px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer border theme-border">
                                 <i class="fa-solid fa-copy"></i> Copy
                             </button>
                         </div>
-                        <pre class="bg-slate-950 text-slate-100 p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="vm-code" class="block whitespace-pre"></code></pre>
+                        <pre class="bg-brand-card theme-text-main p-5 pt-12 rounded-xl text-xs font-mono overflow-x-auto custom-scrollbar border theme-border"><code id="vm-code" class="block whitespace-pre"></code></pre>
                     </div>
                 </div>
             </div>
@@ -627,28 +628,28 @@
     </main>
 
     <!-- Sticky Footer Container -->
-    <footer class="bg-brand-dark border-t theme-border text-slate-400 py-6 mt-auto">
+    <footer class="bg-brand-dark border-t theme-border theme-text-muted py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
             <!-- Left Side support text -->
-            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 text-center md:text-left text-slate-300">
+            <div class="flex flex-wrap items-center justify-center md:justify-start gap-1.5 text-center md:text-left theme-text-muted">
                 <span>Support me or show me your appreciation. Buy me a</span>
-                <span class="inline-flex items-center gap-1 bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded-md border border-amber-500/20 font-medium">
-                    <i class="fa-solid fa-mug-hot"></i> coffee
+                <span class="inline-flex items-center gap-1 bg-brand-slate theme-text-main px-2 py-0.5 rounded-md border theme-border font-medium">
+                    <i class="fa-solid fa-mug-hot text-brand-amber"></i> coffee
                 </span>
                 <span>, a</span>
-                <span class="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-md border border-yellow-500/20 font-medium">
-                    <i class="fa-solid fa-stroopwafel"></i> waffle
+                <span class="inline-flex items-center gap-1 bg-brand-slate theme-text-main px-2 py-0.5 rounded-md border theme-border font-medium">
+                    <i class="fa-solid fa-stroopwafel text-brand-amber"></i> waffle
                 </span>
                 <span>or</span>
-                <span class="inline-flex items-center gap-1 bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded-md border border-orange-500/20 font-medium">
-                    <i class="fa-solid fa-bread-slice"></i> Ultimate Grilled Cheese
+                <span class="inline-flex items-center gap-1 bg-brand-slate theme-text-main px-2 py-0.5 rounded-md border theme-border font-medium">
+                    <i class="fa-solid fa-bread-slice text-brand-amber"></i> Ultimate Grilled Cheese
                 </span>
             </div>
 
             <!-- Right Side developer branding link -->
-            <div class="flex items-center gap-1.5 bg-slate-800/60 border theme-border px-3.5 py-1 rounded-full text-slate-200 hover:text-white transition-all">
-                <i class="fa-brands fa-github text-brand-gold"></i>
-                <a href="https://github.com/cerealicious" target="_blank" class="font-bold hover:underline text-slate-200">cerealicious</a>
+            <div class="flex items-center gap-1.5 bg-brand-slate border theme-border px-3.5 py-1 rounded-full theme-text-main transition-all">
+                <i class="fa-brands fa-github text-brand-indigo"></i>
+                <a href="https://github.com/cerealicious" target="_blank" class="font-bold hover:underline theme-text-main">cerealicious</a>
             </div>
         </div>
     </footer>
@@ -667,7 +668,7 @@
             </div>
             <p id="modalMessage" class="text-xs leading-normal theme-text-muted"></p>
             <div class="flex justify-end">
-                <button onclick="closeCustomModal()" class="px-4 py-1.5 bg-brand-violet hover:bg-violet-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer">
+                <button onclick="closeCustomModal()" class="px-4 py-1.5 bg-brand-violet hover:opacity-90 text-white rounded-lg text-xs font-bold shadow-sm transition-all cursor-pointer">
                     Acknowledge
                 </button>
             </div>
@@ -700,7 +701,7 @@
 
         function setTheme(themeName) {
             const bodyEl = document.body;
-            bodyEl.classList.remove('theme-amber-dark', 'theme-plum-dark', 'theme-slate-light', 'theme-sand-light', 'theme-teal-light');
+            bodyEl.classList.remove('theme-light', 'theme-deuteranopia-dark', 'theme-tritanopia-light', 'theme-deuteranopia-light', 'theme-tritanopia-dark');
             
             if (themeName !== 'default') {
                 bodyEl.classList.add('theme-' + themeName);
@@ -730,13 +731,13 @@
 
             iconBg.className = 'p-2.5 rounded-xl text-white flex items-center justify-center ';
             if (type === 'success') {
-                iconBg.className += 'bg-brand-violet';
+                iconBg.className += 'bg-[var(--brand-amber)]';
                 iconBg.innerHTML = '<i class="fa-solid fa-circle-check text-lg"></i>';
             } else if (type === 'warning') {
-                iconBg.className += 'bg-amber-600';
+                iconBg.className += 'bg-[var(--brand-accent)]';
                 iconBg.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-lg"></i>';
             } else {
-                iconBg.className += 'bg-slate-900';
+                iconBg.className += 'bg-[var(--brand-indigo)]';
                 iconBg.innerHTML = '<i class="fa-solid fa-circle-info text-lg"></i>';
             }
             modal.classList.remove('hidden');
@@ -855,16 +856,16 @@
                 descParagraph.innerHTML = `
                     <div class="text-[11px] font-bold theme-text-main mb-1">Calculated Redundant Gateways (Core 1 / Core 2 / Shared VRRP VIP):</div>
                     <ul class="list-none grid grid-cols-1 md:grid-cols-2 gap-2 font-mono text-[10px] theme-text-muted">
-                        <li class="bg-slate-900/40 p-2 rounded-lg border theme-border">
+                        <li class="bg-brand-slate p-2 rounded-lg border theme-border">
                             <span class="font-bold text-[var(--brand-indigo)]">${t1.senecaId} (VLAN ${t1.uid}):</span> VIP at <span class="font-bold text-[var(--brand-accent)]">.${t1.lanOctet4 + 1}</span>, Core 1 SVI at .${t1.lanOctet4 + 2}, Core 2 SVI at .${t1.lanOctet4 + 3}
                         </li>
-                        <li class="bg-slate-900/40 p-2 rounded-lg border theme-border">
+                        <li class="bg-brand-slate p-2 rounded-lg border theme-border">
                             <span class="font-bold text-[var(--brand-indigo)]">${t2.senecaId} (VLAN ${t2.uid}):</span> VIP at <span class="font-bold text-[var(--brand-accent)]">.${t2.lanOctet4 + 1}</span>, Core 1 SVI at .${t2.lanOctet4 + 2}, Core 2 SVI at .${t2.lanOctet4 + 3}
                         </li>
-                        <li class="bg-slate-900/40 p-2 rounded-lg border theme-border">
+                        <li class="bg-brand-slate p-2 rounded-lg border theme-border">
                             <span class="font-bold text-[var(--brand-indigo)]">${t3.senecaId} (VLAN ${t3.uid}):</span> VIP at <span class="font-bold text-[var(--brand-accent)]">.${t3.lanOctet4 + 1}</span>, Core 1 SVI at .${t3.lanOctet4 + 2}, Core 2 SVI at .${t3.lanOctet4 + 3}
                         </li>
-                        <li class="bg-slate-900/40 p-2 rounded-lg border theme-border">
+                        <li class="bg-brand-slate p-2 rounded-lg border theme-border">
                             <span class="font-bold text-[var(--brand-indigo)]">${t4.senecaId} (VLAN ${t4.uid}):</span> VIP at <span class="font-bold text-[var(--brand-accent)]">.${t4.lanOctet4 + 1}</span>, Core 1 SVI at .${t4.lanOctet4 + 2}, Core 2 SVI at .${t4.lanOctet4 + 3}
                         </li>
                     </ul>`;
@@ -888,7 +889,7 @@
         function populatePrepSheet(tbodyId, branchA, branchB) {
             const tbody = document.getElementById(tbodyId);
             tbody.innerHTML = `
-                <tr class="bg-slate-900/40"><td class="py-2 px-3 font-bold text-brand-amber" colspan="3">${branchA.senecaId} - (VLAN ${branchA.uid}) PARAMETERS</td></tr>
+                <tr class="bg-brand-slate"><td class="py-2 px-3 font-bold text-brand-amber" colspan="3">${branchA.senecaId} - (VLAN ${branchA.uid}) PARAMETERS</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">LAN Subnet</td><td class="py-2 px-3 text-right font-mono theme-text-main whitespace-nowrap" colspan="2">${branchA.lanNetworkID}/26</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">Virtual VIP Gateway</td><td class="py-2 px-3 text-right text-emerald-400 font-bold font-mono whitespace-nowrap" colspan="2">${branchA.virtualGateway}</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">Core 1 SVI IP (Master)</td><td class="py-2 px-3 text-right font-mono theme-text-main whitespace-nowrap" colspan="2">${branchA.core1IP}</td></tr>
@@ -902,7 +903,7 @@
                 <hr width="300%" />
                 <hr width="300%" />
 
-                <tr class="bg-slate-900/40"><td class="py-2 px-3 font-bold text-brand-violet" colspan="3">${branchB.senecaId} - (VLAN ${branchB.uid}) PARAMETERS</td></tr>
+                <tr class="bg-brand-slate"><td class="py-2 px-3 font-bold text-brand-violet" colspan="3">${branchB.senecaId} - (VLAN ${branchB.uid}) PARAMETERS</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">LAN Subnet</td><td class="py-2 px-3 text-right font-mono theme-text-main whitespace-nowrap" colspan="2">${branchB.lanNetworkID}/26</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">Virtual VIP Gateway</td><td class="py-2 px-3 text-right text-emerald-400 font-bold font-mono whitespace-nowrap" colspan="2">${branchB.virtualGateway}</td></tr>
                 <tr><td class="py-2 px-3 theme-text-muted font-medium whitespace-nowrap">Core 1 SVI IP (Master)</td><td class="py-2 px-3 text-right font-mono theme-text-main whitespace-nowrap" colspan="2">${branchB.core1IP}</td></tr>
@@ -965,43 +966,53 @@
                     <td class="py-2 px-3 theme-text-muted">${t4.senecaId}'s WAN link (${t4.wanNetworkID}/30) | Switch: ${t4.switchWanIP} / Router: ${t4.routerWanIP}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1</td>
-                    <td class="py-2 px-3 font-mono text-sky-400">Port 1 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/3)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
+                    </td>
+                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 1<span class="text-[10px] theme-text-muted font-sans block">1/1/3</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t1.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t1.uid} | Gateway: ${t1.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1</td>
-                    <td class="py-2 px-3 font-mono text-sky-400">Port 2 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/4)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
+                    </td>
+                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 2<span class="text-[10px] theme-text-muted font-sans block">1/1/4</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t2.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t2.uid} | Gateway: ${t2.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2</td>
-                    <td class="py-2 px-3 font-mono text-sky-400">Port 1 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/3)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
+                    </td>
+                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 1<span class="text-[10px] theme-text-muted font-sans block">1/1/3</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t3.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t3.uid} | Gateway: ${t3.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2</td>
-                    <td class="py-2 px-3 font-mono text-sky-400">Port 2 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/4)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
+                    </td>
+                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 2<span class="text-[10px] theme-text-muted font-sans block">1/1/4</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t4.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t4.uid} | Gateway: ${t4.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1</td>
-                    <td class="py-2 px-3 font-mono text-pink-500">Port 3 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/5)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 1
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
+                    </td>
+                    <td class="text-[16px] py-2 px-3 font-mono text-pink-500">3 <span class="text-[10px] theme-text-muted font-sans block">1/1/5</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 1</td>
                     <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
                     <td class="py-2 px-3 theme-text-muted">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2</td>
-                    <td class="py-2 px-3 font-mono text-pink-500">Port 3 <span class="text-[10px] text-slate-400 font-sans block">(6300: 1/1/5)</span></td>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 2
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
+                    </td>
+                    <td class="text-[16px] py-2 px-3 font-mono text-pink-500">3 <span class="text-[10px] theme-text-muted font-sans block">1/1/5</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 2</td>
                     <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
                     <td class="py-2 px-3 theme-text-muted">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
@@ -1325,7 +1336,6 @@ router vrrp enable
             const t4 = userCalculatedData.t4;
 
             if (mode === 'access1_2530') {
-                // Aruba 2530/2540 Access Switch 1 (ProCurve OS Syntax)
                 codeBox.textContent = `enable
 configure terminal
 hostname Access-Switch1-2530
@@ -1356,7 +1366,6 @@ exit
 
 write memory`;
             } else if (mode === 'access2_2530') {
-                // Aruba 2530/2540 Access Switch 2 (ProCurve OS Syntax)
                 codeBox.textContent = `enable
 configure terminal
 hostname Access-Switch2-2530
@@ -1387,7 +1396,6 @@ exit
 
 write memory`;
             } else if (mode === 'access1_6300') {
-                // Aruba 6300 Access Switch 1 (ArubaOS-CX Syntax)
                 codeBox.textContent = `enable
 conf terminal
 hostname Aruba-Core1-6300
@@ -1434,7 +1442,6 @@ no shutdown
 vlan trunk allowed ${t1.uid},${t2.uid},${t3.uid},${t4.uid}
 exit`;
             } else if (mode === 'access2_6300') {
-                // Aruba 6300 Access Switch 2 (ArubaOS-CX Syntax)
                 codeBox.textContent = `enable
 conf terminal
 hostname Aruba-Core2-6300
@@ -1532,15 +1539,15 @@ network:
 # Command tool: sudo vtysh
 # Ensure 'ospfd=yes' is turned on inside /etc/frr/daemons before applying.
 
+configure terminal
 router ospf
- ospf router-id ${u.ospfRouterID}
- network 10.33.0.0/16 area 0.0.0.0
- network ${u.wanNetworkID}/30 area 0.0.0.0
- default-information originate
+ospf router-id ${u.ospfRouterID}
+network 10.33.0.0/16 area 0.0.0.0
+network ${u.wanNetworkID}/30 area 0.0.0.0
+default-information originate
+exit
 
-line vty
-
-end
+ip route 0.0.0.0 0.0.0.0 ens33
 write memory`;
             } 
             
