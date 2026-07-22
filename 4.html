@@ -128,32 +128,8 @@
             --tab-inactive-hover-bg: rgba(0, 0, 0, 0.04);
         }
 
-        .theme-tritanopia-dark {
-            /* 5. Dark Mode for Blue-Yellow Color Blindness (Tritanopia) */
-            --bg-base: #180D0E;
-            --bg-card: #271C1E;
-            --bg-input: #271C1E;
-            --border-color: #3F2C2E;
-            --border-input: #573D40;
-            --text-main: #F4F4F5;
-            --text-muted: #A1A1AA;
-            --text-input: #F4F4F5;
-            --brand-indigo: #FB7185;
-            --brand-violet: #FB7185;
-            --brand-amber: #2DD4BF;
-            --brand-dark: #180D0E;
-            --brand-slate: #271C1E;
-            --brand-accent: #FB7185;
-
-            --tab-active-bg: linear-gradient(135deg, #FB7185, #F43F5E);
-            --tab-active-text: #180D0E;
-            --tab-inactive-text: #A1A1AA;
-            --tab-inactive-hover: #F4F4F5;
-            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
-        }
-
         .theme-deuteranopia-light {
-            /* 6. Light Mode for Red-Green Color Blindness (Deuteranopia / Protanopia) */
+            /* 5. Light Mode for Red-Green Color Blindness (Deuteranopia / Protanopia) */
             --bg-base: #F4F6F8;
             --bg-card: #FFFFFF;
             --bg-input: #FFFFFF;
@@ -174,6 +150,30 @@
             --tab-inactive-text: #4B5563;
             --tab-inactive-hover: #111827;
             --tab-inactive-hover-bg: rgba(0, 0, 0, 0.04);
+        }
+
+        .theme-tritanopia-dark {
+            /* 6. Dark Mode for Blue-Yellow Color Blindness (Tritanopia) */
+            --bg-base: #180D0E;
+            --bg-card: #271C1E;
+            --bg-input: #271C1E;
+            --border-color: #3F2C2E;
+            --border-input: #573D40;
+            --text-main: #F4F4F5;
+            --text-muted: #A1A1AA;
+            --text-input: #F4F4F5;
+            --brand-indigo: #FB7185;
+            --brand-violet: #FB7185;
+            --brand-amber: #2DD4BF;
+            --brand-dark: #180D0E;
+            --brand-slate: #271C1E;
+            --brand-accent: #FB7185;
+
+            --tab-active-bg: linear-gradient(135deg, #FB7185, #F43F5E);
+            --tab-active-text: #180D0E;
+            --tab-inactive-text: #A1A1AA;
+            --tab-inactive-hover: #F4F4F5;
+            --tab-inactive-hover-bg: rgba(255, 255, 255, 0.05);
         }
 
         body {
@@ -276,21 +276,21 @@
             <div class="flex flex-wrap items-center gap-4 bg-brand-slate px-4 py-2 rounded-2xl border theme-border shadow-md">
                 <div class="flex items-center gap-1.5">
                     <i class="fa-solid fa-palette text-brand-indigo text-xs"></i>
-                    <span class="text-[9px] font-extrabold uppercase tracking-widest theme-text-muted">Color Palette:</span>
+                    <span class="text-[9px] font-extrabold uppercase tracking-widest theme-text-muted">Accessibility Palette:</span>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="flex gap-1.5" title="Alternating Dark-Light Accessible Palettes">
-                        <button onclick="setTheme('default')" class="w-5 h-5 rounded-full bg-[#3D8BFD] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="1. Dark Mode (Standard)"></button>
+                        <button onclick="setTheme('default')" class="w-5 h-5 rounded-full bg-[#3D8BFD] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="1. Dark Mode (Standard) - Default"></button>
                         <button onclick="setTheme('light')" class="w-5 h-5 rounded-full bg-[#0D6EFD] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="2. Light Mode (Standard)"></button>
                         <button onclick="setTheme('deuteranopia-dark')" class="w-5 h-5 rounded-full bg-[#60A5FA] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="3. Dark Mode (Red-Green Color Blindness)"></button>
                         <button onclick="setTheme('tritanopia-light')" class="w-5 h-5 rounded-full bg-[#E11D48] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="4. Light Mode (Blue-Yellow Color Blindness)"></button>
-                        <button onclick="setTheme('tritanopia-dark')" class="w-5 h-5 rounded-full bg-[#FB7185] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="5. Dark Mode (Blue-Yellow Color Blindness)"></button>
-                        <button onclick="setTheme('deuteranopia-light')" class="w-5 h-5 rounded-full bg-[#0055FF] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="6. Light Mode (Red-Green Color Blindness)"></button>
+                        <button onclick="setTheme('deuteranopia-light')" class="w-5 h-5 rounded-full bg-[#0055FF] border border-slate-400 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="5. Light Mode (Red-Green Color Blindness)"></button>
+                        <button onclick="setTheme('tritanopia-dark')" class="w-5 h-5 rounded-full bg-[#FB7185] border border-slate-600 hover:scale-125 transition-all shadow cursor-pointer focus:outline-none" title="6. Dark Mode (Blue-Yellow Color Blindness)"></button>
                     </div>
                 </div>
             </div>
 
-            <div class="text-xs font-semibold theme-text-main">
+            <div class="text-xs font-semibold theme-text-muted shadow-lg">
                 <span><a href="https://github.com/cerealicious" target="_blank" class="hover:text-brand-indigo transition-colors hover:underline flex items-center gap-2">
                     <span>Made by Cerealicious</span>
                     <img src="https://avatars.githubusercontent.com/u/5056960?v=4" alt="cerealicious profile" class="w-12 h-12 rounded-full border theme-border shadow-inner">
@@ -508,9 +508,9 @@
                     <div class="overflow-x-auto custom-scrollbar">
                         <table class="w-full text-xs text-left theme-text-main border-collapse table-fixed min-w-[640px]">
                             <thead>
-                                <tr class="border-b theme-border theme-text- font-bold uppercase tracking-wider text-[13px]">
+                                <tr class="border-b theme-border font-bold uppercase tracking-wider text-[13px]">
                                     <th class="py-2.5 px-3 w-36">From Device</th>
-                                    <th class="py-2.5 px-3 w-20">Port</th>
+                                    <th class="py-2.5 px-3 w-16">Port</th>
                                     <th class="py-2.5 px-3 w-1/5">To Device</th>
                                     <th class="py-2.5 px-3 w-16">Port</th>
                                     <th class="py-2.5 px-3 w-[45%]">Purpose / Configuration Reference</th>
@@ -925,16 +925,16 @@
             body.innerHTML = `
                 <tr>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 1</td>
-                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/1</td>
+                    <td class="py-2 px-3 font-mono text-cyan-400">1/1/1</td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 2</td>
-                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/1</td>
+                    <td class="py-2 px-3 font-mono text-cyan-400">1/1/1</td>
                     <td class="py-2 px-3 theme-text-muted">Inter-Core Backbone Redundancy Trunk (Allows VLANs ${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
                 </tr>
                 <tr>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 1</td>
-                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/2</td>
+                    <td class="py-2 px-3 font-mono text-amber-400">1/1/2</td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 2</td>
-                    <td class="py-2 px-3 font-mono text-brand-amber">1/1/2</td>
+                    <td class="py-2 px-3 font-mono text-amber-400">1/1/2</td>
                     <td class="py-2 px-3 theme-text-muted">Inter-Core Secondary High-Availability Interconnect</td>
                 </tr>
                 <tr>
@@ -966,33 +966,41 @@
                     <td class="py-2 px-3 theme-text-muted">${t4.senecaId}'s WAN link (${t4.wanNetworkID}/30) | Switch: ${t4.switchWanIP} / Router: ${t4.routerWanIP}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 1
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
                     </td>
-                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 1<span class="text-[10px] theme-text-muted font-sans block">1/1/3</span></td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 1 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/3)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t1.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t1.uid} | Gateway: ${t1.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 1<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 1
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
                     </td>
-                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 2<span class="text-[10px] theme-text-muted font-sans block">1/1/4</span></td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 2 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/4)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t2.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t2.uid} | Gateway: ${t2.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 2
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
                     </td>
-                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 1<span class="text-[10px] theme-text-muted font-sans block">1/1/3</span></td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 1 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/3)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t3.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t3.uid} | Gateway: ${t3.virtualGateway}</td>
                 </tr>
                 <tr>
-                    <td class="py-2 px-3 font-bold theme-text-main">2530 Access 2<span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
+                    <td class="py-2 px-3 font-bold theme-text-main">
+                        2530 Access 2
+                        <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
                     </td>
-                    <td class="text-[14px] py-2 px-3 font-mono text-sky-400">Port 2<span class="text-[10px] theme-text-muted font-sans block">1/1/4</span></td>
+                    <td class="py-2 px-3 font-mono text-sky-400">Port 2 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/4)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">${t4.senecaId} Client/Server</td>
                     <td class="py-2 px-3 font-mono text-sky-400">ens33</td>
                     <td class="py-2 px-3 theme-text-muted">Private LAN Untagged VLAN ${t4.uid} | Gateway: ${t4.virtualGateway}</td>
@@ -1002,7 +1010,7 @@
                         2530 Access 1
                         <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access1</span>
                     </td>
-                    <td class="text-[16px] py-2 px-3 font-mono text-pink-500">3 <span class="text-[10px] theme-text-muted font-sans block">1/1/5</span></td>
+                    <td class="py-2 px-3 font-mono text-pink-500">Port 3 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/5)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 1</td>
                     <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
                     <td class="py-2 px-3 theme-text-muted">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
@@ -1012,7 +1020,7 @@
                         2530 Access 2
                         <span class="text-[10px] theme-text-muted font-normal block">Aruba6300-Access2</span>
                     </td>
-                    <td class="text-[16px] py-2 px-3 font-mono text-pink-500">3 <span class="text-[10px] theme-text-muted font-sans block">1/1/5</span></td>
+                    <td class="py-2 px-3 font-mono text-pink-500">Port 3 <span class="text-[10px] theme-text-muted font-sans block">(6300: 1/1/5)</span></td>
                     <td class="py-2 px-3 font-bold theme-text-main">Aruba 6300 Core 2</td>
                     <td class="py-2 px-3 font-mono text-pink-500">1/1/11</td>
                     <td class="py-2 px-3 theme-text-muted">Uplink 802.1Q trunk carrying Tagged VLANs (${t1.uid}, ${t2.uid}, ${t3.uid}, ${t4.uid})</td>
